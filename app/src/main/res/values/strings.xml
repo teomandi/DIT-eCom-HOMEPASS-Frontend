@@ -14,4 +14,12 @@
     <string name="select_role">Select Role</string>
     <string name="click_on_image_to_select_from_gallery">Click on image to select from gallery</string>
     <string name="select_profile_picture">Select Profile Picture</string>
+    <string name="search_place">Search place..</string>
+    <string name="switch_role">Switch Role</string>
+    <string name="home">Home</string>
+    <string name="messages">Messages</string>
+    <string name="malibu_image">malibu image</string>
+    <string name="cost_per_day">Cost per Day ($):</string>
+    <string name="cost_per_person">Cost per Person ($):</string>
+    <string name="rating">Rating:</string>
 </resources>

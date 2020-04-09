@@ -23,6 +23,16 @@ public class LoginActivity extends AppCompatActivity {
         mTextUsername = (EditText) findViewById(R.id.edittext_username);
         mTextPassword = (EditText) findViewById(R.id.edittext_password);
         mButtonLogin = (Button) findViewById(R.id.button_login);
+        mButtonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainIntent = new Intent(
+                        LoginActivity.this,
+                        MainActivity.class
+                );
+                startActivity(mainIntent);
+            }
+        });
         mTextViewRegister = (TextView) findViewById(R.id.textview_register);
         mTextViewRegister.setOnClickListener(new View.OnClickListener() {
             @Override
