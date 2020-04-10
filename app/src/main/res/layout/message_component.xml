@@ -2,8 +2,11 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:layout_marginTop="15dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:id="@+id/message_view"
     >
 
     <LinearLayout
@@ -12,11 +15,26 @@
         android:orientation="horizontal"
         >
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/asianx" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/cicleview_profile"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/asianx"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#FF000000"
+            android:layout_marginEnd="15dp"/>
+
+        <TextView
+            android:id="@+id/textview_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:text="Hallo Saror,s a viral disease that causes inflammation of the brain in  humans and other mammals. Early symptoms can include fever and tingling "
+            />
+
+
 
     </LinearLayout>
 
