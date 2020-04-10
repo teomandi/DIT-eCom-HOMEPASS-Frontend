@@ -1,6 +1,7 @@
 package com.example.frontmynbnb;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +27,14 @@ public class RegisterActivity extends AppCompatActivity {
         mTextCnfPassword = (EditText) findViewById(R.id.edittext_cnf_password);
 
         mButtonRegister = (Button) findViewById(R.id.button_register);
+//        mButtonRegister.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DialogFragment multiChoiceDialog = new SelectRoleDialog();
+//                multiChoiceDialog.setCancelable(false);
+//                multiChoiceDialog.show(getSupportFragmentManager(), "Multi Choice dialog");
+//            }
+//        });
         mTextViewLogin = (TextView) findViewById(R.id.textview_login);
         mTextViewLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,4 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
     }
+
+
+
 }

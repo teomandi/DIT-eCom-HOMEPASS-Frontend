@@ -13,18 +13,18 @@ import androidx.fragment.app.Fragment;
 
 public class ProfileFragment extends Fragment {
 
-    Button mButtonHelp;
+    Button mButtonRoles;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        mButtonHelp = (Button) view.findViewById(R.id.button_help);
-        mButtonHelp.setOnClickListener(new View.OnClickListener(){
+        mButtonRoles = (Button) view.findViewById(R.id.button_roles);
+        mButtonRoles.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Toast.makeText(getActivity(), "Profile Button clicked!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Wohoop! I made you a Host.", Toast.LENGTH_SHORT).show();
 
             }
         });

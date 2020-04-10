@@ -24,7 +24,11 @@
     <string name="rating">Rating:</string>
     <string name="profile">Profile</string>
     <string name="help">Help</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="type_a_message">Type a message..</string>
+    <string name="send">Send</string>
+    <string name="be_a_host">Be a host?</string>
+    <string-array name="roles">
+        <item>Tenant</item>
+        <item>Host</item>
+    </string-array>
 </resources>
