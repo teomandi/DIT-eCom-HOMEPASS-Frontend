@@ -27,6 +27,7 @@
     <string name="type_a_message">Type a message..</string>
     <string name="send">Send</string>
     <string name="be_a_host">Be a host?</string>
+    <string name="image_place">Image place</string>
     <string-array name="roles">
         <item>Tenant</item>
         <item>Host</item>

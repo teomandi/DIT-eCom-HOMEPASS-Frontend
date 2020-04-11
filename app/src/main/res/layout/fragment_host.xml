@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/default_button"
         android:text="@string/help"
+        android:textColor="@color/colorWhite"
         />
 
 </LinearLayout>

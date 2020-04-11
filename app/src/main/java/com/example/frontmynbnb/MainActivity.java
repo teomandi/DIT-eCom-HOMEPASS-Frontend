@@ -3,6 +3,7 @@ package com.example.frontmynbnb;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -16,6 +17,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        final FragmentManager fm = this.getSupportFragmentManager();
+//        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+//            fm.popBackStack();
+//        }
+
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -35,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
                 assert selectedFragment != null;
-                getSupportFragmentManager().beginTransaction().replace(
+                fm.beginTransaction().replace(
                         R.id.fragment_container,
                         selectedFragment
                 ).commit();

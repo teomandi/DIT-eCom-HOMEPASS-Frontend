@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:autofillHints="@string/search_place"
-        android:background="@drawable/default_edittext"
+        android:background="@drawable/light_round"
         android:drawableStart="@drawable/ic_search_black_35dp"
         android:drawablePadding="10dp"
         android:hint="@string/search_place"
@@ -23,29 +23,11 @@
         android:textColor="#000"
         />
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <ListView
+        android:id="@+id/listview_placescontainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:orientation="vertical">
-
-            <include layout="@layout/main_component" />
-
-            <include layout="@layout/main_component" />
-
-            <include layout="@layout/main_component" />
-
-            <include layout="@layout/main_component" />
+        />
 
 
-        </LinearLayout>
-
-    </ScrollView>
 </LinearLayout>

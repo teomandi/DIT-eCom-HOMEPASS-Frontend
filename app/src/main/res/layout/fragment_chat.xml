@@ -56,7 +56,7 @@
             android:autofillHints="@string/type_a_message"
             android:hint="@string/type_a_message"
             android:textColor="@color/colorWhite"
-            android:background="@drawable/default_edittext"
+            android:background="@drawable/light_round"
             android:inputType="text" />
 
         <Button

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,17 +7,10 @@
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
     android:id="@+id/message_view"
-    android:background="@color/colorLightGray"
+    android:background="@drawable/light_round"
+    android:orientation="horizontal"
+    android:weightSum="3"
     >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="3"
-
-        >
-
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/cicleview_profile"
@@ -38,7 +31,7 @@
 
             <TextView
                 android:id="@+id/textview_username"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="20sp"
@@ -47,15 +40,14 @@
                 />
 
             <TextView
-                android:id="@+id/textview_message"
-                android:layout_width="match_parent"
+                android:id="@+id/textview_content"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorWhite"
-                android:text="Hallo Saror,s a viral disease that causes inflammation of the brain in  humans and other mammals. Early symptoms can include fever and tingling "
+                android:text="Hallo Saror,s a viral disease that causes inflammati inflammatiinflammati inflammati"
                 />
+
         </LinearLayout>
 
 
     </LinearLayout>
-
-</FrameLayout>

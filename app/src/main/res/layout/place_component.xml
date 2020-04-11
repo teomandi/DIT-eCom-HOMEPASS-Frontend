@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="15dp"
+    android:padding="5dp"
+    android:background="@drawable/dark_round"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:orientation="horizontal"
+    android:weightSum="2">
+
+    <ImageView
+        android:id="@+id/imageview_place"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="fitXY"
+        android:src="@drawable/malibu"
+        android:contentDescription="@string/image_place" />
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginStart="2dp"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/textview_countrycity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"
+            android:text="Malibu California"
+            android:textSize="24sp"
+
+            />
+
+        <TextView
+            android:id="@+id/textview_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textStyle="normal"
+            android:text="Hot Palace"
+            android:textSize="15sp"
+            />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="2"
+            android:layout_marginTop="30dp"
+            >
+
+            <TableRow>
+
+                <TextView
+                    android:text="@string/cost_per_day"
+                    android:layout_column="1"
+                    android:padding="3dp"
+                    android:textColor="@color/colorWhite"
+                    />
+
+                <TextView
+                    android:id="@+id/textview_costperday"
+                    android:layout_column="2"
+                    android:padding="3dp"
+                    android:text="23"
+                    android:textColor="@color/colorWhite"
+                    />
+
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_column="1"
+                    android:text="@string/cost_per_person"
+                    android:padding="3dp"
+                    android:textColor="@color/colorWhite"
+                    />
+
+                <TextView
+                    android:id="@+id/textview_costperperson"
+                    android:layout_column="2"
+                    android:padding="3dp"
+                    android:text="8"
+                    android:textColor="@color/colorWhite"
+                    />
+            </TableRow>
+
+        </TableLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textColor="@color/colorWhite"
+                android:text="@string/rating"
+                android:textStyle="bold"
+                android:padding="3dp"
+
+                />
+
+            <!-- mRatingBar.setRating(int)   -->
+
+            <RatingBar
+                android:id="@+id/rating"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:paddingTop="6dp"
+                style="?android:attr/ratingBarStyleSmall"
+                android:numStars="5"
+                android:stepSize="0.1"
+                android:isIndicator="true"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
