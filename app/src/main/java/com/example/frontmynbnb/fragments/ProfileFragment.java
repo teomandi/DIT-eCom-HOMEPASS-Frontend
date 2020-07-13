@@ -1,4 +1,4 @@
-package com.example.frontmynbnb;
+package com.example.frontmynbnb.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.frontmynbnb.R;
 
 public class ProfileFragment extends Fragment {
 

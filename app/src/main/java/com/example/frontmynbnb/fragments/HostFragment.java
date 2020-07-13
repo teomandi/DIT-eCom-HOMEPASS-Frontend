@@ -1,4 +1,4 @@
-package com.example.frontmynbnb;
+package com.example.frontmynbnb.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.models.Place;
 
 import java.util.ArrayList;

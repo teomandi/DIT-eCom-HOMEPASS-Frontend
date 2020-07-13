@@ -1,4 +1,4 @@
-package com.example.frontmynbnb;
+package com.example.frontmynbnb.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,24 +15,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.models.Place;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class PlacesAdapter extends ArrayAdapter<Place> {
 
-//    private Context mCtx;
-//    private int resource;
-//    private List<Place> placeList;
-
     public PlacesAdapter(Context ctx, ArrayList<Place> placeList){
         super(ctx, 0, placeList);
-
-//        this.mCtx = ctx;
-//        this.resource = resource;
-//        this.placeList = placeList;
     }
 
     @NonNull
@@ -59,6 +50,7 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
         RatingBar placeRating = view.findViewById(R.id.rating);
 
 
+        assert place != null;
         String cc = place.getCountry() + ", " + place.getCity();
 
         placeImage.setImageResource(place.getImage());

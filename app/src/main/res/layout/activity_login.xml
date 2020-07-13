@@ -74,8 +74,16 @@
             android:paddingStart="5dp"
             tools:ignore="RtlSymmetry" />
 
+
+
+
     </LinearLayout>
 
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RETROFIT"
+        android:id="@+id/retrofit_test"
+        />
 
 </LinearLayout>

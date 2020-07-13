@@ -7,7 +7,13 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import com.example.frontmynbnb.fragments.HomeFragment;
+import com.example.frontmynbnb.fragments.HostFragment;
+import com.example.frontmynbnb.fragments.MessagesFragment;
+import com.example.frontmynbnb.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment selectedFragment = null;
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.nav_home:
                         selectedFragment = new HomeFragment();
                         break;

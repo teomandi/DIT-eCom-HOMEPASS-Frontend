@@ -27,6 +27,10 @@
         android:id="@+id/listview_placescontainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         />
 
 

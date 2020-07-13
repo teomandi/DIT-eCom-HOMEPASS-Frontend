@@ -28,6 +28,7 @@
     <string name="send">Send</string>
     <string name="be_a_host">Be a host?</string>
     <string name="image_place">Image place</string>
+    <string name="hompass_logo">HomPass Logo</string>
     <string-array name="roles">
         <item>Tenant</item>
         <item>Host</item>
