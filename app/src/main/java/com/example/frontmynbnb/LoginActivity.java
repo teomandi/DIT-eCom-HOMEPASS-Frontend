@@ -66,7 +66,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("RETROFIT TEST starts");
-                Retrofit retrofit = RestClient.getClient();
+                String token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW9tYW5kaTQiLCJleHAiOjE1OTc1OTY5MDV9.MS4OMS2oyb0RSZnGRH2_CSup4ffmN3OO7STQ31FQU2ugOSRGxpWdM8-JS6osxQPsQTxmFuQ8xkBfePHzDNg8hw"
+                Retrofit retrofit = RestClient.getClient(token);
                 JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
                 Call<List<Message>> call = jsonPlaceHolderApi.getAllMessages();
                 call.enqueue(new Callback<List<Message>>() {

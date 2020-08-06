@@ -16,6 +16,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 public class MainActivity extends AppCompatActivity {
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
