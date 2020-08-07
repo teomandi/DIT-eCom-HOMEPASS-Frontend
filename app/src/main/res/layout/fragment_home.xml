@@ -23,6 +23,12 @@
         android:textColor="#000"
         />
 
+    <Button
+        android:id="@+id/retrofit_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RETROFIT-TEST" />
+
     <ListView
         android:id="@+id/listview_placescontainer"
         android:layout_width="match_parent"

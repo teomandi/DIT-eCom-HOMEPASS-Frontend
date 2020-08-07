@@ -7,21 +7,25 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.frontmynbnb.fragments.HomeFragment;
 import com.example.frontmynbnb.fragments.HostFragment;
 import com.example.frontmynbnb.fragments.MessagesFragment;
 import com.example.frontmynbnb.fragments.ProfileFragment;
+import com.example.frontmynbnb.models.Message;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 
 public class MainActivity extends AppCompatActivity {
-    private String token;
-
-    public String getToken() {
-        return token;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,9 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         final FragmentManager fm = this.getSupportFragmentManager();
-//        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-//            fm.popBackStack();
-//        }
+
 
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

@@ -12,24 +12,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.frontmynbnb.models.Login;
 import com.example.frontmynbnb.models.Message;
-import com.example.frontmynbnb.models.Post;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
+    private String mtoken;
+    public String getToken() {
+        return mtoken;
+    }
+
     EditText mTextUsername;
     EditText mTextPassword;
     Button mButtonLogin;
     TextView mTextViewRegister;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +41,57 @@ public class LoginActivity extends AppCompatActivity {
         mButtonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mainIntent = new Intent(
-                        LoginActivity.this,
-                        MainActivity.class
-                );
-                startActivity(mainIntent);
+                String username = mTextUsername.getText().toString();
+                String password = mTextPassword.getText().toString();
+                if ( username.length() == 0 || password.length() == 0 ) {
+                    Toast.makeText(
+                            LoginActivity.this,
+                            "Please, fulfill both of the inputs.",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                Login login = new Login(username, password);
+                Retrofit retrofit = RestClient.getStringClient();
+                JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+                Call<String> call = jsonPlaceHolderApi.login(login);
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        System.out.println("We have a response!" + response.code());
+                        if(response.code() != 200){
+                            Toast.makeText(
+                                    LoginActivity.this,
+                                    "Authorization failed",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                            return;
+                        }
+                        Toast.makeText(
+                                LoginActivity.this,
+                                "Authorization succeeded",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        mtoken = response.headers().get("Authorization");
+                        Intent mainIntent = new Intent(
+                                LoginActivity.this,
+                                MainActivity.class
+                        );
+                        startActivity(mainIntent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Toast.makeText(
+                                LoginActivity.this,
+                                "SERVER ERROR 500",
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                });
+
+
             }
         });
         mTextViewRegister = (TextView) findViewById(R.id.textview_register);
@@ -61,32 +106,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button rettest = (Button) findViewById(R.id.retrofit_test);
-        rettest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("RETROFIT TEST starts");
-                String token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW9tYW5kaTQiLCJleHAiOjE1OTc1OTY5MDV9.MS4OMS2oyb0RSZnGRH2_CSup4ffmN3OO7STQ31FQU2ugOSRGxpWdM8-JS6osxQPsQTxmFuQ8xkBfePHzDNg8hw"
-                Retrofit retrofit = RestClient.getClient(token);
-                JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-                Call<List<Message>> call = jsonPlaceHolderApi.getAllMessages();
-                call.enqueue(new Callback<List<Message>>() {
-                    @Override
-                    public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
-                        List<Message> messages = response.body();
-                        for (Message msg: messages){
-                            System.out.println(msg.getBody());
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<List<Message>> call, Throwable t) {
-                        System.out.println(t.getMessage());
-                    }
-                });
-
-            }
-        });
 
 
 
