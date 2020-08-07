@@ -25,6 +25,7 @@
         android:drawableStart="@drawable/ic_person_black_24dp"
         android:drawablePadding="10dp"
         android:hint="@string/username"
+        android:inputType="text"
         />
 
     <EditText
@@ -37,6 +38,7 @@
         android:drawableStart="@drawable/ic_lock_black_24dp"
         android:drawablePadding="10dp"
         android:hint="@string/password"
+        android:inputType="textPassword"
         />
 
     <Button

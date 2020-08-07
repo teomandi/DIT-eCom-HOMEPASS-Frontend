@@ -1,12 +1,11 @@
 package com.example.frontmynbnb;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -17,7 +16,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.frontmynbnb.misc.Utils;
+import com.example.frontmynbnb.models.User;
+
 import java.io.IOException;
+import java.io.InputStream;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -30,6 +41,8 @@ public class RegisterActivity extends AppCompatActivity {
     TextView mTextViewLogin;
     ImageView mUploadImage;
     Bitmap mCurrentBitmap;
+    Uri mBitmapUri = null;
+
     Button mButtonRegister;
 
     @Override
@@ -55,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(
                         intent,
                         "Select Picture"
-                ),SELECT_IMAGE);
+                ), SELECT_IMAGE);
             }
         });
         mButtonRegister = (Button) findViewById(R.id.button_register);
@@ -64,6 +77,93 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!validate())
                     return;
+                RequestBody usernamePart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mTextUsername.getText().toString()
+                );
+                RequestBody emailPart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mTextEmail.getText().toString()
+                );
+                RequestBody passwordPart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mTextPassword.getText().toString()
+                );
+                RequestBody firstNamePart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mTextName.getText().toString()
+                );
+                RequestBody lastNamePart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mTextSurname.getText().toString()
+                );
+                RequestBody phonePart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mTextPhone.getText().toString()
+                );
+                RequestBody hostPart = RequestBody.create(
+                        MultipartBody.FORM,
+                        String.valueOf(mCheckHost.isChecked())
+                );
+
+                MultipartBody.Part imageFilePart = null;
+                if (mBitmapUri != null) {
+                    byte[] img = null;
+                    try {
+                        InputStream iStream = getContentResolver().openInputStream(mBitmapUri);
+                        img = Utils.getBytes(iStream);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("uri ~~> " + mBitmapUri + "   " + img.length);
+                    RequestBody imageFile = RequestBody.create(MediaType.parse("image/jpeg"), img);
+                    imageFilePart = MultipartBody.Part.createFormData(
+                            "picture",
+                            mBitmapUri.getLastPathSegment(),
+                            imageFile
+                    );
+                    System.out.println("filepart initialized");
+                }
+                Retrofit retrofit = RestClient.getClient(null);
+                JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+                Call<User> call = jsonPlaceHolderApi.register(
+                        usernamePart, emailPart, passwordPart, firstNamePart, lastNamePart,
+                        phonePart, hostPart, imageFilePart
+                );
+                call.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        System.out.println("Register user status ~~> " + response.code());
+                        if( response.code() != 200 ){
+                            Toast.makeText(
+                                    RegisterActivity.this,
+                                    "Creating user failed",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                            return;
+                        }
+                        User retUser = response.body();
+                        Toast.makeText(
+                                RegisterActivity.this,
+                                "User " + retUser.getUsername() + " successfully registered",
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        Intent loginIntent = new Intent(
+                                RegisterActivity.this,
+                                LoginActivity.class
+                        );
+                        loginIntent.putExtra("username", retUser.getUsername());
+                        startActivity(loginIntent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+
+                    }
+                });
+
+
+
             }
         });
         mTextViewLogin = (TextView) findViewById(R.id.textview_login);
@@ -91,6 +191,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
                     try {
+                        mBitmapUri = data.getData();
                         mCurrentBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
                         mUploadImage.setImageBitmap((mCurrentBitmap));
                     } catch (IOException e) {
@@ -104,26 +205,27 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public boolean validate(){
-        if( mTextUsername.getText().length() > 0 &&
-                mTextEmail.getText().length() > 0 &&
-                mTextPassword.getText().length() > 0 &&
-                mTextCnfPassword.getText().length() > 0 &&
-                mTextName.getText().length() > 0 &&
-                mTextSurname.getText().length() > 0 &&
-                mTextPhone.getText().length() > 0 ){
+        if( mTextUsername.getText().length() == 0 ||
+                mTextEmail.getText().length() == 0 ||
+                mTextPassword.getText().length() == 0 ||
+                mTextCnfPassword.getText().length() == 0 ||
+                mTextName.getText().length() == 0 ||
+                mTextSurname.getText().length() == 0 ||
+                mTextPhone.getText().length() == 0 ){
             Toast.makeText(this, "All the fields should be filled.", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if( mTextCnfPassword.getText() != mTextPassword.getText() ){
+        System.out.println(mTextCnfPassword.getText().toString() + "=?=" + mTextPassword.getText().toString());
+        if( !mTextCnfPassword.getText().toString().equals(mTextPassword.getText().toString()) ){
             Toast.makeText(this, "Passwords not the same.", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if( mCurrentBitmap == null){
-            Toast.makeText(this, "No upload image found.", Toast.LENGTH_LONG).show();
-            return false;
-        }
+//        if( mCurrentBitmap == null){
+//            Toast.makeText(this, "Please select a photo to upload.", Toast.LENGTH_LONG).show();
+//            return false;
+//        }
 
         return true;
     }

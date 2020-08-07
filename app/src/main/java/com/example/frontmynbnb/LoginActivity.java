@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
                 if ( username.length() == 0 || password.length() == 0 ) {
                     Toast.makeText(
                             LoginActivity.this,
-                            "Please, fulfill both of the inputs.",
+                            "Please, fulfill both of the fields.",
                             Toast.LENGTH_SHORT
                     ).show();
                     return;
@@ -105,11 +105,11 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(registerIntent);
             }
         });
-
-
-
-
-
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String value = extras.getString("username");
+            mTextUsername.setText(value);
+        }
 
     }
 }
