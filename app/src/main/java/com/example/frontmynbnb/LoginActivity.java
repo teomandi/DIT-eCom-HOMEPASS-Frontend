@@ -20,10 +20,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    private String mtoken;
-    public String getToken() {
-        return mtoken;
-    }
+
 
     EditText mTextUsername;
     EditText mTextPassword;
@@ -73,11 +70,13 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT
                         ).show();
 
-                        mtoken = response.headers().get("Authorization");
+                        String userToken = response.headers().get("Authorization");
                         Intent mainIntent = new Intent(
                                 LoginActivity.this,
                                 MainActivity.class
                         );
+                        mainIntent.putExtra("username", mTextUsername.getText().toString());
+                        mainIntent.putExtra("token", userToken);
                         startActivity(mainIntent);
                     }
 
@@ -85,9 +84,10 @@ public class LoginActivity extends AppCompatActivity {
                     public void onFailure(Call<String> call, Throwable t) {
                         Toast.makeText(
                                 LoginActivity.this,
-                                "SERVER ERROR 500",
+                                "Failure!!",
                                 Toast.LENGTH_LONG
                         ).show();
+                        System.out.println("Error message:: " + t.getMessage());
                     }
                 });
 

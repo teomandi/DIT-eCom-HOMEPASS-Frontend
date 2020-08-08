@@ -124,6 +124,19 @@
             android:textColor="#000"
             android:autofillHints="Phone" />
 
+        <EditText
+            android:id="@+id/edittext_address"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/light_round"
+            android:drawableStart="@drawable/ic_home_black_24dp"
+            android:drawablePadding="10dp"
+            android:hint="@string/address"
+            android:inputType="text"
+            android:textColor="#000"
+            android:autofillHints="Phone" />
+
 
         <CheckBox android:id="@+id/checkbox_behost"
             android:layout_marginTop="20dp"

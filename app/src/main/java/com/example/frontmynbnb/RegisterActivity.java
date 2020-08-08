@@ -36,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int SELECT_IMAGE = 1;
 
     EditText mTextUsername, mTextPassword, mTextCnfPassword, mTextName, mTextSurname, mTextEmail,
-            mTextPhone;
+            mTextPhone, mTextAddress;
     CheckBox mCheckHost;
     TextView mTextViewLogin;
     ImageView mUploadImage;
@@ -57,6 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
         mTextPhone = (EditText) findViewById(R.id.edittext_phone);
         mTextPassword = (EditText) findViewById(R.id.edittext_password);
         mTextCnfPassword = (EditText) findViewById(R.id.edittext_cnf_password);
+        mTextAddress = (EditText) findViewById(R.id.edittext_address);
         mCheckHost = (CheckBox) findViewById(R.id.checkbox_behost);
         mUploadImage = (ImageView) findViewById(R.id.imageview_uploadpic);
         mUploadImage.setOnClickListener(new View.OnClickListener() {
@@ -101,11 +102,15 @@ public class RegisterActivity extends AppCompatActivity {
                         MultipartBody.FORM,
                         mTextPhone.getText().toString()
                 );
+                RequestBody addressPart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mTextAddress.getText().toString()
+                );
                 RequestBody hostPart = RequestBody.create(
                         MultipartBody.FORM,
                         String.valueOf(mCheckHost.isChecked())
                 );
-
+                //image part
                 MultipartBody.Part imageFilePart = null;
                 if (mBitmapUri != null) {
                     byte[] img = null;
@@ -128,7 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
                 JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
                 Call<User> call = jsonPlaceHolderApi.register(
                         usernamePart, emailPart, passwordPart, firstNamePart, lastNamePart,
-                        phonePart, hostPart, imageFilePart
+                        phonePart, hostPart, addressPart, imageFilePart
                 );
                 call.enqueue(new Callback<User>() {
                     @Override
@@ -158,7 +163,12 @@ public class RegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-
+                        System.out.println("Error message:: " + t.getMessage());
+                        Toast.makeText(
+                                RegisterActivity.this,
+                                "Failure!!",
+                                Toast.LENGTH_LONG
+                        ).show();
                     }
                 });
 

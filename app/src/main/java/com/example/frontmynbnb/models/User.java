@@ -8,6 +8,7 @@ public class User {
     private String lastName;
     private String phone;
     private boolean isHost;
+    private String address;
     private String createdAt=null;
     private String updatedAt=null;
     private String imageName=null;
@@ -92,5 +93,61 @@ public class User {
 
     public void setHost(boolean host) {
         isHost = host;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void printDetails(){
+        System.out.println("User Details");
+        System.out.println("username: " + username);
+        System.out.println("email: " + email);
+        System.out.println("firstName: " + firstName);
+        System.out.println("lastName: " + lastName);
+        System.out.println("phone: " + phone);
+        System.out.println("address: " + address);
+        System.out.println("isHost: " + isHost);
+        System.out.println("createdAt: " + createdAt);
+        System.out.println("id: " + id);
+
+
+
     }
 }

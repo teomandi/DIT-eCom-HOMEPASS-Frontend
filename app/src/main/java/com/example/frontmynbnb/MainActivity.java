@@ -26,15 +26,27 @@ import retrofit2.Retrofit;
 
 
 public class MainActivity extends AppCompatActivity {
+    private static String mToken, mUsername;
+    public static String getToken() {
+        return mToken;
+    }
+    public static String getUsername() {
+        return mUsername;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mUsername = extras.getString("username");
+            mToken = extras.getString("token");
+            System.out.println("Username and token collected");
+        }
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         final FragmentManager fm = this.getSupportFragmentManager();
-
-
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
