@@ -124,7 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:text="@string/click_here_to_become_a_host"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/lightOrange"
             android:textSize="16sp"
             android:textStyle="bold"
             android:visibility="invisible"/>

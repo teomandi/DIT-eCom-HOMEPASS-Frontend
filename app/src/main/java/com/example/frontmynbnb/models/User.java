@@ -7,7 +7,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String phone;
-    private boolean isHost;
+    private boolean host;
     private String address;
     private String createdAt=null;
     private String updatedAt=null;
@@ -20,7 +20,7 @@ public class User {
                 String firstName,
                 String lastName,
                 String phone,
-                boolean isHost,
+                boolean host,
                 String createdAt,
                 String updatedAt,
                 String imageName,
@@ -32,7 +32,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
-        this.isHost = isHost;
+        this.host = host;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.imageName = imageName;
@@ -88,11 +88,11 @@ public class User {
     }
 
     public boolean isHost() {
-        return isHost;
+        return host;
     }
 
     public void setHost(boolean host) {
-        isHost = host;
+        this.host = host;
     }
 
     public String getAddress() {
@@ -143,7 +143,7 @@ public class User {
         System.out.println("lastName: " + lastName);
         System.out.println("phone: " + phone);
         System.out.println("address: " + address);
-        System.out.println("isHost: " + isHost);
+        System.out.println("isHost: " + host);
         System.out.println("createdAt: " + createdAt);
         System.out.println("id: " + id);
 
