@@ -140,6 +140,7 @@
             android:textColor="@color/lightOrange"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:translationZ="10dp"
             android:visibility="invisible"/>
 
     </LinearLayout>
@@ -147,231 +148,226 @@
 <!--    EDIT VIEW STARTs -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/linearLayout1">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageview_editprofilepic"
-            android:layout_width="175dp"
-            android:layout_height="175dp"
-            android:layout_margin="15dp"
-            android:src="@drawable/asianx"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:paddingStart="10dp"
-            android:text="@string/click_on_image_to_select_from_gallery"
-            android:textColor="#fff"
-            tools:ignore="RtlSymmetry" />
-
-        <TableLayout
-            android:id="@+id/tableview_edit_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="25dp">
-
-            <TableRow>
-
-                <TextView
-                    android:layout_column="1"
-                    android:padding="3dp"
-                    android:text="@string/username_ask"
-                    android:textColor="#000"
-                    android:drawableStart="@drawable/ic_person_black_24dp"
-                    android:textSize="23sp" />
-
-                <EditText
-                    android:id="@+id/editview_username2"
-                    android:layout_column="2"
-                    android:layout_width="200dp"
-                    android:padding="3dp"
-                    android:textColor="#000"
-                    android:background="@drawable/light_round"
-                    android:textSize="23sp"
-                    android:inputType="text"/>
-
-            </TableRow>
-
-            <TableRow
-                android:layout_marginTop="3dp">
-
-                <TextView
-                    android:layout_column="1"
-                    android:padding="3dp"
-                    android:text="@string/name_ask"
-                    android:textColor="#000"
-                    android:drawableStart="@drawable/ic_person_black_24dp"
-                    android:textSize="23sp" />
-
-                <EditText
-                    android:id="@+id/editview_firstname2"
-                    android:layout_column="2"
-                    android:layout_width="200dp"
-                    android:padding="3dp"
-                    android:textColor="#000"
-                    android:background="@drawable/light_round"
-                    android:textSize="23sp"
-                    android:inputType="text"/>
-
-            </TableRow>
-
-            <TableRow
-                android:layout_marginTop="3dp">
-
-                <TextView
-                    android:layout_column="1"
-                    android:padding="3dp"
-                    android:text="@string/surname_ask"
-                    android:textColor="#000"
-                    android:drawableStart="@drawable/ic_person_black_24dp"
-                    android:textSize="23sp" />
-
-                <EditText
-                    android:id="@+id/editview_lastname2"
-                    android:layout_column="2"
-                    android:layout_width="200dp"
-                    android:padding="3dp"
-                    android:background="@drawable/light_round"
-                    android:textColor="#000"
-                    android:textSize="23sp"
-                    android:inputType="text"/>
-
-            </TableRow>
-
-        </TableLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:paddingStart="10dp"
-            android:text="@string/main_fields"
-            android:textColor="#fff"
-            tools:ignore="RtlSymmetry" />
-
-        <TableLayout
-            android:id="@+id/tableview_edit_secondary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="25dp">
-
-            <TableRow>
-
-                <TextView
-                    android:layout_column="1"
-                    android:padding="3dp"
-                    android:text="@string/email_ask"
-                    android:textColor="#000"
-                    android:drawableStart="@drawable/ic_email_black_24dp"
-                    android:textSize="23sp" />
-
-                <EditText
-                    android:id="@+id/editview_email2"
-                    android:layout_column="2"
-                    android:layout_width="200dp"
-                    android:padding="3dp"
-                    android:textColor="#000"
-                    android:background="@drawable/light_round"
-                    android:textSize="23sp"
-                    android:inputType="textEmailAddress"
-                    />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_marginTop="3dp">
-
-                <TextView
-                    android:layout_column="1"
-                    android:padding="3dp"
-                    android:text="@string/phone_ask"
-                    android:textColor="#000"
-                    android:drawableStart="@drawable/ic_phone_black_24dp"
-                    android:textSize="23sp"
-                    />
-
-                <EditText
-                    android:id="@+id/editview_phone2"
-                    android:layout_column="2"
-                    android:layout_width="200dp"
-                    android:padding="3dp"
-                    android:textColor="#000"
-                    android:background="@drawable/light_round"
-                    android:textSize="23sp"
-                    android:inputType="phone"/>
-
-            </TableRow>
-
-            <TableRow
-                android:layout_marginTop="3dp">
-
-                <TextView
-                    android:layout_column="1"
-                    android:padding="3dp"
-                    android:text="@string/address_ask"
-                    android:textColor="#000"
-                    android:drawableStart="@drawable/ic_home_black_24dp"
-                    android:textSize="23sp"
-                    />
-
-                <EditText
-                    android:id="@+id/editview_address2"
-                    android:layout_column="2"
-                    android:layout_width="200dp"
-                    android:padding="3dp"
-                    android:background="@drawable/light_round"
-                    android:textColor="#000"
-                    android:textSize="23sp"
-                    android:inputType="text"/>
-
-            </TableRow>
-
-        </TableLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:paddingStart="10dp"
-            android:text="@string/secondary_fields"
-            android:textColor="#fff"
-            tools:ignore="RtlSymmetry" />
-
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:layout_marginBottom="50dp">
+            android:orientation="vertical"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout1">
 
-            <Button
-                android:id="@+id/button_cancel"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:text="@string/cancel"
-                android:background="@drawable/cancel_button"
-                android:textColor="#000"
-                android:layout_marginEnd="5dp"
-                android:textStyle="bold"
-                />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageview_editprofilepic"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
+                android:layout_margin="15dp"
+                android:src="@drawable/asianx" />
 
-            <Button
-                android:id="@+id/button_save"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:text="@string/save"
-                android:background="@drawable/success_button"
-                android:textColor="#000"
-                android:textStyle="bold"
-                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:paddingStart="10dp"
+                android:text="@string/click_on_image_to_select_from_gallery"
+                android:textColor="#fff"
+                tools:ignore="RtlSymmetry" />
+
+            <TableLayout
+                android:id="@+id/tableview_edit_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="25dp">
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_person_black_24dp"
+                        android:padding="3dp"
+                        android:text="@string/username_ask"
+                        android:textColor="#000"
+                        android:textSize="23sp" />
+
+                    <EditText
+                        android:id="@+id/editview_username2"
+                        android:layout_width="200dp"
+                        android:layout_column="2"
+                        android:background="@drawable/light_round"
+                        android:inputType="text"
+                        android:padding="3dp"
+                        android:textColor="#000"
+                        android:textSize="23sp" />
+
+                </TableRow>
+
+                <TableRow android:layout_marginTop="3dp">
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_person_black_24dp"
+                        android:padding="3dp"
+                        android:text="@string/name_ask"
+                        android:textColor="#000"
+                        android:textSize="23sp" />
+
+                    <EditText
+                        android:id="@+id/editview_firstname2"
+                        android:layout_width="200dp"
+                        android:layout_column="2"
+                        android:background="@drawable/light_round"
+                        android:inputType="text"
+                        android:padding="3dp"
+                        android:textColor="#000"
+                        android:textSize="23sp" />
+
+                </TableRow>
+
+                <TableRow android:layout_marginTop="3dp">
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_person_black_24dp"
+                        android:padding="3dp"
+                        android:text="@string/surname_ask"
+                        android:textColor="#000"
+                        android:textSize="23sp" />
+
+                    <EditText
+                        android:id="@+id/editview_lastname2"
+                        android:layout_width="200dp"
+                        android:layout_column="2"
+                        android:background="@drawable/light_round"
+                        android:inputType="text"
+                        android:padding="3dp"
+                        android:textColor="#000"
+                        android:textSize="23sp" />
+
+                </TableRow>
+
+            </TableLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:paddingStart="10dp"
+                android:text="@string/main_fields"
+                android:textColor="#fff"
+                tools:ignore="RtlSymmetry" />
+
+            <TableLayout
+                android:id="@+id/tableview_edit_secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="25dp">
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_email_black_24dp"
+                        android:padding="3dp"
+                        android:text="@string/email_ask"
+                        android:textColor="#000"
+                        android:textSize="23sp" />
+
+                    <EditText
+                        android:id="@+id/editview_email2"
+                        android:layout_width="200dp"
+                        android:layout_column="2"
+                        android:background="@drawable/light_round"
+                        android:inputType="textEmailAddress"
+                        android:padding="3dp"
+                        android:textColor="#000"
+                        android:textSize="23sp" />
+
+                </TableRow>
+
+                <TableRow android:layout_marginTop="3dp">
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_phone_black_24dp"
+                        android:padding="3dp"
+                        android:text="@string/phone_ask"
+                        android:textColor="#000"
+                        android:textSize="23sp" />
+
+                    <EditText
+                        android:id="@+id/editview_phone2"
+                        android:layout_width="200dp"
+                        android:layout_column="2"
+                        android:background="@drawable/light_round"
+                        android:inputType="phone"
+                        android:padding="3dp"
+                        android:textColor="#000"
+                        android:textSize="23sp" />
+
+                </TableRow>
+
+                <TableRow android:layout_marginTop="3dp">
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_home_black_24dp"
+                        android:padding="3dp"
+                        android:text="@string/address_ask"
+                        android:textColor="#000"
+                        android:textSize="23sp" />
+
+                    <EditText
+                        android:id="@+id/editview_address2"
+                        android:layout_width="200dp"
+                        android:layout_column="2"
+                        android:background="@drawable/light_round"
+                        android:inputType="text"
+                        android:padding="3dp"
+                        android:textColor="#000"
+                        android:textSize="23sp" />
+
+                </TableRow>
+
+            </TableLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:paddingStart="10dp"
+                android:text="@string/secondary_fields"
+                android:textColor="#fff"
+                tools:ignore="RtlSymmetry" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button_cancel"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/cancel_button"
+                    android:text="@string/cancel"
+                    android:textColor="#000"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_save"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/success_button"
+                    android:text="@string/save"
+                    android:textColor="#000"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
     </ScrollView>
 
 

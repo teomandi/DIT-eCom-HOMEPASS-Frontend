@@ -26,11 +26,16 @@ import com.example.frontmynbnb.JsonPlaceHolderApi;
 import com.example.frontmynbnb.MainActivity;
 import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.RestClient;
+import com.example.frontmynbnb.misc.Utils;
 import com.example.frontmynbnb.models.User;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -90,6 +95,118 @@ public class ProfileFragment extends Fragment {
         mEditPhone = (EditText) view.findViewById(R.id.editview_phone2);
         mEditAddress = (EditText) view.findViewById(R.id.editview_address2);
         mButtonSave = (Button) view.findViewById(R.id.button_save);
+        mButtonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                if( !validate() )
+                    return;
+                RequestBody usernamePart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mEditUsername.getText().toString()
+                );
+                RequestBody firstNamePart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mEditFirstName.getText().toString()
+                );
+                RequestBody lastNamePart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mEditLastName.getText().toString()
+                );
+                RequestBody emailPart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mEditEmail.getText().toString()
+                );
+                RequestBody phonePart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mEditPhone.getText().toString()
+                );
+                RequestBody addressPart = RequestBody.create(
+                        MultipartBody.FORM,
+                        mEditAddress.getText().toString()
+                );
+                // password and host parts will be ignored in the backend
+                RequestBody passwordPart = RequestBody.create(
+                        MultipartBody.FORM,
+                        ""
+                );
+                RequestBody hostPart = RequestBody.create(
+                        MultipartBody.FORM,
+                        "false"
+                );
+                //image part
+                MultipartBody.Part imageFilePart = null;
+                if (mBitmapUri != null) {
+                    byte[] img = null;
+                    try {
+                        InputStream iStream = getContext().getContentResolver().openInputStream(mBitmapUri);
+                        img = Utils.getBytes(iStream);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("uri ~~> " + mBitmapUri + "   " + img.length);
+                    RequestBody imageFile = RequestBody.create(MediaType.parse("image/jpeg"), img);
+                    imageFilePart = MultipartBody.Part.createFormData(
+                            "picture",
+                            mBitmapUri.getLastPathSegment(),
+                            imageFile
+                    );
+                    System.out.println("filepart initialized");
+                }else{
+                    imageFilePart = MultipartBody.Part.createFormData(
+                            "picture",
+                            null,
+                            null
+                    );
+                }
+                Retrofit retrofit = RestClient.getClient(MainActivity.getToken());
+                JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+                Call<User> call = jsonPlaceHolderApi.editUser(
+                        mUser.getId(), usernamePart, emailPart, passwordPart, firstNamePart,
+                        lastNamePart, phonePart, hostPart, addressPart, imageFilePart);
+                call.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        mProgressBar.setVisibility(View.INVISIBLE);
+                        if( !response.isSuccessful() ) {
+                            Toast.makeText(
+                                    getContext(),
+                                    "Not successful response " + response.code(),
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                            return;
+                        }
+                        System.out.println("Status Code : " + response.code());
+                        editLinearLayout.setVisibility(View.INVISIBLE);
+                        mButtonEdit.setVisibility(View.VISIBLE);
+                        infoLinearLayout.setVisibility(View.VISIBLE);
+                        mUser = response.body();
+                        setUserDetails();
+                        fetchUserImage();
+                        Toast.makeText(
+                                getContext(),
+                                "Info edited with success " + response.code(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        mProgressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(
+                                getContext(),
+                                "Failure on putting user!",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        System.out.println("Error message:: " + t.getMessage());
+                    }
+                });
+                //update the username
+                MainActivity.setUsername(mUser.getUsername());
+
+
+            }
+        });
         mButtonCancel = (Button) view.findViewById(R.id.button_cancel);
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -292,5 +409,18 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getContext(), "Canceled", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public boolean validate() {
+        if (mEditUsername.getText().length() == 0 ||
+                mEditEmail.getText().length() == 0 ||
+                mEditFirstName.getText().length() == 0 ||
+                mEditLastName.getText().length() == 0 ||
+                mEditPhone.getText().length() == 0 ||
+                mEditAddress.getText().length() == 0) {
+            Toast.makeText(getContext(), "All the fields should be filled.", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 }

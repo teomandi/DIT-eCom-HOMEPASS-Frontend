@@ -33,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
     public static String getUsername() {
         return mUsername;
     }
+    public static void setUsername(String username) {
+        mUsername = username;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

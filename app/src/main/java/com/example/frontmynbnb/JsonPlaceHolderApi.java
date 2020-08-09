@@ -44,6 +44,20 @@ public interface JsonPlaceHolderApi {
     @PUT("users/{id}/host")
     Call<User> switchUserHost(@Path("id") int id);
 
+    @Multipart
+    @PUT("users/{id}")
+    Call<User> editUser(
+            @Path("id") int id,
+            @Part("username") RequestBody username,
+            @Part("email") RequestBody email,
+            @Part("password") RequestBody password,
+            @Part("firstName") RequestBody firstName,
+            @Part("lastName") RequestBody lastName,
+            @Part("phone") RequestBody phone,
+            @Part("host") RequestBody isHost,
+            @Part("address") RequestBody address,
+            @Part MultipartBody.Part imageFile);
+
     @GET("messages")
     Call<List<Message>> getAllMessages();
 

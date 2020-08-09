@@ -221,22 +221,20 @@ public class RegisterActivity extends AppCompatActivity {
                 mTextCnfPassword.getText().length() == 0 ||
                 mTextName.getText().length() == 0 ||
                 mTextSurname.getText().length() == 0 ||
-                mTextPhone.getText().length() == 0 ){
+                mTextPhone.getText().length() == 0 ||
+                mTextAddress.getText().length() == 0){
             Toast.makeText(this, "All the fields should be filled.", Toast.LENGTH_LONG).show();
             return false;
         }
-
         System.out.println(mTextCnfPassword.getText().toString() + "=?=" + mTextPassword.getText().toString());
         if( !mTextCnfPassword.getText().toString().equals(mTextPassword.getText().toString()) ){
             Toast.makeText(this, "Passwords not the same.", Toast.LENGTH_LONG).show();
             return false;
         }
-
-//        if( mCurrentBitmap == null){
-//            Toast.makeText(this, "Please select a photo to upload.", Toast.LENGTH_LONG).show();
-//            return false;
-//        }
-
+        if( mCurrentBitmap == null){
+            Toast.makeText(this, "Please select a photo to upload.", Toast.LENGTH_LONG).show();
+            return false;
+        }
         return true;
     }
 
