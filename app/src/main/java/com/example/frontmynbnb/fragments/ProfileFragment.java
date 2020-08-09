@@ -1,11 +1,18 @@
 package com.example.frontmynbnb.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -32,14 +39,21 @@ import retrofit2.Retrofit;
 
 public class ProfileFragment extends Fragment {
 
+    private static final int SELECT_IMAGE = 1;
+
     private ProgressBar mProgressBar;
     private TextView mTextFirstName, mTextLastName, mTextUsername, mTextEmail, mTextPhone,
             mTextAddress, mTextHost;
-    private CircleImageView mCircleImage;
+    private CircleImageView mCircleImage, mCircleImageEdit;
     private TableLayout mTableView;
+    private Button mButtonEdit, mButtonSave, mButtonCancel;
+    private LinearLayout infoLinearLayout, editLinearLayout;
+//    private ScrollView ;
+    private EditText mEditUsername, mEditFirstName, mEditLastName, mEditEmail, mEditPhone, mEditAddress;
 
     private User mUser = null;
-    private Bitmap mUserImage = null;
+    private Bitmap mUserImage = null, mNewUserImage;
+    private Uri mBitmapUri = null;
 
     @Nullable
     @Override
@@ -53,7 +67,65 @@ public class ProfileFragment extends Fragment {
         mTextPhone = (TextView) view.findViewById(R.id.textview_phone);
         mTextAddress = (TextView) view.findViewById(R.id.textview_address);
         mCircleImage = (CircleImageView) view.findViewById(R.id.imageview_profilepic);
+        mCircleImageEdit = (CircleImageView) view.findViewById(R.id.imageview_editprofilepic);
+        mCircleImageEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(
+                        intent,
+                        "Select Picture"
+                ), SELECT_IMAGE);
+            }
+        });
         mTableView = (TableLayout) view.findViewById(R.id.tableview_infotable);
+        infoLinearLayout = (LinearLayout) view.findViewById(R.id.linearLayout1);
+        editLinearLayout = (LinearLayout) view.findViewById(R.id.linearLayout2);
+        mEditUsername = (EditText) view.findViewById(R.id.editview_username2);
+        mEditFirstName = (EditText) view.findViewById(R.id.editview_firstname2);
+        mEditLastName = (EditText) view.findViewById(R.id.editview_lastname2);
+        mEditEmail = (EditText) view.findViewById(R.id.editview_email2);
+        mEditPhone = (EditText) view.findViewById(R.id.editview_phone2);
+        mEditAddress = (EditText) view.findViewById(R.id.editview_address2);
+        mButtonSave = (Button) view.findViewById(R.id.button_save);
+        mButtonCancel = (Button) view.findViewById(R.id.button_cancel);
+        mButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(
+                        getContext(),
+                        "Edit Canceled",
+                        Toast.LENGTH_SHORT
+                ).show();
+                editLinearLayout.setVisibility(View.INVISIBLE);
+                mButtonEdit.setVisibility(View.VISIBLE);
+                infoLinearLayout.setVisibility(View.VISIBLE);
+            }
+        });
+        mButtonEdit = (Button) view.findViewById(R.id.button_edit);
+        mButtonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(
+                        getContext(),
+                        "Edit mode activated",
+                        Toast.LENGTH_SHORT
+                ).show();
+                infoLinearLayout.setVisibility(View.INVISIBLE);
+                mButtonEdit.setVisibility(View.INVISIBLE);
+                editLinearLayout.setVisibility(View.VISIBLE);
+                mCircleImageEdit.setImageBitmap(mUserImage);
+                // set the values
+                mEditUsername.setText(mTextUsername.getText());
+                mEditFirstName.setText(mTextFirstName.getText());
+                mEditLastName.setText(mTextLastName.getText());
+                mEditEmail.setText(mTextEmail.getText());
+                mEditPhone.setText(mTextPhone.getText());
+                mEditAddress.setText(mTextAddress.getText());
+            }
+        });
         mTextHost = (TextView) view.findViewById(R.id.textview_host);
         mTextHost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,12 +138,14 @@ public class ProfileFragment extends Fragment {
                     ).show();
                     return;
                 }
+                mProgressBar.setVisibility(View.VISIBLE);
                 Retrofit retrofit = RestClient.getClient(MainActivity.getToken());
                 JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
                 Call<User> call = jsonPlaceHolderApi.switchUserHost(mUser.getId());
                 call.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
+                        mProgressBar.setVisibility(View.INVISIBLE);
                         if( !response.isSuccessful() ) {
                             Toast.makeText(
                                     getContext(),
@@ -92,6 +166,7 @@ public class ProfileFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
+                        mProgressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(
                                 getContext(),
                                 "Failure on switching to host!",
@@ -110,6 +185,7 @@ public class ProfileFragment extends Fragment {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+                mProgressBar.setVisibility(View.INVISIBLE);
                 if( !response.isSuccessful() ) {
                     Toast.makeText(
                             getContext(),
@@ -127,6 +203,7 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+                mProgressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(
                         getContext(),
                         "Failure!!",
@@ -153,7 +230,6 @@ public class ProfileFragment extends Fragment {
         String hostMessage = mUser.isHost() ? "Already a host" : "Click here to become a host";
         mTextHost.setText(hostMessage);
         mTextHost.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.INVISIBLE);
     }
 
     private void fetchUserImage(){
@@ -194,6 +270,27 @@ public class ProfileFragment extends Fragment {
                 System.out.println("Error message:: " + t.getMessage());
             }
         });
+    }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_IMAGE) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data != null) {
+                    try {
+                        mBitmapUri = data.getData();
+                        mNewUserImage = MediaStore.Images.Media.getBitmap(
+                                getContext().getContentResolver(),
+                                data.getData()
+                        );
+                        mCircleImageEdit.setImageBitmap((mNewUserImage));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED)  {
+                Toast.makeText(getContext(), "Canceled", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

@@ -31,6 +31,17 @@
     <string name="hompass_logo">HomPass Logo</string>
     <string name="click_here_to_become_a_host">Click here to become a Host</string>
     <string name="address">Address</string>
+    <string name="edit">Edit</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="username_ask">Username:</string>
+    <string name="name_ask">Name:</string>
+    <string name="surname_ask">Surname:</string>
+    <string name="main_fields">Main fields</string>
+    <string name="secondary_fields">Secondary fields</string>
+    <string name="email_ask">Email:</string>
+    <string name="phone_ask">Phone:</string>
+    <string name="address_ask">Address:</string>
     <string-array name="roles">
         <item>Tenant</item>
         <item>Host</item>
