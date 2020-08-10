@@ -152,12 +152,10 @@ public class ProfileFragment extends Fragment {
                             imageFile
                     );
                     System.out.println("filepart initialized");
-                }else{
-                    imageFilePart = MultipartBody.Part.createFormData(
-                            "picture",
-                            null,
-                            null
-                    );
+                }
+                else {
+                    RequestBody attachmentEmpty = RequestBody.create(MediaType.parse("text/plain"), "");
+                    imageFilePart = MultipartBody.Part.createFormData("picture", "", attachmentEmpty);
                 }
                 Retrofit retrofit = RestClient.getClient(MainActivity.getToken());
                 JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);

@@ -127,7 +127,10 @@ public class RegisterActivity extends AppCompatActivity {
                             mBitmapUri.getLastPathSegment(),
                             imageFile
                     );
-                    System.out.println("filepart initialized");
+                    System.out.println("filep art initialized");
+                } else {
+                    RequestBody attachmentEmpty = RequestBody.create(MediaType.parse("text/plain"), "");
+                    imageFilePart = MultipartBody.Part.createFormData("picture", "", attachmentEmpty);
                 }
                 Retrofit retrofit = RestClient.getClient(null);
                 JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
@@ -231,10 +234,10 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Passwords not the same.", Toast.LENGTH_LONG).show();
             return false;
         }
-        if( mCurrentBitmap == null){
-            Toast.makeText(this, "Please select a photo to upload.", Toast.LENGTH_LONG).show();
-            return false;
-        }
+//        if( mCurrentBitmap == null){
+//            Toast.makeText(this, "Please select a photo to upload.", Toast.LENGTH_LONG).show();
+//            return false;
+//        }
         return true;
     }
 

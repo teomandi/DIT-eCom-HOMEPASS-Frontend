@@ -35,7 +35,7 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent">
+        >
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageview_profilepic"
@@ -261,7 +261,8 @@
                 android:id="@+id/tableview_edit_secondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="25dp">
+                android:layout_margin="25dp"
+                >
 
                 <TableRow>
 
