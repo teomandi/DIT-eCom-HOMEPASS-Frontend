@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +54,7 @@ public class ProfileFragment extends Fragment {
     private TableLayout mTableView;
     private Button mButtonEdit, mButtonSave, mButtonCancel;
     private LinearLayout infoLinearLayout, editLinearLayout;
-//    private ScrollView ;
+    private ScrollView scrollView2;
     private EditText mEditUsername, mEditFirstName, mEditLastName, mEditEmail, mEditPhone, mEditAddress;
 
     private User mUser = null;
@@ -73,6 +74,7 @@ public class ProfileFragment extends Fragment {
         mTextAddress = (TextView) view.findViewById(R.id.textview_address);
         mCircleImage = (CircleImageView) view.findViewById(R.id.imageview_profilepic);
         mCircleImageEdit = (CircleImageView) view.findViewById(R.id.imageview_editprofilepic);
+        scrollView2 = (ScrollView) view.findViewById(R.id.scrollView2);
         mCircleImageEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,7 +177,7 @@ public class ProfileFragment extends Fragment {
                             return;
                         }
                         System.out.println("Status Code : " + response.code());
-                        editLinearLayout.setVisibility(View.INVISIBLE);
+                        scrollView2.setVisibility(View.INVISIBLE);
                         mButtonEdit.setVisibility(View.VISIBLE);
                         infoLinearLayout.setVisibility(View.VISIBLE);
                         mUser = response.body();
@@ -214,7 +216,7 @@ public class ProfileFragment extends Fragment {
                         "Edit Canceled",
                         Toast.LENGTH_SHORT
                 ).show();
-                editLinearLayout.setVisibility(View.INVISIBLE);
+                scrollView2.setVisibility(View.INVISIBLE);
                 mButtonEdit.setVisibility(View.VISIBLE);
                 infoLinearLayout.setVisibility(View.VISIBLE);
             }
@@ -230,7 +232,7 @@ public class ProfileFragment extends Fragment {
                 ).show();
                 infoLinearLayout.setVisibility(View.INVISIBLE);
                 mButtonEdit.setVisibility(View.INVISIBLE);
-                editLinearLayout.setVisibility(View.VISIBLE);
+                scrollView2.setVisibility(View.VISIBLE);
                 mCircleImageEdit.setImageBitmap(mUserImage);
                 // set the values
                 mEditUsername.setText(mTextUsername.getText());
