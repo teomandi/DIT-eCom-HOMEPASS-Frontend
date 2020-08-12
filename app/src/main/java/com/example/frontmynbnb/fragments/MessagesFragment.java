@@ -9,13 +9,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.example.frontmynbnb.R;
 
 import java.util.Objects;
 
-public class MessagesFragment extends Fragment {
+public class MessagesFragment extends MyFragment {
 
     TextView mtitle;
     Button addMessage;
@@ -49,6 +48,18 @@ public class MessagesFragment extends Fragment {
             }
         });
 
+
         return view;
     }
+
+    @Override
+    public boolean onBackPressed() {
+        System.out.println("MESSAGES");
+        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
+                R.id.fragment_container,
+                new HomeFragment()
+        ).addToBackStack(null).commit();
+        return true;
+    }
+
 }

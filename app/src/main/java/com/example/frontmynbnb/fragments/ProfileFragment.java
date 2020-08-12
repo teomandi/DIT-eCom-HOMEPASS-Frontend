@@ -32,6 +32,7 @@ import com.example.frontmynbnb.models.User;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -43,7 +44,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends MyFragment {
 
     private static final int SELECT_IMAGE = 1;
 
@@ -421,6 +422,18 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getContext(), "All the fields should be filled.", Toast.LENGTH_LONG).show();
             return false;
         }
+        return true;
+    }
+
+
+
+    @Override
+    public boolean onBackPressed() {
+        System.out.println("PROFILE");
+        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
+                R.id.fragment_container,
+                new HomeFragment()
+        ).addToBackStack(null).commit();
         return true;
     }
 }
