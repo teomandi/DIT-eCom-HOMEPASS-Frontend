@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.frontmynbnb.MainActivity;
 import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.models.Place;
 
@@ -28,6 +29,8 @@ public class HostFragment extends MyFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_host, container, false);
+
+        MainActivity.setBottomNavChecked(2);
         return view;
     }
 

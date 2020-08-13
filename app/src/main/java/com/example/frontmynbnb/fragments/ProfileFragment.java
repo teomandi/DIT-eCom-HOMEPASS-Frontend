@@ -330,6 +330,9 @@ public class ProfileFragment extends MyFragment {
                 System.out.println("Error message:: " + t.getMessage());
             }
         });
+
+        MainActivity.setBottomNavChecked(1);
+        MainActivity.changeTheme("la");
         return view;
     }
 
@@ -412,7 +415,7 @@ public class ProfileFragment extends MyFragment {
         }
     }
 
-    public boolean validate() {
+    private boolean validate() {
         if (mEditUsername.getText().length() == 0 ||
                 mEditEmail.getText().length() == 0 ||
                 mEditFirstName.getText().length() == 0 ||

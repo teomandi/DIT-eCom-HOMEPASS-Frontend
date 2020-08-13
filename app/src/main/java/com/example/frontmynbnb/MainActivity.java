@@ -2,10 +2,13 @@ package com.example.frontmynbnb;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -14,14 +17,17 @@ import com.example.frontmynbnb.fragments.HostFragment;
 import com.example.frontmynbnb.fragments.MessagesFragment;
 import com.example.frontmynbnb.fragments.ProfileFragment;
 import com.example.frontmynbnb.fragments.MyFragment;
-import com.example.frontmynbnb.models.Login;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
+import static com.example.frontmynbnb.R.drawable.background2;
+
 
 public class MainActivity extends AppCompatActivity {
-    private static String mToken, mUsername;
+    private static String mToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0MzIxIiwiZXhwIjoxNTk4MjA4NDczfQ.j-AGYygWeu_b27Fh7eFFLnVVSfQC617gAzVeTFSMHfuxmk-CFj4IZcFjyDc27L4qgeTosaBj9UupsPVty5rgTg";
+    private static String mUsername = "4321";
+    private static ConstraintLayout layout;
     public static String getToken() {
         return mToken;
     }
@@ -32,7 +38,17 @@ public class MainActivity extends AppCompatActivity {
         mUsername = username;
     }
 
-    private BottomNavigationView bottomNav;
+    private static BottomNavigationView bottomNav;
+    public static void setBottomNavChecked(int id){
+        bottomNav.getMenu().getItem(id).setCheckable(true);
+        bottomNav.getMenu().getItem(id).setChecked(true);
+    }
+
+    public static void changeTheme(String theme){
+        bottomNav.setBackgroundColor(Color.parseColor("#0404af"));
+//        layout.setBackground(background2);
+
+    }
 
 
     @Override
@@ -41,11 +57,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            System.out.println("looking for username and password on extra");
             mUsername = extras.getString("username");
             mToken = extras.getString("token");
             System.out.println("Username and token collected");
         }
-
+        layout = (ConstraintLayout) findViewById(R.id.main_layout);
         bottomNav = findViewById(R.id.bottom_navigation);
         final FragmentManager fm = this.getSupportFragmentManager();
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -81,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
         ).commit();
         //uncheck them all
         int size = bottomNav.getMenu().size();
+        System.out.println("???");
+
         for (int i = 0; i < size; i++) {
             bottomNav.getMenu().getItem(i).setCheckable(false);
         }
@@ -90,14 +109,13 @@ public class MainActivity extends AppCompatActivity {
     // handle back
     @Override
     public void onBackPressed() {
-
         List<Fragment> fragmentList = this.getSupportFragmentManager().getFragments();
-
         boolean handled = false;
         for(Fragment f : fragmentList) {
             if(f instanceof MyFragment) {
                 handled = ((MyFragment)f).onBackPressed();
                 int size = bottomNav.getMenu().size();
+                System.out.println("???");
                 for (int i = 0; i < size; i++) {
                     bottomNav.getMenu().getItem(i).setCheckable(false);
                 }
@@ -106,14 +124,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
         if(!handled) {
             Intent loginIntent = new Intent(
                     MainActivity.this,
                     LoginActivity.class
             );
             startActivity(loginIntent);
-
         }
     }
 }

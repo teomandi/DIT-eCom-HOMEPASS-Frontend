@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.frontmynbnb.MainActivity;
 import com.example.frontmynbnb.R;
 
 import java.util.Objects;
@@ -48,6 +49,7 @@ public class MessagesFragment extends MyFragment {
             }
         });
 
+        MainActivity.setBottomNavChecked(0);
 
         return view;
     }

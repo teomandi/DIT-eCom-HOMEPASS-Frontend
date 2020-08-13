@@ -13,8 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.frontmynbnb.models.Login;
-import com.example.frontmynbnb.models.Message;
-import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                         );
                         mainIntent.putExtra("username", mTextUsername.getText().toString());
                         mainIntent.putExtra("token", userToken);
+                        System.out.println("~~~~> " + userToken);
                         startActivity(mainIntent);
                     }
 
