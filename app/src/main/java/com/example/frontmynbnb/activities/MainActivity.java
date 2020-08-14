@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                                     "Don't rush!",
                                     Toast.LENGTH_SHORT
                             ).show();
+                            fetchUserDetails();
                             return true;
                         }
                         if ( !AppConstants.USER.isHost() ){
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG
                 ).show();
                 System.out.println("Error message:: " + t.getMessage());
-                fetched = true;
+                fetched = false;
             }
         });
     }

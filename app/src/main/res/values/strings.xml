@@ -42,8 +42,9 @@
     <string name="email_ask">Email:</string>
     <string name="phone_ask">Phone:</string>
     <string name="address_ask">Address:</string>
+    <string name="map_key" translatable="false">AIzaSyB_qsP8AOP_P0MdlPz-48TDaJYjTP3vbjo</string>
     <string-array name="roles">
-        <item>Tenant</item>
+        <item>Guest</item>
         <item>Host</item>
     </string-array>
 </resources>

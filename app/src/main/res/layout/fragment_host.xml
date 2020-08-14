@@ -9,21 +9,34 @@
     android:gravity="center_horizontal"
     >
 
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:id="@+id/google_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+    <androidx.appcompat.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/sv_location"
+        app:queryHint="Add address.."
+        app:iconifiedByDefault="false"
+        android:layout_margin="10dp"
+        android:elevation="5dp"
+        android:background="@drawable/light_round"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_id"
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:text="Host???"
-        android:textSize="40sp"
-        android:textStyle="bold"
+        android:id="@+id/results_id"
+        android:text="empty"
         />
-    <Button
-        android:id="@+id/button_help"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/success_button"
-        android:text="@string/help"
-        android:textColor="@color/colorWhite"
-        />
+
 
 </LinearLayout>
