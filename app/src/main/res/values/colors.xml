@@ -8,8 +8,11 @@
     <color name="colorMoreRed">#af0404</color>
     <color name="colorRed">#ff0000</color>
     <color name="colorDeepBlue">#00004B</color>
-    <color name="colorMoreBlue">#0404af</color>
+    <color name="colorMoreBlue">#0404f5</color>
     <color name="colorBlue">#0000ff</color>
+    <color name="colorDeepGreen">#05272E</color>
+    <color name="colorMoreGreen">#59a074</color>
+    <color name="colorGreen">#d7e997</color>
     <color name="colorWhite">#cccccc</color>
     <color name="lightOrange">#ffb11c</color>
 </resources>

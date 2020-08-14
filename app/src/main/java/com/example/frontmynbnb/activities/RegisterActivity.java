@@ -1,4 +1,4 @@
-package com.example.frontmynbnb;
+package com.example.frontmynbnb.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.frontmynbnb.JsonPlaceHolderApi;
+import com.example.frontmynbnb.R;
+import com.example.frontmynbnb.RestClient;
 import com.example.frontmynbnb.misc.Utils;
 import com.example.frontmynbnb.models.User;
 

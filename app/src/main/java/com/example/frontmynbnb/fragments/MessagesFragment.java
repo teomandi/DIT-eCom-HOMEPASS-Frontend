@@ -10,15 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.frontmynbnb.MainActivity;
+import com.example.frontmynbnb.AppConstants;
+import com.example.frontmynbnb.activities.HostActivity;
+import com.example.frontmynbnb.activities.MainActivity;
 import com.example.frontmynbnb.R;
 
 import java.util.Objects;
 
 public class MessagesFragment extends MyFragment {
 
-    TextView mtitle;
-    Button addMessage;
+    TextView mTextTitle;
+    Button mButtonAddMessage;
     View view;
 
     @Nullable
@@ -26,8 +28,8 @@ public class MessagesFragment extends MyFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_messages, container, false);
 
-        mtitle = view.findViewById(R.id.textview_title);
-        mtitle.setOnClickListener(new View.OnClickListener(){
+        mTextTitle = view.findViewById(R.id.textview_title);
+        mTextTitle.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 ChatFragment chatF = ChatFragment.newInstance(10, "Sarah");
@@ -38,7 +40,9 @@ public class MessagesFragment extends MyFragment {
             }
         });
 
-        addMessage = (Button) view.findViewById(R.id.button_addmessage);
+        mButtonAddMessage = (Button) view.findViewById(R.id.button_addmessage);
+        if(AppConstants.MODE.equals("HOST"))
+            mButtonAddMessage.setBackgroundResource(R.drawable.success_button);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +53,11 @@ public class MessagesFragment extends MyFragment {
             }
         });
 
-        MainActivity.setBottomNavChecked(0);
+
+        if(AppConstants.MODE.equals("GUEST"))
+            MainActivity.setBottomNavChecked(0);
+        else
+            HostActivity.setBottomNavChecked(0);
 
         return view;
     }

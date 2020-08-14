@@ -22,7 +22,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/light_round"
-        android:drawableStart="@drawable/ic_edit_black_24dp"
         android:text="@string/edit"
         app:layout_constraintEnd_toEndOf="@+id/progressBar"
         app:layout_constraintTop_toTopOf="@+id/scrollView1"
@@ -86,7 +85,7 @@
                     <TextView
                         android:layout_column="1"
                         android:padding="3dp"
-                        android:text="@string/email"
+                        android:text="@string/email_ask"
                         android:textColor="@color/colorWhite"
                         android:textSize="25sp" />
 
@@ -104,7 +103,7 @@
                     <TextView
                         android:layout_column="1"
                         android:padding="3dp"
-                        android:text="@string/phone"
+                        android:text="@string/phone_ask"
                         android:textColor="@color/colorWhite"
                         android:textSize="25sp" />
 
@@ -122,7 +121,7 @@
                     <TextView
                         android:layout_column="1"
                         android:padding="3dp"
-                        android:text="@string/address"
+                        android:text="@string/address_ask"
                         android:textColor="@color/colorWhite"
                         android:textSize="25sp" />
 

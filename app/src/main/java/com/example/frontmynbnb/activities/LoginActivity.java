@@ -1,4 +1,4 @@
-package com.example.frontmynbnb;
+package com.example.frontmynbnb.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Retrofit;
@@ -12,6 +12,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.frontmynbnb.AppConstants;
+import com.example.frontmynbnb.JsonPlaceHolderApi;
+import com.example.frontmynbnb.R;
+import com.example.frontmynbnb.RestClient;
 import com.example.frontmynbnb.models.Login;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,9 +77,10 @@ public class LoginActivity extends AppCompatActivity {
                                 LoginActivity.this,
                                 MainActivity.class
                         );
-                        mainIntent.putExtra("username", mTextUsername.getText().toString());
-                        mainIntent.putExtra("token", userToken);
-                        System.out.println("~~~~> " + userToken);
+                        AppConstants.TOKEN = userToken;
+                        AppConstants.USERNAME = mTextUsername.getText().toString();
+                        AppConstants.MODE = "GUEST";
+                        System.out.println("~~~~> " + AppConstants.USERNAME);
                         startActivity(mainIntent);
                     }
 

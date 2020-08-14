@@ -21,7 +21,7 @@
         android:id="@+id/button_help"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/default_button"
+        android:background="@drawable/success_button"
         android:text="@string/help"
         android:textColor="@color/colorWhite"
         />

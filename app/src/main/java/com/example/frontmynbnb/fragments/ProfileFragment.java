@@ -21,10 +21,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
+import com.example.frontmynbnb.AppConstants;
 import com.example.frontmynbnb.JsonPlaceHolderApi;
-import com.example.frontmynbnb.MainActivity;
+import com.example.frontmynbnb.activities.HostActivity;
+import com.example.frontmynbnb.activities.MainActivity;
 import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.RestClient;
 import com.example.frontmynbnb.misc.Utils;
@@ -54,7 +55,7 @@ public class ProfileFragment extends MyFragment {
     private CircleImageView mCircleImage, mCircleImageEdit;
     private TableLayout mTableView;
     private Button mButtonEdit, mButtonSave, mButtonCancel;
-    private LinearLayout infoLinearLayout, editLinearLayout;
+    private LinearLayout infoLinearLayout;
     private ScrollView scrollView2;
     private EditText mEditUsername, mEditFirstName, mEditLastName, mEditEmail, mEditPhone, mEditAddress;
 
@@ -90,7 +91,6 @@ public class ProfileFragment extends MyFragment {
         });
         mTableView = (TableLayout) view.findViewById(R.id.tableview_infotable);
         infoLinearLayout = (LinearLayout) view.findViewById(R.id.linearLayout1);
-        editLinearLayout = (LinearLayout) view.findViewById(R.id.linearLayout2);
         mEditUsername = (EditText) view.findViewById(R.id.editview_username2);
         mEditFirstName = (EditText) view.findViewById(R.id.editview_firstname2);
         mEditLastName = (EditText) view.findViewById(R.id.editview_lastname2);
@@ -160,7 +160,7 @@ public class ProfileFragment extends MyFragment {
                     RequestBody attachmentEmpty = RequestBody.create(MediaType.parse("text/plain"), "");
                     imageFilePart = MultipartBody.Part.createFormData("picture", "", attachmentEmpty);
                 }
-                Retrofit retrofit = RestClient.getClient(MainActivity.getToken());
+                Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
                 JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
                 Call<User> call = jsonPlaceHolderApi.editUser(
                         mUser.getId(), usernamePart, emailPart, passwordPart, firstNamePart,
@@ -182,6 +182,7 @@ public class ProfileFragment extends MyFragment {
                         mButtonEdit.setVisibility(View.VISIBLE);
                         infoLinearLayout.setVisibility(View.VISIBLE);
                         mUser = response.body();
+                        AppConstants.USER = mUser;
                         setUserDetails();
                         fetchUserImage();
                         Toast.makeText(
@@ -203,8 +204,7 @@ public class ProfileFragment extends MyFragment {
                     }
                 });
                 //update the username
-                MainActivity.setUsername(mUser.getUsername());
-
+                AppConstants.USERNAME = mUser.getUsername();
 
             }
         });
@@ -257,7 +257,7 @@ public class ProfileFragment extends MyFragment {
                     return;
                 }
                 mProgressBar.setVisibility(View.VISIBLE);
-                Retrofit retrofit = RestClient.getClient(MainActivity.getToken());
+                Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
                 JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
                 Call<User> call = jsonPlaceHolderApi.switchUserHost(mUser.getId());
                 call.enqueue(new Callback<User>() {
@@ -273,6 +273,7 @@ public class ProfileFragment extends MyFragment {
                             return;
                         }
                         mUser = response.body();
+                        AppConstants.USER = mUser;
                         assert mUser != null;
                         setUserDetails();
                         Toast.makeText(
@@ -295,8 +296,8 @@ public class ProfileFragment extends MyFragment {
                 });
             }
         });
-        String token = MainActivity.getToken();
-        String username = MainActivity.getUsername();
+        String token = AppConstants.TOKEN;
+        String username = AppConstants.USERNAME;
         Retrofit retrofit = RestClient.getClient(token);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         Call<User> call = jsonPlaceHolderApi.getUserByUsername(username);
@@ -314,6 +315,7 @@ public class ProfileFragment extends MyFragment {
                 }
                 System.out.println("Status Code : " + response.code());
                 mUser = response.body();
+                AppConstants.USER = mUser;
                 assert mUser != null;
                 setUserDetails();
                 fetchUserImage();
@@ -330,8 +332,12 @@ public class ProfileFragment extends MyFragment {
                 System.out.println("Error message:: " + t.getMessage());
             }
         });
-
-        MainActivity.setBottomNavChecked(1);
+        AppConstants.USERNAME = "4321";
+        System.out.println("uname1: ~~~~~~~~~~~~~~~~~~~~~~> " + AppConstants.MODE);
+        if(AppConstants.MODE.equals("GUEST"))
+            MainActivity.setBottomNavChecked(1);
+        else
+            HostActivity.setBottomNavChecked(1);
         return view;
     }
 
@@ -353,7 +359,7 @@ public class ProfileFragment extends MyFragment {
     }
 
     private void fetchUserImage(){
-        String token = MainActivity.getToken();
+        String token = AppConstants.TOKEN;
         Retrofit retrofit = RestClient.getClient(token);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         Call<ResponseBody> call = jsonPlaceHolderApi.getUserImage(mUser.getId());
