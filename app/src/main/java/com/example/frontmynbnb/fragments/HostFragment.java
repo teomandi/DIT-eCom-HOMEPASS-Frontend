@@ -1,6 +1,7 @@
 package com.example.frontmynbnb.fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,8 @@ public class HostFragment extends MyFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_host, container, false);
+
+
 
         MainActivity.setBottomNavChecked(2);
         return view;

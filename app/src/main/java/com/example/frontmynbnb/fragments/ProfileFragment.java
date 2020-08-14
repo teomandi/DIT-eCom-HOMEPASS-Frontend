@@ -332,7 +332,6 @@ public class ProfileFragment extends MyFragment {
         });
 
         MainActivity.setBottomNavChecked(1);
-        MainActivity.changeTheme("la");
         return view;
     }
 

@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.frontmynbnb.fragments.HomeFragment;
 import com.example.frontmynbnb.fragments.HostFragment;
@@ -27,7 +28,6 @@ import static com.example.frontmynbnb.R.drawable.background2;
 public class MainActivity extends AppCompatActivity {
     private static String mToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0MzIxIiwiZXhwIjoxNTk4MjA4NDczfQ.j-AGYygWeu_b27Fh7eFFLnVVSfQC617gAzVeTFSMHfuxmk-CFj4IZcFjyDc27L4qgeTosaBj9UupsPVty5rgTg";
     private static String mUsername = "4321";
-    private static ConstraintLayout layout;
     public static String getToken() {
         return mToken;
     }
@@ -44,11 +44,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.getMenu().getItem(id).setChecked(true);
     }
 
-    public static void changeTheme(String theme){
-        bottomNav.setBackgroundColor(Color.parseColor("#0404af"));
-//        layout.setBackground(background2);
 
-    }
 
 
     @Override
@@ -62,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
             mToken = extras.getString("token");
             System.out.println("Username and token collected");
         }
-        layout = (ConstraintLayout) findViewById(R.id.main_layout);
         bottomNav = findViewById(R.id.bottom_navigation);
         final FragmentManager fm = this.getSupportFragmentManager();
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -80,8 +75,10 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = new ProfileFragment();
                         break;
                     case R.id.nav_switch:
-                        selectedFragment = new HostFragment();
-                        break;
+//                        selectedFragment = new HostFragment();
+//                        break;
+                        Toast.makeText(getApplicationContext(), "Switch to Host", Toast.LENGTH_SHORT).show();
+                        return true;
                 }
                 assert selectedFragment != null;
                 fm.beginTransaction().replace(
