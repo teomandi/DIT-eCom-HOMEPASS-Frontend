@@ -15,8 +15,11 @@ import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.fragments.HomeFragment;
 import com.example.frontmynbnb.fragments.HostFragment;
 import com.example.frontmynbnb.fragments.MessagesFragment;
+import com.example.frontmynbnb.fragments.MyFragment;
 import com.example.frontmynbnb.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
 
 public class HostActivity extends AppCompatActivity {
 
@@ -69,6 +72,31 @@ public class HostActivity extends AppCompatActivity {
         int size = bottomNav.getMenu().size();
         for (int i = 0; i < size; i++) {
             bottomNav.getMenu().getItem(i).setCheckable(false);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        List<Fragment> fragmentList = this.getSupportFragmentManager().getFragments();
+        boolean handled = false;
+        for(Fragment f : fragmentList) {
+            if(f instanceof MyFragment) {
+                handled = ((MyFragment)f).onBackPressed();
+                int size = bottomNav.getMenu().size();
+                for (int i = 0; i < size; i++) {
+                    bottomNav.getMenu().getItem(i).setCheckable(false);
+                }
+                if(handled) {
+                    break;
+                }
+            }
+        }
+        if(!handled) {
+            Intent loginIntent = new Intent(
+                    HostActivity.this,
+                    LoginActivity.class
+            );
+            startActivity(loginIntent);
         }
     }
 }

@@ -21,19 +21,8 @@ public class HostFragment extends MyFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_host, container, false);
 
-
-
-        MainActivity.setBottomNavChecked(2);
         return view;
     }
 
-//    @Override
-//    public boolean onBackPressed() {
-//        System.out.println("HOST");
-//        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
-//                R.id.fragment_container,
-//                new HomeFragment()
-//        ).addToBackStack(null).commit();
-//        return true;
-//    }
+
 }

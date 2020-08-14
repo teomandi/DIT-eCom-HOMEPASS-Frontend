@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/dark_round"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,17 +16,7 @@
         app:layout_constraintStart_toStartOf="@+id/scrollView1"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button_edit"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/light_round"
-        android:text="@string/edit"
-        app:layout_constraintEnd_toEndOf="@+id/progressBar"
-        app:layout_constraintTop_toTopOf="@+id/scrollView1"
-        tools:ignore="PrivateResource" />
+
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -41,41 +32,55 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageview_profilepic"
-                android:layout_width="175dp"
-                android:layout_height="175dp"
-                android:layout_margin="15dp"
-                android:src="@drawable/asianx" />
-
-            <TextView
-                android:id="@+id/textview_name"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorWhite"
-                android:textSize="35sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-            <TextView
-                android:id="@+id/textview_surname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorWhite"
-                android:textSize="35sp"
-                android:textStyle="bold" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageview_profilepic"
+                    android:layout_width="175dp"
+                    android:layout_height="175dp"
+                    android:layout_margin="15dp"
+                    android:src="@drawable/asianx" />
 
-            <TextView
-                android:id="@+id/textview_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorWhite"
-                android:textSize="30sp"
-                android:textStyle="italic" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/textview_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#fff"
+                        android:textSize="35sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textview_surname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#fff"
+                        android:textSize="35sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textview_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#fff"
+                        android:textSize="30sp"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+            </LinearLayout>
 
             <TableLayout
                 android:id="@+id/tableview_infotable"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="25dp"
                 android:visibility="invisible">
@@ -86,14 +91,14 @@
                         android:layout_column="1"
                         android:padding="3dp"
                         android:text="@string/email_ask"
-                        android:textColor="@color/colorWhite"
+                        android:textColor="#fff"
                         android:textSize="25sp" />
 
                     <TextView
                         android:id="@+id/textview_email"
                         android:layout_column="2"
                         android:padding="3dp"
-                        android:textColor="@color/colorWhite"
+                        android:textColor="#fff"
                         android:textSize="25sp" />
 
                 </TableRow>
@@ -104,14 +109,14 @@
                         android:layout_column="1"
                         android:padding="3dp"
                         android:text="@string/phone_ask"
-                        android:textColor="@color/colorWhite"
+                        android:textColor="#fff"
                         android:textSize="25sp" />
 
                     <TextView
                         android:id="@+id/textview_phone"
                         android:layout_column="2"
                         android:padding="3dp"
-                        android:textColor="@color/colorWhite"
+                        android:textColor="#fff"
                         android:textSize="25sp" />
 
                 </TableRow>
@@ -122,14 +127,14 @@
                         android:layout_column="1"
                         android:padding="3dp"
                         android:text="@string/address_ask"
-                        android:textColor="@color/colorWhite"
+                        android:textColor="#fff"
                         android:textSize="25sp" />
 
                     <TextView
                         android:id="@+id/textview_address"
                         android:layout_column="2"
                         android:padding="3dp"
-                        android:textColor="@color/colorWhite"
+                        android:textColor="#fff"
                         android:textSize="25sp" />
 
                 </TableRow>
@@ -146,6 +151,14 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/button_edit"
+                android:layout_width="80dp"
+                android:layout_height="45dp"
+                android:background="@drawable/light_round"
+                android:text="@string/edit"
+                />
 
         </LinearLayout>
     </ScrollView>
@@ -192,10 +205,10 @@
 
                     <TextView
                         android:layout_column="1"
-                        android:drawableStart="@drawable/ic_person_black_24dp"
+                        android:drawableStart="@drawable/ic_person_white_24dp"
                         android:padding="3dp"
                         android:text="@string/username_ask"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="23sp" />
 
                     <EditText
@@ -205,7 +218,7 @@
                         android:background="@drawable/light_round"
                         android:inputType="text"
                         android:padding="3dp"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="23sp" />
 
                 </TableRow>
@@ -214,10 +227,10 @@
 
                     <TextView
                         android:layout_column="1"
-                        android:drawableStart="@drawable/ic_person_black_24dp"
+                        android:drawableStart="@drawable/ic_person_white_24dp"
                         android:padding="3dp"
                         android:text="@string/name_ask"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="23sp" />
 
                     <EditText
@@ -227,7 +240,7 @@
                         android:background="@drawable/light_round"
                         android:inputType="text"
                         android:padding="3dp"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="23sp" />
 
                 </TableRow>
@@ -236,10 +249,10 @@
 
                     <TextView
                         android:layout_column="1"
-                        android:drawableStart="@drawable/ic_person_black_24dp"
+                        android:drawableStart="@drawable/ic_person_white_24dp"
                         android:padding="3dp"
                         android:text="@string/surname_ask"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="23sp" />
 
                     <EditText
@@ -249,7 +262,7 @@
                         android:background="@drawable/light_round"
                         android:inputType="text"
                         android:padding="3dp"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="23sp" />
 
                 </TableRow>
@@ -274,10 +287,10 @@
 
                     <TextView
                         android:layout_column="1"
-                        android:drawableStart="@drawable/ic_email_black_24dp"
+                        android:drawableStart="@drawable/ic_email_white_24dp"
                         android:padding="3dp"
                         android:text="@string/email_ask"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="23sp" />
 
                     <EditText
@@ -287,7 +300,7 @@
                         android:background="@drawable/light_round"
                         android:inputType="textEmailAddress"
                         android:padding="3dp"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="23sp" />
 
                 </TableRow>
@@ -296,10 +309,10 @@
 
                     <TextView
                         android:layout_column="1"
-                        android:drawableStart="@drawable/ic_phone_black_24dp"
+                        android:drawableStart="@drawable/ic_phone_white_24dp"
                         android:padding="3dp"
                         android:text="@string/phone_ask"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="23sp" />
 
                     <EditText
@@ -309,7 +322,7 @@
                         android:background="@drawable/light_round"
                         android:inputType="phone"
                         android:padding="3dp"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="23sp" />
 
                 </TableRow>
@@ -318,10 +331,10 @@
 
                     <TextView
                         android:layout_column="1"
-                        android:drawableStart="@drawable/ic_home_black_24dp"
+                        android:drawableStart="@drawable/ic_home_white_24dp"
                         android:padding="3dp"
                         android:text="@string/address_ask"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="23sp" />
 
                     <EditText
@@ -331,7 +344,7 @@
                         android:background="@drawable/light_round"
                         android:inputType="text"
                         android:padding="3dp"
-                        android:textColor="#000"
+                        android:textColor="#fff"
                         android:textSize="23sp" />
 
                 </TableRow>
@@ -360,7 +373,7 @@
                     android:layout_marginEnd="5dp"
                     android:background="@drawable/cancel_button"
                     android:text="@string/cancel"
-                    android:textColor="#000"
+                    android:textColor="#fff"
                     android:textStyle="bold" />
 
                 <Button
@@ -369,7 +382,7 @@
                     android:layout_height="40dp"
                     android:background="@drawable/success_button"
                     android:text="@string/save"
-                    android:textColor="#000"
+                    android:textColor="#fff"
                     android:textStyle="bold" />
 
             </LinearLayout>

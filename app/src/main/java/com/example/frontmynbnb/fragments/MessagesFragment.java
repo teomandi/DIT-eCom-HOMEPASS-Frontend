@@ -66,8 +66,8 @@ public class MessagesFragment extends MyFragment {
     public boolean onBackPressed() {
         System.out.println("MESSAGES");
         Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
-                R.id.fragment_container,
-                new HomeFragment()
+                AppConstants.MODE.equals("GUEST") ? R.id.fragment_container : R.id.fragment_container2,
+                AppConstants.MODE.equals("GUEST") ? new HomeFragment() : new HostFragment()
         ).addToBackStack(null).commit();
         return true;
     }
