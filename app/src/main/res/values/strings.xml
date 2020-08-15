@@ -41,8 +41,17 @@
     <string name="secondary_fields">Secondary fields</string>
     <string name="email_ask">Email:</string>
     <string name="phone_ask">Phone:</string>
+    <string name="google_maps_api_key">AIzaSyAASOp4dNDXWgirwg8gcAwqTzJ7dGHyJC8</string>
     <string name="address_ask">Address:</string>
-    <string name="map_key" translatable="false">AIzaSyB_qsP8AOP_P0MdlPz-48TDaJYjTP3vbjo</string>
+    <string name="availability_ask">Availability:</string>
+    <string name="set_the_date_ranges_that_the_house_is_available">Set the available date ranges that the house is available</string>
+    <string name="open_calendar">Open Calendar</string>
+    <string name="pick_date_range">Pick date range:</string>
+    <string name="period_ask">Available Period:</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="add_new_date_range">Add new date range:</string>
+    <string name="add">ADD</string>
     <string-array name="roles">
         <item>Guest</item>
         <item>Host</item>
