@@ -9,7 +9,6 @@
     android:orientation="vertical"
     app:layout_constraintTop_toTopOf="parent">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,13 +16,20 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Your Place"
+            android:id="@+id/title_place"
+            android:textSize="40sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@string/address_ask"
+            android:text="@string/address"
             android:textColor="#fff"
-            android:textSize="25sp"
-
+            android:textSize="30sp"
             />
 
         <SearchView
@@ -44,19 +50,271 @@
             android:layout_margin="10dp" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@string/availability_ask"
+            android:text="@string/details"
             android:textColor="#fff"
-            android:textSize="25sp" />
+            android:textSize="30sp"
+            />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/light_round"
+            >
+
+            <TableRow>
+                <TextView
+                    android:text="@string/max_guests_ask"
+                    android:layout_column="1"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    />
+                <EditText
+                    android:id="@+id/edittext_maxguest"
+                    android:layout_width="130dp"
+                    android:layout_column="2"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    android:inputType="number"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:text="@string/min_cost"
+                    android:layout_column="1"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    />
+                <EditText
+                    android:id="@+id/edittext_mincost"
+                    android:layout_column="2"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    android:inputType="number"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:text="@string/cost_per_person_ask"
+                    android:layout_column="1"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    />
+
+                <EditText
+                    android:id="@+id/edittext_costperperson"
+                    android:layout_column="2"
+                    android:inputType="number"
+                    android:padding="5dp"
+                    android:textColor="#fff"
+                    android:textSize="25sp" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:text="@string/number_of_beds_ask"
+                    android:layout_column="1"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    />
+                <EditText
+                    android:id="@+id/edittext_beds"
+                    android:layout_column="2"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    android:inputType="number"
+
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:text="@string/number_of_baths_ask"
+                    android:layout_column="1"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    />
+                <EditText
+                    android:id="@+id/edittext_baths"
+                    android:layout_column="2"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    android:inputType="number"
+
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:text="@string/number_of_bedrooms_ask"
+                    android:layout_column="1"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    />
+                <EditText
+                    android:id="@+id/edittext_bedrooms"
+                    android:layout_column="2"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    android:inputType="number"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:text="@string/max_guests_ask"
+                    android:layout_column="1"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    />
+                <CheckBox
+                    android:id="@+id/checkbox_livingroom"
+                    android:layout_column="2"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:text="@string/area_m2_ask"
+                    android:layout_column="1"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    />
+                <EditText
+                    android:id="@+id/edittext_area"
+                    android:layout_column="2"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    android:padding="5dp"
+                    />
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/images"
+            android:textColor="#fff"
+            android:textSize="30sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/main_image"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"
+            />
+        
+        <ImageView
+            android:id="@+id/imageview_main"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:src="@drawable/simple_home"
+            android:contentDescription="@string/main_image_of_the_house"
+            android:layout_marginBottom="10dp"
+
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/upload_multiple_images"
+            android:textColor="#fff"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/button_multimages"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:background="@drawable/success_button"
+            android:text="@string/select_images"
+            android:textColor="#fff"
+            />
+
+
+        <TextView
+            android:id="@+id/textview_multimages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/_0_images_have_been_uploaded"
+            android:textColor="#fff"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/type_of_place"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+
+            android:textColor="#fff"
+            android:textSize="30sp"
+            />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio_type"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            >
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio_house"
+                android:textSize="20sp"
+                android:textColor="#fff"
+                android:text="@string/house"
+                />
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio_room"
+                android:textSize="20sp"
+                android:textColor="#fff"
+                android:text="@string/room"
+                />
+        </RadioGroup>
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/availability"
+            android:textColor="#fff"
+            android:textSize="30sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:text="@string/set_the_date_ranges_that_the_house_is_available"
             android:textColor="#fff"
-            android:textSize="15sp"
+            android:textSize="20sp"
 
             />
 

@@ -43,7 +43,7 @@
     <string name="phone_ask">Phone:</string>
     <string name="google_maps_api_key">AIzaSyAASOp4dNDXWgirwg8gcAwqTzJ7dGHyJC8</string>
     <string name="address_ask">Address:</string>
-    <string name="availability_ask">Availability:</string>
+    <string name="availability">Availability</string>
     <string name="set_the_date_ranges_that_the_house_is_available">Set the date ranges that the house is available.</string>
     <string name="open_calendar">Open Calendar</string>
     <string name="pick_date_range">Pick date range:</string>
@@ -53,6 +53,23 @@
     <string name="add_new_date_range">Add new date range:</string>
     <string name="add">ADD</string>
     <string name="empty_date">--/--/----</string>
+    <string name="max_guests_ask">Max Guests:</string>
+    <string name="min_cost">Min Cost:</string>
+    <string name="cost_per_person_ask">Cost per Person:</string>
+    <string name="number_of_beds_ask">Number of Beds:</string>
+    <string name="number_of_baths_ask">Number of Baths:</string>
+    <string name="number_of_bedrooms_ask">Number of Bedrooms:</string>
+    <string name="area_m2_ask">Area (m2):</string>
+    <string name="images">Images</string>
+    <string name="main_image">Main image</string>
+    <string name="upload_multiple_images">Select multiple images from Gallery</string>
+    <string name="_0_images_have_been_uploaded">0 images have been added</string>
+    <string name="select_images">Select Images</string>
+    <string name="type_of_place">Type of Place</string>
+    <string name="house">House</string>
+    <string name="room">Room</string>
+    <string name="main_image_of_the_house">Main image of the house</string>
+    <string name="details">Details</string>
     <string-array name="roles">
         <item>Guest</item>
         <item>Host</item>
