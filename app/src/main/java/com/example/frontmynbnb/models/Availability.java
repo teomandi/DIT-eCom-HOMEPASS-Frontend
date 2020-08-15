@@ -9,7 +9,8 @@ public class Availability {
         this.to = to;
     }
 
-    public Availability() { }
+    public Availability() {
+    }
 
     public String getFrom() {
         return from;

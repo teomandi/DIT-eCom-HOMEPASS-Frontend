@@ -7,7 +7,10 @@
     android:orientation="horizontal"
     android:weightSum="5"
     android:layout_margin="5dp"
+    android:descendantFocusability="blocksDescendants"
     >
+<!--    -->
+
 
     <TextView
         android:layout_weight="1"
@@ -17,27 +20,27 @@
         android:textSize="15sp"
         />
 
-    <Button
-        android:visibility="visible"
-        android:layout_weight="1"
-        android:layout_width="40dp"
-        android:layout_height="35dp"
-        android:background="@drawable/success_button"
-        android:text="@string/from"
-        android:textColor="#fff"
-        android:layout_marginEnd="20dp"
-        android:id="@+id/button_from"
-        />
+<!--    <Button-->
+<!--        android:visibility="visible"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="35dp"-->
+<!--        android:background="@drawable/success_button"-->
+<!--        android:text="@string/from"-->
+<!--        android:textColor="#fff"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:id="@+id/button_from"-->
+<!--        />-->
 
     <TextView
         android:id="@+id/textview_from"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="#fff"
         android:textSize="15sp"
-        android:text="15/5/2011"
+        android:text="@string/empty_date"
+        android:padding="2dp"
         />
 
     <TextView
@@ -46,36 +49,28 @@
         android:text="------"
         android:textSize="15sp"
         />
-    <Button
-        android:visibility="visible"
-        android:layout_weight="1"
-        android:layout_width="40dp"
-        android:layout_height="35dp"
-        android:background="@drawable/success_button"
-        android:text="@string/to"
-        android:textColor="#fff"
-        android:layout_marginStart="20dp"
-        android:id="@+id/button_to"
-        />
+<!--    <Button-->
+<!--        android:visibility="visible"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="35dp"-->
+<!--        android:background="@drawable/success_button"-->
+<!--        android:text="@string/to"-->
+<!--        android:textColor="#fff"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:id="@+id/button_to"-->
+<!--        />-->
 
     <TextView
         android:id="@+id/textview_to"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="#fff"
         android:textSize="15sp"
-        android:text="15/5/2011"
-        />
-
-    <Button
-        android:layout_weight="1"
-        android:layout_width="10dp"
-        android:layout_height="30dp"
-        android:background="@drawable/ic_close_black_24dp"
         android:layout_marginStart="20dp"
-        android:id="@+id/button_av_close"
+        android:text="@string/empty_date"
+        android:padding="2dp"
         />
 
 

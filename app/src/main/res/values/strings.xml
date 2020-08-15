@@ -44,7 +44,7 @@
     <string name="google_maps_api_key">AIzaSyAASOp4dNDXWgirwg8gcAwqTzJ7dGHyJC8</string>
     <string name="address_ask">Address:</string>
     <string name="availability_ask">Availability:</string>
-    <string name="set_the_date_ranges_that_the_house_is_available">Set the available date ranges that the house is available</string>
+    <string name="set_the_date_ranges_that_the_house_is_available">Set the date ranges that the house is available.</string>
     <string name="open_calendar">Open Calendar</string>
     <string name="pick_date_range">Pick date range:</string>
     <string name="period_ask">Available Period:</string>
@@ -52,6 +52,7 @@
     <string name="to">To</string>
     <string name="add_new_date_range">Add new date range:</string>
     <string name="add">ADD</string>
+    <string name="empty_date">--/--/----</string>
     <string-array name="roles">
         <item>Guest</item>
         <item>Host</item>

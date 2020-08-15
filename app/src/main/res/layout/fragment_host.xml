@@ -4,105 +4,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_constraintTop_toTopOf="parent"
+    android:layout_gravity="center_vertical"
     android:background="@drawable/dark_round"
-    >
+    android:orientation="vertical"
+    app:layout_constraintTop_toTopOf="parent">
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:gravity="center_horizontal"
-        >
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/availability_ask"
-            android:textSize="25sp"
             android:layout_marginStart="10dp"
+            android:text="@string/address_ask"
             android:textColor="#fff"
+            android:textSize="25sp"
+
             />
+
+        <SearchView
+            android:id="@+id/searchview_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/dark_round"
+            android:elevation="5dp"
+            android:iconifiedByDefault="false"
+            android:queryHint="Set your address..."
+            android:textColor="#fff" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapview"
+            android:layout_width="match_parent"
+            android:layout_height="325dp"
+            android:layout_margin="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/availability_ask"
+            android:textColor="#fff"
+            android:textSize="25sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/set_the_date_ranges_that_the_house_is_available"
-            android:textSize="15sp"
             android:textColor="#fff"
+            android:textSize="15sp"
 
             />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_margin="15dp"
             android:orientation="horizontal"
-            android:layout_gravity="center_vertical"
-            android:weightSum="2"
-            >
+            android:weightSum="2">
+
             <TextView
-                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/add_new_date_range"
-                android:textSize="20sp"
                 android:textColor="#fff"
+                android:textSize="20sp"
 
                 />
+
             <Button
-                android:layout_weight="1"
+                android:id="@+id/add_availability"
                 android:layout_width="120dp"
                 android:layout_height="30dp"
+                android:layout_weight="1"
                 android:background="@drawable/success_button"
-                android:id="@+id/add_availability"
                 android:text="@string/add"
-                android:textColor="@color/colorWhite"
-
+                android:textColor="#fff"
                 />
         </LinearLayout>
 
         <ListView
+            android:id="@+id/listview_availablecontainer"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:id="@+id/listview_availablecontainer"
-            android:divider="@color/colorGreen"
-            android:dividerHeight="1sp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:nestedScrollingEnabled="true"
+            android:divider="@color/colorGreen"
+            android:dividerHeight="1sp"
+            android:nestedScrollingEnabled="true" />
 
-            />
-
-
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/address_ask"
-            android:textSize="25sp"
-            android:layout_marginStart="10dp"
-            android:textColor="#fff"
-
-            />
-
-        <SearchView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/searchview_address"
-            android:queryHint="Set your address..."
-            android:iconifiedByDefault="false"
-            android:layout_margin="10dp"
-            android:elevation="5dp"
-            android:background="@drawable/dark_round"
-            android:textColor="#fff"
-            />
-
-        <com.google.android.gms.maps.MapView
-            android:layout_width="match_parent"
-            android:layout_height="325dp"
-            android:layout_margin="10dp"
-            android:id="@+id/mapview" />
-
-
-</LinearLayout>
+    </LinearLayout>
 
 </ScrollView>
