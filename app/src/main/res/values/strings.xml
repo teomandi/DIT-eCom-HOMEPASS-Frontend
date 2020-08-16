@@ -77,6 +77,8 @@
     <string name="add_the_benefits_for_the_place">Add the benefits for the place</string>
     <string name="post">Post</string>
     <string name="write_your_benefit">Write your benefit..</string>
+    <string name="description">Description</string>
+    <string name="write_a_description_about_the_place">Write a description about the place..</string>
     <string-array name="roles">
         <item>Guest</item>
         <item>Host</item>

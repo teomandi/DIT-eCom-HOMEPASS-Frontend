@@ -212,6 +212,24 @@
         </TableLayout>
 
         <TextView
+            android:text="@string/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:textSize="25sp"
+            android:padding="5dp"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/light_round"
+            android:id="@+id/edittext_description"
+            android:hint="@string/write_a_description_about_the_place"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/images"
@@ -319,7 +337,8 @@
             android:layout_height="wrap_content"
             android:text="@string/add_the_rules_for_the_place"
             android:textColor="#fff"
-            android:textSize="20sp" />
+            android:layout_marginStart="10dp"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -372,7 +391,8 @@
             android:layout_height="wrap_content"
             android:text="@string/add_the_benefits_for_the_place"
             android:textColor="#fff"
-            android:textSize="20sp" />
+            android:layout_marginStart="10dp"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
