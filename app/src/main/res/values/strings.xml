@@ -70,6 +70,13 @@
     <string name="room">Room</string>
     <string name="main_image_of_the_house">Main image of the house</string>
     <string name="details">Details</string>
+    <string name="rules">Rules</string>
+    <string name="add_the_rules_for_the_place">Add the rules for the place</string>
+    <string name="write_your_rule">Write your rule..</string>
+    <string name="benefits">Benefits</string>
+    <string name="add_the_benefits_for_the_place">Add the benefits for the place</string>
+    <string name="post">Post</string>
+    <string name="write_your_benefit">Write your benefit..</string>
     <string-array name="roles">
         <item>Guest</item>
         <item>Host</item>

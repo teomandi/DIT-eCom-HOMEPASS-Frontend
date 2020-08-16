@@ -440,7 +440,7 @@ public class ProfileFragment extends MyFragment {
         System.out.println("PROFILE ~~" + AppConstants.MODE);
         Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                 AppConstants.MODE.equals("GUEST") ? R.id.fragment_container : R.id.fragment_container2,
-                AppConstants.MODE.equals("GUEST") ? new HomeFragment() : new HostFragment()
+                AppConstants.MODE.equals("GUEST") ? new HomeFragment() : new CreateHostFragment()
         ).addToBackStack(null).commit();
         return true;
     }

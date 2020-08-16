@@ -8,12 +8,10 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.frontmynbnb.AppConstants;
 import com.example.frontmynbnb.R;
-import com.example.frontmynbnb.fragments.HomeFragment;
-import com.example.frontmynbnb.fragments.HostFragment;
+import com.example.frontmynbnb.fragments.CreateHostFragment;
 import com.example.frontmynbnb.fragments.MessagesFragment;
 import com.example.frontmynbnb.fragments.MyFragment;
 import com.example.frontmynbnb.fragments.ProfileFragment;
@@ -66,7 +64,7 @@ public class HostActivity extends AppCompatActivity {
         // put host
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container2,
-                new HostFragment()
+                new CreateHostFragment()
         ).commit();
         //uncheck them all
         int size = bottomNav.getMenu().size();
