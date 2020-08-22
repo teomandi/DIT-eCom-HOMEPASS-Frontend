@@ -146,8 +146,5 @@ public class User {
         System.out.println("isHost: " + host);
         System.out.println("createdAt: " + createdAt);
         System.out.println("id: " + id);
-
-
-
     }
 }

@@ -1,6 +1,7 @@
 package com.example.frontmynbnb.models;
 
 public class Availability {
+    private int id;
     private String from;
     private String to;
 
@@ -10,6 +11,14 @@ public class Availability {
     }
 
     public Availability() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFrom() {
@@ -26,5 +35,9 @@ public class Availability {
 
     public void setTo(String to) {
         this.to = to;
+    }
+
+    public void print(){
+        System.out.println(from + " --- " + to);
     }
 }
