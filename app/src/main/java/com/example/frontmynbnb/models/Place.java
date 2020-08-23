@@ -51,7 +51,7 @@ public class Place {
             System.out.println("- " + r.getContent());
         System.out.println("~~Images: ");
         for(Image i: images)
-            System.out.println("- " + i.getFilename());
+            System.out.println("- " + i.getId() + ") " + i.getFilename());
         System.out.println("~~Availabilities: ");
         for(Availability a: availabilities)
             a.print();

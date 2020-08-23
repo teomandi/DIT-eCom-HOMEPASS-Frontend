@@ -9,6 +9,10 @@ public class Benefit {
         this.content = content;
     }
 
+    public Benefit(String content) {
+        this.content = content;
+    }
+
     public int getId() {
         return id;
     }

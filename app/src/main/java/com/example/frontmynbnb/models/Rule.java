@@ -8,6 +8,9 @@ public class Rule {
         this.id = id;
         this.content = content;
     }
+    public Rule(String content) {
+        this.content = content;
+    }
 
     public int getId() {
         return id;
