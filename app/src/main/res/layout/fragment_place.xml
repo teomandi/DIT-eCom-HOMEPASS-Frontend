@@ -1,14 +1,377 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.PlaceFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+z    <LinearLayout
+        android:id="@+id/no_having_home_view"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="100dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/you_don_t_have_set_your_place_yet"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"
+        />
+        <Button
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:id="@+id/button_setplace"
+            android:textColor="#fff"
+            android:background="@drawable/default_button"
+            android:text="@string/create_place"
+            />
+    </LinearLayout>
 
-</FrameLayout>
+    <ScrollView
+        android:id="@+id/having_home_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical"
+        android:background="@drawable/dark_round"
+        android:visibility="invisible"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            >
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:id="@+id/imageview_mygallery"
+                android:contentDescription="@string/place_gallery"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/your_place"
+                android:layout_marginBottom="20dp"
+                android:textStyle="bold"
+                android:textSize="40sp"
+                />
+
+            <TextView
+                android:id="@+id/textview_myaddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapview2"
+                android:layout_width="match_parent"
+                android:layout_height="325dp"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="20dp"
+                />
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/light_round"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/details"
+                    android:textColor="#fff"
+                    android:textSize="30sp"
+                    />
+                <TableRow>
+                    <TextView
+                        android:text="@string/max_guests_ask"
+                        android:layout_column="1"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:drawableStart="@drawable/ic_person_white_24dp"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/textview_mymaxguest"
+                        android:layout_width="130dp"
+                        android:layout_column="2"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:padding="5dp"
+                        />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="@string/min_cost"
+                        android:layout_column="1"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:drawableStart="@drawable/ic_attach_money_white_24dp"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/textview_mymincost"
+                        android:layout_column="2"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:padding="5dp"
+                        />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="@string/cost_per_person_ask"
+                        android:layout_column="1"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:drawableStart="@drawable/ic_attach_money_white_24dp"
+                        android:padding="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/textview_mycostperperson"
+                        android:layout_column="2"
+                        android:padding="5dp"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="@string/number_of_beds_ask"
+                        android:layout_column="1"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:drawableStart="@drawable/ic_bed_white_24dp"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/textview_mybeds"
+                        android:layout_column="2"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:padding="5dp"
+                        />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="@string/number_of_baths_ask"
+                        android:layout_column="1"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:drawableStart="@drawable/ic_bath_white_24dp"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/textview_mybaths"
+                        android:layout_column="2"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:padding="5dp"
+                        />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="@string/number_of_bedrooms_ask"
+                        android:layout_column="1"
+                        android:textColor="#fff"
+                        android:drawableStart="@drawable/ic_bed_white_24dp"
+                        android:textSize="25sp"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/textview_mybedrooms"
+                        android:layout_column="2"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:padding="5dp"
+                        />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="@string/has_livingroom_ask"
+                        android:layout_column="1"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:drawableStart="@drawable/ic_living_room_24dp"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/textview_mylivingroom"
+                        android:layout_column="2"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:padding="5dp"
+                        />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="@string/area_m2_ask"
+                        android:layout_column="1"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:drawableStart="@drawable/ic_area_white_24dp"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/textview_myarea"
+                        android:layout_column="2"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:padding="5dp"
+                        />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="@string/type_of_place"
+                        android:layout_column="1"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:drawableStart="@drawable/ic_home_white_24dp"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/textview_mytype"
+                        android:layout_column="2"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:padding="5dp"
+                        />
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:text="@string/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="25sp"
+                android:padding="5dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/light_round"
+                android:id="@+id/textview_mydescription"
+                android:layout_marginBottom="25dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:textColor="#fff"
+                android:textSize="15sp"
+                />
+
+            <TextView
+                android:text="@string/benefits"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="25sp"
+                android:padding="5dp"
+                />
+
+            <ListView
+                android:id="@+id/listview_benefitcontainer2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:divider="@color/colorGreen"
+                android:background="@drawable/light_round"
+                android:dividerHeight="1sp"
+                android:nestedScrollingEnabled="true" />
+
+            <TextView
+                android:text="@string/rules"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="25sp"
+                android:padding="5dp"
+                />
+
+            <ListView
+                android:id="@+id/listview_rulescontainer2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:divider="@color/colorGreen"
+                android:background="@drawable/light_round"
+                android:dividerHeight="1sp"
+                android:nestedScrollingEnabled="true" />
+
+            <TextView
+                android:text="@string/availability"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="25sp"
+                android:padding="5dp"
+                />
+
+            <ListView
+                android:id="@+id/listview_availablecontainer2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:divider="@color/colorGreen"
+                android:background="@drawable/light_round"
+                android:dividerHeight="1sp"
+                android:nestedScrollingEnabled="true" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="40dp"
+                android:layout_gravity="center_horizontal"
+                >
+                <Button
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:text="Delete"
+                    android:textColor="@color/colorRed"
+                    android:id="@+id/button_delete_myplace"
+                    android:background="@drawable/default_button"
+                    android:layout_marginRight="15dp"
+                    />
+                <Button
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:text="Edit"
+                    android:textColor="#f50"
+                    android:id="@+id/button_edit_myplace"
+                    android:background="@drawable/cancel_button"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
