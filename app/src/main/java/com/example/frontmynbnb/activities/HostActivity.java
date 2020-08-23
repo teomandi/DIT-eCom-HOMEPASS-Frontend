@@ -8,16 +8,26 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.frontmynbnb.AppConstants;
+import com.example.frontmynbnb.JsonPlaceHolderApi;
 import com.example.frontmynbnb.R;
-import com.example.frontmynbnb.fragments.CreateHostFragment;
+import com.example.frontmynbnb.RestClient;
+import com.example.frontmynbnb.fragments.CreatePlaceFragment;
 import com.example.frontmynbnb.fragments.MessagesFragment;
 import com.example.frontmynbnb.fragments.MyFragment;
+import com.example.frontmynbnb.fragments.PlaceFragment;
 import com.example.frontmynbnb.fragments.ProfileFragment;
+import com.example.frontmynbnb.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class HostActivity extends AppCompatActivity {
 
@@ -26,6 +36,8 @@ public class HostActivity extends AppCompatActivity {
         bottomNav.getMenu().getItem(id).setCheckable(true);
         bottomNav.getMenu().getItem(id).setChecked(true);
     }
+
+    private boolean fetched = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +76,7 @@ public class HostActivity extends AppCompatActivity {
         // put host
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container2,
-                new CreateHostFragment()
+                new PlaceFragment()
         ).commit();
         //uncheck them all
         int size = bottomNav.getMenu().size();
@@ -72,6 +84,7 @@ public class HostActivity extends AppCompatActivity {
             bottomNav.getMenu().getItem(i).setCheckable(false);
         }
         AppConstants.MODE = "HOST";
+        fetchUserDetails();
     }
 
     @Override
@@ -97,5 +110,40 @@ public class HostActivity extends AppCompatActivity {
             );
             startActivity(loginIntent);
         }
+    }
+
+    private void fetchUserDetails() {
+        String token = AppConstants.TOKEN;
+        String username = AppConstants.USERNAME;
+        Retrofit retrofit = RestClient.getClient(token);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<User> call = jsonPlaceHolderApi.getUserByUsername(username);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "Not successful response " + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                System.out.println("Status Code : " + response.code());
+                AppConstants.USER = response.body();
+                fetched = true;
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Failure fetching the user!!",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+                fetched = false;
+            }
+        });
     }
 }

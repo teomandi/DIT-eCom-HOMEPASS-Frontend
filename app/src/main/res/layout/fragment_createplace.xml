@@ -1,518 +1,566 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_vertical"
-    android:background="@drawable/dark_round"
-    android:orientation="vertical"
-    app:layout_constraintTop_toTopOf="parent"
-    android:id="@+id/scroll_layout">
+    tools:context=".fragments.CreatePlaceFragment">
+
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/layout_postingcomponent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
+        android:orientation="vertical"
         android:gravity="center_horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="250dp"
+        android:background="@drawable/dark_round"
+        android:padding="10dp"
+        >
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginBottom="15dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Place is creating.."
+            android:textSize="25sp"
+            android:textColor="#fff"
+            />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarPostPlace"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_marginTop="250dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scroll_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Your Place"
-            android:layout_marginBottom="20dp"
-            android:textStyle="bold"
-            android:id="@+id/title_place"
-            android:textSize="40sp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/address"
-            android:textColor="#fff"
-            android:textSize="30sp"
-            />
-
-        <SearchView
-            android:id="@+id/searchview_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/dark_round"
-            android:elevation="5dp"
-            android:iconifiedByDefault="false"
-            android:queryHint="Set your address..."
-            android:textColor="#fff" />
-
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapview"
-            android:layout_width="match_parent"
-            android:layout_height="325dp"
-            android:layout_margin="10dp"
-            android:layout_marginBottom="20dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/details"
-            android:textColor="#fff"
-            android:textSize="30sp"
-            />
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/light_round"
-            >
-
-            <TableRow>
-                <TextView
-                    android:text="@string/max_guests_ask"
-                    android:layout_column="1"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    />
-                <EditText
-                    android:id="@+id/edittext_maxguest"
-                    android:layout_width="130dp"
-                    android:layout_column="2"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    android:inputType="number"
-                    />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:text="@string/min_cost"
-                    android:layout_column="1"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    />
-                <EditText
-                    android:id="@+id/edittext_mincost"
-                    android:layout_column="2"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    android:inputType="number"
-                    />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:text="@string/cost_per_person_ask"
-                    android:layout_column="1"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    />
-
-                <EditText
-                    android:id="@+id/edittext_costperperson"
-                    android:layout_column="2"
-                    android:inputType="number"
-                    android:padding="5dp"
-                    android:textColor="#fff"
-                    android:textSize="25sp" />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:text="@string/number_of_beds_ask"
-                    android:layout_column="1"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    />
-                <EditText
-                    android:id="@+id/edittext_beds"
-                    android:layout_column="2"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    android:inputType="number"
-
-                    />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:text="@string/number_of_baths_ask"
-                    android:layout_column="1"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    />
-                <EditText
-                    android:id="@+id/edittext_baths"
-                    android:layout_column="2"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    android:inputType="number"
-
-                    />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:text="@string/number_of_bedrooms_ask"
-                    android:layout_column="1"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    />
-                <EditText
-                    android:id="@+id/edittext_bedrooms"
-                    android:layout_column="2"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    android:inputType="number"
-                    />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:text="@string/max_guests_ask"
-                    android:layout_column="1"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    />
-                <CheckBox
-                    android:id="@+id/checkbox_livingroom"
-                    android:layout_column="2"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:text="@string/area_m2_ask"
-                    android:layout_column="1"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    />
-                <EditText
-                    android:id="@+id/edittext_area"
-                    android:layout_column="2"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:padding="5dp"
-                    />
-            </TableRow>
-        </TableLayout>
-
-        <TextView
-            android:text="@string/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#fff"
-            android:textSize="25sp"
-            android:padding="5dp"
-            />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@drawable/light_round"
-            android:id="@+id/edittext_description"
-            android:hint="@string/write_a_description_about_the_place"
-            android:textColor="#fff"
-            android:textSize="15sp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/images"
-            android:textColor="#fff"
-            android:textSize="30sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/main_image"
-            android:textColor="#fff"
-            android:textSize="20sp"
-            android:layout_marginBottom="10dp"
-            />
-        
-        <ImageView
-            android:id="@+id/imageview_main"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@drawable/simple_home"
-            android:contentDescription="@string/main_image_of_the_house"
-            android:layout_marginBottom="10dp"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/upload_multiple_images"
-            android:textColor="#fff"
-            android:textSize="20sp" />
-
-        <Button
-            android:id="@+id/button_multimages"
-            android:layout_width="150dp"
-            android:layout_height="40dp"
-            android:background="@drawable/success_button"
-            android:text="@string/select_images"
-            android:textColor="#fff"
-            android:layout_marginBottom="10dp"
-            />
-
-        <ImageView
-            android:id="@+id/imageview_multiple"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@drawable/simple_home"
-            android:contentDescription="@string/main_image_of_the_house"
-            android:layout_marginBottom="10dp"
-            />
-
-
-        <TextView
-            android:id="@+id/textview_multimages"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="@string/_0_images_have_been_uploaded"
-            android:textColor="#fff"
-            android:textSize="15sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/type_of_place"
-            android:textColor="#fff"
-            android:textSize="30sp"
-            />
-
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/radio_type"
-            android:layout_marginBottom="20dp"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal"
-            >
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/radio_house"
-                android:textSize="20sp"
-                android:textColor="#fff"
-                android:text="@string/house"
-                />
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/radio_room"
-                android:textSize="20sp"
-                android:textColor="#fff"
-                android:text="@string/room"
-                />
-        </RadioGroup>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/rules"
-            android:textColor="#fff"
-            android:textSize="30sp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_the_rules_for_the_place"
-            android:textColor="#fff"
-            android:layout_marginStart="10dp"
-            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="15dp"
-            android:weightSum="2"
-            android:layout_gravity="center_vertical"
-            >
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <EditText
+            <TextView
+                android:id="@+id/title_place"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/edittext_newrule"
-                android:layout_weight="1"
-                android:inputType="text"
-                android:hint="@string/write_your_rule"
-                />
-            <Button
-                android:layout_width="120dp"
-                android:layout_height="30dp"
-                android:id="@+id/button_addrule"
-                android:layout_weight="1"
-                android:background="@drawable/success_button"
-                android:textColor="#fff"
-                android:text="@string/add"
-                />
-
-        </LinearLayout>
-        <ListView
-            android:id="@+id/listview_rulecontainer"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
-            android:divider="@color/colorGreen"
-            android:background="@drawable/light_round"
-            android:dividerHeight="1sp"
-            android:nestedScrollingEnabled="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/benefits"
-            android:textColor="#fff"
-            android:textSize="30sp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_the_benefits_for_the_place"
-            android:textColor="#fff"
-            android:layout_marginStart="10dp"
-            android:textSize="15sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="15dp"
-            android:weightSum="2"
-            android:layout_gravity="center_vertical"
-            >
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/edittext_newbenefit"
-                android:layout_weight="1"
-                android:inputType="text"
-                android:hint="@string/write_your_benefit"
-                />
-            <Button
-                android:layout_width="120dp"
-                android:layout_height="30dp"
-                android:id="@+id/button_addbenefit"
-                android:layout_weight="1"
-                android:background="@drawable/success_button"
-                android:textColor="#fff"
-                android:text="@string/add"
-                />
-
-        </LinearLayout>
-        <ListView
-            android:id="@+id/listview_benefitcontainer"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
-            android:divider="@color/colorGreen"
-            android:background="@drawable/light_round"
-            android:dividerHeight="1sp"
-            android:nestedScrollingEnabled="true" />
-
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="@string/availability"
-            android:textColor="#fff"
-            android:textSize="30sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/set_the_date_ranges_that_the_house_is_available"
-            android:textColor="#fff"
-            android:textSize="15sp"
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="15dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:text="@string/your_place"
+                android:textSize="40sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/add_new_date_range"
+                android:layout_marginStart="10dp"
+                android:text="@string/address"
                 android:textColor="#fff"
-                android:textSize="20sp"
+                android:textSize="30sp" />
 
-                />
+            <SearchView
+                android:id="@+id/searchview_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/dark_round"
+                android:elevation="5dp"
+                android:iconifiedByDefault="false"
+                android:queryHint="Set your address..."
+                android:textColor="#fff" />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapview"
+                android:layout_width="match_parent"
+                android:layout_height="325dp"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/details"
+                android:textColor="#fff"
+                android:textSize="30sp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/light_round">
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_person_white_24dp"
+                        android:padding="5dp"
+                        android:text="@string/max_guests_ask"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
+                    <EditText
+                        android:id="@+id/edittext_maxguest"
+                        android:layout_width="130dp"
+                        android:layout_column="2"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_attach_money_white_24dp"
+                        android:padding="5dp"
+                        android:text="@string/min_cost"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
+                    <EditText
+                        android:id="@+id/edittext_mincost"
+                        android:layout_column="2"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_attach_money_white_24dp"
+                        android:padding="5dp"
+                        android:text="@string/cost_per_person_ask"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
+                    <EditText
+                        android:id="@+id/edittext_costperperson"
+                        android:layout_column="2"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_bed_white_24dp"
+                        android:padding="5dp"
+                        android:text="@string/number_of_beds_ask"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
+                    <EditText
+                        android:id="@+id/edittext_beds"
+                        android:layout_column="2"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+
+                        />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_bath_white_24dp"
+                        android:padding="5dp"
+                        android:text="@string/number_of_baths_ask"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
+                    <EditText
+                        android:id="@+id/edittext_baths"
+                        android:layout_column="2"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+
+                        />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_bed_white_24dp"
+                        android:padding="5dp"
+                        android:text="@string/number_of_bedrooms_ask"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
+                    <EditText
+                        android:id="@+id/edittext_bedrooms"
+                        android:layout_column="2"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_living_room_24dp"
+                        android:padding="5dp"
+                        android:text="@string/has_livingroom_ask"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
+                    <CheckBox
+                        android:id="@+id/checkbox_livingroom"
+                        android:layout_column="2"
+                        android:padding="5dp"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
+                        android:drawableStart="@drawable/ic_area_white_24dp"
+                        android:padding="5dp"
+                        android:text="@string/area_m2_ask"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
+                    <EditText
+                        android:id="@+id/edittext_area"
+                        android:layout_column="2"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@string/description"
+                android:textColor="#fff"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/edittext_description"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@drawable/light_round"
+                android:hint="@string/write_a_description_about_the_place"
+                android:textColor="#fff"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/images"
+                android:textColor="#fff"
+                android:textSize="30sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/main_image"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/imageview_main"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/main_image_of_the_house"
+                android:src="@drawable/simple_home" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/upload_multiple_images"
+                android:textColor="#fff"
+                android:textSize="20sp" />
 
             <Button
-                android:id="@+id/add_availability"
-                android:layout_width="120dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
+                android:id="@+id/button_multimages"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/success_button"
-                android:text="@string/add"
+                android:text="@string/select_images"
+                android:textColor="#fff" />
+
+            <ImageView
+                android:id="@+id/imageview_multiple"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/main_image_of_the_house"
+                android:src="@drawable/simple_home" />
+
+
+            <TextView
+                android:id="@+id/textview_multimages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="@string/_0_images_have_been_uploaded"
                 android:textColor="#fff"
-                />
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/type_of_place"
+                android:textColor="#fff"
+                android:textSize="30sp" />
+
+            <RadioGroup
+                android:id="@+id/radio_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:drawableStart="@drawable/ic_home_white_24dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radio_house"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/house"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/radio_room"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/room"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rules"
+                android:textColor="#fff"
+                android:textSize="30sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/add_the_rules_for_the_place"
+                android:textColor="#fff"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="15dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <EditText
+                    android:id="@+id/edittext_newrule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/write_your_rule"
+                    android:inputType="text" />
+
+                <Button
+                    android:id="@+id/button_addrule"
+                    android:layout_width="120dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/success_button"
+                    android:text="@string/add"
+                    android:textColor="#fff" />
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/listview_rulecontainer"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/light_round"
+                android:divider="@color/colorGreen"
+                android:dividerHeight="1sp"
+                android:nestedScrollingEnabled="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/benefits"
+                android:textColor="#fff"
+                android:textSize="30sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/add_the_benefits_for_the_place"
+                android:textColor="#fff"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="15dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <EditText
+                    android:id="@+id/edittext_newbenefit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/write_your_benefit"
+                    android:inputType="text" />
+
+                <Button
+                    android:id="@+id/button_addbenefit"
+                    android:layout_width="120dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/success_button"
+                    android:text="@string/add"
+                    android:textColor="#fff" />
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/listview_benefitcontainer"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/light_round"
+                android:divider="@color/colorGreen"
+                android:dividerHeight="1sp"
+                android:nestedScrollingEnabled="true" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/availability"
+                android:textColor="#fff"
+                android:textSize="30sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/set_the_date_ranges_that_the_house_is_available"
+                android:textColor="#fff"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="15dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/add_new_date_range"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+
+                    />
+
+                <Button
+                    android:id="@+id/add_availability"
+                    android:layout_width="120dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/success_button"
+                    android:text="@string/add"
+                    android:textColor="#fff" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/listview_availablecontainer"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/light_round"
+                android:divider="@color/colorGreen"
+                android:dividerHeight="1sp"
+                android:nestedScrollingEnabled="true" />
+
+
+            <Button
+                android:id="@+id/button_postplace"
+                android:layout_width="150dp"
+                android:layout_height="35dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/success_button"
+                android:text="@string/post"
+                android:textColor="#fff" />
+
+            <Button
+                android:id="@+id/button_cancelcreate"
+                android:layout_width="75dp"
+                android:layout_height="25dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/cancel_button"
+                android:text="@string/cancel"
+                android:textColor="#fff" />
+
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/listview_availablecontainer"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
-            android:divider="@color/colorGreen"
-            android:background="@drawable/light_round"
-            android:dividerHeight="1sp"
-            android:nestedScrollingEnabled="true" />
+    </ScrollView>
 
-
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:textColor="#fff"
-            android:layout_marginBottom="5dp"
-            android:text="@string/post"
-            android:background="@drawable/success_button"
-            />
-
-        <Button
-            android:layout_width="75dp"
-            android:layout_height="25dp"
-            android:textColor="#fff"
-            android:layout_marginBottom="20dp"
-            android:text="@string/cancel"
-            android:background="@drawable/cancel_button"
-            />
-
-    </LinearLayout>
-
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

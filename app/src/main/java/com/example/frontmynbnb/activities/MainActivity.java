@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         AppConstants.MODE = "GUEST";
-        System.out.println("uname1: ~~~~~~~~~~~~~~~~~~~~~~> " + AppConstants.USERNAME);
+        System.out.println("uname: ~~> " + AppConstants.USERNAME);
         // put home
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container,

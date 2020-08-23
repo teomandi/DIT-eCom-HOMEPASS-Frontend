@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".fragments.PlaceFragment">
 
-z    <LinearLayout
+
+    <LinearLayout
         android:id="@+id/no_having_home_view"
         android:visibility="invisible"
         android:layout_width="match_parent"
@@ -32,6 +33,34 @@ z    <LinearLayout
             android:background="@drawable/default_button"
             android:text="@string/create_place"
             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/progressBarPlace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="250dp"
+        android:background="@drawable/dark_round"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginBottom="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fetching_your_place"
+            android:textColor="#fff"
+            android:textSize="25sp" />
     </LinearLayout>
 
     <ScrollView

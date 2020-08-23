@@ -3,6 +3,7 @@ package com.example.frontmynbnb;
 
 import com.example.frontmynbnb.models.Login;
 import com.example.frontmynbnb.models.Message;
+import com.example.frontmynbnb.models.Place;
 import com.example.frontmynbnb.models.User;
 
 import java.util.List;
@@ -58,7 +59,30 @@ public interface JsonPlaceHolderApi {
             @Part("address") RequestBody address,
             @Part MultipartBody.Part imageFile);
 
+    @GET("users/{id}/places")
+    Call<Place> getUsersPlaceById(@Path("id") int id);
+
+    @GET("users/username/{username}/places")
+    Call<Place> getUsersPlaceByUsername(@Path("username") String username);
+
+    @GET("places/{id}/mainimage")
+    Call<ResponseBody> getPlaceMainImage(@Path("id") int id);
+
+    @GET("images/{id}")
+    Call<ResponseBody> getImageById(@Path("id") int id);
+
+    @POST
+
+
+
+
+
+    //tests---------------------------------------------------------//
+
     @GET("messages")
     Call<List<Message>> getAllMessages();
+
+    @POST("places/6/multi-rules") //not works
+    Call<String> setMultipleRules(@Body List<String> rules);
 
 }

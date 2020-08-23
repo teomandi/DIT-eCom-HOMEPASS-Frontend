@@ -29,11 +29,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.frontmynbnb.AppConstants;
 import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.adapters.AvailabilitiesAdapter;
 import com.example.frontmynbnb.adapters.BenefitsAdapter;
 import com.example.frontmynbnb.adapters.RulesAdapter;
 import com.example.frontmynbnb.models.Availability;
+import com.example.frontmynbnb.models.Benefit;
+import com.example.frontmynbnb.models.Rule;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -46,10 +49,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.frontmynbnb.AppConstants.MAPVIEW_BUNDLE_KEY;
 
-public class CreateHostFragment extends Fragment implements OnMapReadyCallback {
+public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallback {
 
     private static final int SELECT_MAIN_IMAGE = 1;
     private static final int SELECT_MULTIPLE_IMAGES = 2;
@@ -58,7 +62,8 @@ public class CreateHostFragment extends Fragment implements OnMapReadyCallback {
     private MapView mMapView;
     private GoogleMap mGoogleMap;
     private SearchView mSearchAddress;
-    private Button mButtonAddAvailability, mButtonMultipleImages, mButtonAddBenefit, mButtonAddRule;
+    private Button mButtonAddAvailability, mButtonMultipleImages, mButtonAddBenefit, mButtonAddRule
+            , mButtonCancel, mButtonPost;
     private ListView availableContainer, benefitContainer, ruleContainer;
     private ImageView mMainImage, mImageMultpiple;
     private TextView mTextMultImages;
@@ -67,7 +72,8 @@ public class CreateHostFragment extends Fragment implements OnMapReadyCallback {
 
     private ArrayList<Availability> availabilityList;
     private AvailabilitiesAdapter mAvAdapter;
-    private ArrayList<String> ruleList, benefitList;
+    private ArrayList<Benefit> benefitList;
+    private ArrayList<Rule> ruleList;
     private BenefitsAdapter mBenAdapter;
     private RulesAdapter mRulAdapter;
 
@@ -79,12 +85,12 @@ public class CreateHostFragment extends Fragment implements OnMapReadyCallback {
     private String mAvFrom, mAvTo;
 
 
-    public CreateHostFragment() {
+    public CreatePlaceFragment() {
         // Required empty public constructor
     }
 
-    public static CreateHostFragment newInstance() {
-        CreateHostFragment fragment = new CreateHostFragment();
+    public static CreatePlaceFragment newInstance() {
+        CreatePlaceFragment fragment = new CreatePlaceFragment();
         return fragment;
     }
 
@@ -96,21 +102,32 @@ public class CreateHostFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_createhost, container, false);
+        View view = inflater.inflate(R.layout.fragment_createplace, container, false);
 
         availabilityList = new ArrayList<Availability>();
-        benefitList = new ArrayList<String>();
-        ruleList = new ArrayList<String>();
+        benefitList = new ArrayList<Benefit>();
+        ruleList = new ArrayList<Rule>();
 
         mScrollLayout = (ScrollView) view.findViewById(R.id.scroll_layout);
         // benefits
+        mButtonPost = (Button) view.findViewById(R.id.button_postplace);
+        mButtonCancel = (Button) view.findViewById(R.id.button_cancelcreate);
+        mButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(
+                        R.id.fragment_container2,
+                        new PlaceFragment()
+                ).commit();
+            }
+        });
         mEditBenefit = (EditText) view.findViewById(R.id.edittext_newbenefit);
         mButtonAddBenefit = (Button)  view.findViewById(R.id.button_addbenefit);
         mButtonAddBenefit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String benefit = mEditBenefit.getText().toString();
-                if( benefit.isEmpty() ) {
+                String content = mEditBenefit.getText().toString();
+                if( content.isEmpty() ) {
                     Toast.makeText(
                             getContext(),
                             "Benefit is empty!",
@@ -118,7 +135,7 @@ public class CreateHostFragment extends Fragment implements OnMapReadyCallback {
                     ).show();
                     return;
                 }
-                benefitList.add(benefit);
+                benefitList.add(new Benefit(content));
                 mBenAdapter.notifyDataSetChanged();
                 mEditBenefit.setText("");
                 Toast.makeText(
@@ -145,8 +162,8 @@ public class CreateHostFragment extends Fragment implements OnMapReadyCallback {
         mButtonAddRule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String rule = mEditRule.getText().toString();
-                if( rule.isEmpty() ) {
+                String content = mEditRule.getText().toString();
+                if( content.isEmpty() ) {
                     Toast.makeText(
                             getContext(),
                             "Rule is empty!",
@@ -154,7 +171,7 @@ public class CreateHostFragment extends Fragment implements OnMapReadyCallback {
                     ).show();
                     return;
                 }
-                ruleList.add(rule);
+                ruleList.add(new Rule(content));
                 mRulAdapter.notifyDataSetChanged();
                 mEditRule.setText("");
                 Toast.makeText(
@@ -456,6 +473,15 @@ public class CreateHostFragment extends Fragment implements OnMapReadyCallback {
         }).start();
     }
 
+    @Override
+    public boolean onBackPressed() {
+        System.out.println("Create ~~" + AppConstants.MODE);
+        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
+                R.id.fragment_container2,
+                new PlaceFragment()
+        ).addToBackStack(null).commit();
+        return true;
+    }
 
 
 }

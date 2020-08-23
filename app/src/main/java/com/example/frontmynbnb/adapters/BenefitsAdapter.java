@@ -12,15 +12,16 @@ import androidx.annotation.Nullable;
 
 import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.models.Availability;
+import com.example.frontmynbnb.models.Benefit;
 
 import java.util.ArrayList;
 
-public class BenefitsAdapter extends ArrayAdapter<String> {
-    public BenefitsAdapter(Context ctx, ArrayList<String> benefitsList) {
+public class BenefitsAdapter extends ArrayAdapter<Benefit> {
+    public BenefitsAdapter(Context ctx, ArrayList<Benefit> benefitsList) {
         super(ctx, 0, benefitsList);
     }
 
-    private String benefit;
+    private Benefit benefit;
 
     @NonNull
     @Override
@@ -32,7 +33,7 @@ public class BenefitsAdapter extends ArrayAdapter<String> {
 
         benefit = getItem(position);
         TextView mTextContent = view.findViewById(R.id.textview_benefit);
-        mTextContent.setText(benefit);
+        mTextContent.setText(benefit.getContent());
         return view;
     }
 }
