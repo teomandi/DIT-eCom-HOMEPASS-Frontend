@@ -16,10 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -30,12 +33,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.frontmynbnb.AppConstants;
+import com.example.frontmynbnb.JsonPlaceHolderApi;
 import com.example.frontmynbnb.R;
+import com.example.frontmynbnb.RestClient;
 import com.example.frontmynbnb.adapters.AvailabilitiesAdapter;
 import com.example.frontmynbnb.adapters.BenefitsAdapter;
 import com.example.frontmynbnb.adapters.RulesAdapter;
+import com.example.frontmynbnb.misc.Utils;
 import com.example.frontmynbnb.models.Availability;
 import com.example.frontmynbnb.models.Benefit;
+import com.example.frontmynbnb.models.Place;
 import com.example.frontmynbnb.models.Rule;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,6 +58,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 import static com.example.frontmynbnb.AppConstants.MAPVIEW_BUNDLE_KEY;
 
 public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallback {
@@ -61,6 +76,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
 
     private MapView mMapView;
     private GoogleMap mGoogleMap;
+    private LatLng latLng;
     private SearchView mSearchAddress;
     private Button mButtonAddAvailability, mButtonMultipleImages, mButtonAddBenefit, mButtonAddRule
             , mButtonCancel, mButtonPost;
@@ -68,7 +84,10 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     private ImageView mMainImage, mImageMultpiple;
     private TextView mTextMultImages;
     private ScrollView mScrollLayout;
-    private EditText mEditBenefit, mEditRule;
+    private EditText mEditBenefit, mEditRule, mEditMaxGeusts, mEditMinCost, mEditCostPerPerson
+            , mEditBeds, mEditBaths, mEditArea, mEditDescription, mEditBedrooms;
+    private CheckBox mCheckLivingRoom;
+    private RadioGroup mRadioType;
 
     private ArrayList<Availability> availabilityList;
     private AvailabilitiesAdapter mAvAdapter;
@@ -76,6 +95,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     private ArrayList<Rule> ruleList;
     private BenefitsAdapter mBenAdapter;
     private RulesAdapter mRulAdapter;
+    private LinearLayout mPostingProgressView;
 
     private Uri mMainImageUri;
     private List<Uri> mImagesUrisList;
@@ -108,9 +128,27 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         benefitList = new ArrayList<Benefit>();
         ruleList = new ArrayList<Rule>();
 
-        mScrollLayout = (ScrollView) view.findViewById(R.id.scroll_layout);
+        mScrollLayout = (ScrollView) view.findViewById(R.id.scroll_layout_createplace);
+        mPostingProgressView = (LinearLayout) view.findViewById(R.id.layout_postingcomponent);
+        mEditMaxGeusts = (EditText) view.findViewById(R.id.edittext_maxguest);
+        mEditMinCost = (EditText) view.findViewById(R.id.edittext_mincost);
+        mEditCostPerPerson = (EditText) view.findViewById(R.id.edittext_costperperson);
+        mEditBeds = (EditText) view.findViewById(R.id.edittext_beds);
+        mEditBaths = (EditText) view.findViewById(R.id.edittext_baths);
+        mEditBedrooms = (EditText) view.findViewById(R.id.edittext_bedrooms);
+        mEditArea = (EditText) view.findViewById(R.id.edittext_area);
+        mEditDescription = (EditText) view.findViewById(R.id.edittext_description);
+        mCheckLivingRoom = (CheckBox) view.findViewById(R.id.checkbox_livingroom);
+        mRadioType = (RadioGroup) view.findViewById(R.id.radio_type);
+
         // benefits
         mButtonPost = (Button) view.findViewById(R.id.button_postplace);
+        mButtonPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postPlace();
+            }
+        });
         mButtonCancel = (Button) view.findViewById(R.id.button_cancelcreate);
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,7 +314,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                         return false;
                     }
                     Address address = addressList.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                    latLng = new LatLng(address.getLatitude(), address.getLongitude());
                     mGoogleMap.clear();
                     mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(location));
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
@@ -481,6 +519,158 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 new PlaceFragment()
         ).addToBackStack(null).commit();
         return true;
+    }
+
+    private boolean validate() {
+        return (latLng != null &&
+                !mEditMaxGeusts.getText().toString().equals("") &&
+                !mEditMinCost.getText().toString().equals("") &&
+                !mEditCostPerPerson.getText().toString().equals("") &&
+                !mEditBeds.getText().toString().equals("") &&
+                !mEditBaths.getText().toString().equals("") &&
+                !mEditArea.getText().toString().equals("") &&
+                !mEditDescription.getText().toString().equals("") &&
+                mMainImageUri != null);
+    }
+
+    private void postPlace(){
+        mPostingProgressView.setVisibility(View.VISIBLE);
+        if(!validate()){
+            Toast.makeText(
+                    getActivity(),
+                    "Please fulfill all the fields",
+                    Toast.LENGTH_SHORT
+            ).show();
+            mPostingProgressView.setVisibility(View.INVISIBLE);
+            return;
+        }
+//        Place place = new Place();
+//        place.setAddress(mSearchAddress.getQuery().toString());
+//        place.setLatitude(String.valueOf(latLng.latitude));
+//        place.setLongitude(String.valueOf(latLng.longitude));
+//        place.setMaxGuest(Integer.parseInt(mEditMaxGeusts.getText().toString()));
+//        place.setMinCost(Integer.parseInt(mEditMinCost.getText().toString()));
+//        place.setCostPerPerson(Integer.parseInt(mEditCostPerPerson.getText().toString()));
+//        place.setType(mRadioType.getCheckedRadioButtonId() == R.id.radio_house ? "House" : "Room");
+//        place.setDescription(mEditDescription.getText().toString());
+//        place.setBeds(Integer.parseInt(mEditBeds.getText().toString()));
+//        place.setBaths(Integer.parseInt(mEditBaths.getText().toString()));
+//        place.setBedrooms(Integer.parseInt(mEditBedrooms.getText().toString()));
+//        place.setLivingRoom(mCheckLivingRoom.isChecked());
+//        place.setArea(Integer.parseInt(mEditArea.getText().toString()));
+        RequestBody addressPart = RequestBody.create(
+                MultipartBody.FORM,
+                mSearchAddress.getQuery().toString()
+        );
+        RequestBody latPart = RequestBody.create(
+                MultipartBody.FORM,
+                String.valueOf(latLng.latitude)
+        );
+        RequestBody longPart = RequestBody.create(
+                MultipartBody.FORM,
+                String.valueOf(latLng.longitude)
+        );
+        RequestBody maxGuestPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditMaxGeusts.getText().toString()
+        );
+        RequestBody minCostPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditMinCost.getText().toString()
+        );
+        RequestBody costPerPersonPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditCostPerPerson.getText().toString()
+        );
+        RequestBody typePart = RequestBody.create(
+                MultipartBody.FORM,
+                mRadioType.getCheckedRadioButtonId() == R.id.radio_house ? "House" : "Room"
+        );
+        RequestBody descriptionPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditDescription.getText().toString()
+        );
+        RequestBody bedsPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditBeds.getText().toString()
+        );
+        RequestBody bathsPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditBaths.getText().toString()
+        );
+        RequestBody bedroomsPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditBedrooms.getText().toString()
+        );
+        RequestBody livingRoomPart = RequestBody.create(
+                MultipartBody.FORM,
+                String.valueOf(mCheckLivingRoom.isChecked())
+        );
+        RequestBody areaPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditArea.getText().toString()
+        );
+        byte[] img = null;
+        try {
+            InputStream iStream = getActivity().getContentResolver().openInputStream(mMainImageUri);
+            img = Utils.getBytes(iStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("uri ~~> " + mMainImageUri + "   " + img.length);
+        RequestBody imageFile = RequestBody.create(MediaType.parse("image/jpeg"), img);
+        MultipartBody.Part  mainImageFilePart = MultipartBody.Part.createFormData(
+                "image",
+                mMainImageUri.getLastPathSegment(),
+                imageFile
+        );
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<Place> call = jsonPlaceHolderApi.postUsersPlace(
+                AppConstants.USER.getId(),
+                addressPart, latPart, longPart, maxGuestPart, minCostPart,
+                costPerPersonPart, typePart, descriptionPart, bedsPart,bathsPart, bedroomsPart,
+                livingRoomPart, areaPart, mainImageFilePart
+        );
+        call.enqueue(new Callback<Place>() {
+            @Override
+            public void onResponse(Call<Place> call, Response<Place> response) {
+                mPostingProgressView.setVisibility(View.INVISIBLE);
+                if( !response.isSuccessful() ) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                Place p = response.body();
+                p.printDetails();
+            }
+
+            @Override
+            public void onFailure(Call<Place> call, Throwable t) {
+                mPostingProgressView.setVisibility(View.INVISIBLE);
+                Toast.makeText(
+                        getContext(),
+                        "Failure on putting place!",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 

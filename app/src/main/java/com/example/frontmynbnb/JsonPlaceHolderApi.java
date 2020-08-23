@@ -71,7 +71,24 @@ public interface JsonPlaceHolderApi {
     @GET("images/{id}")
     Call<ResponseBody> getImageById(@Path("id") int id);
 
-    @POST
+    @Multipart
+    @POST("users/{id}/places")
+    Call<Place> postUsersPlace(
+            @Path("id") int id,
+            @Part("address") RequestBody address,
+            @Part("latitude") RequestBody latitude,
+            @Part("longitude") RequestBody longitude,
+            @Part("maxGuests") RequestBody maxGuests,
+            @Part("minCost") RequestBody minCost,
+            @Part("costPerPerson") RequestBody costPerPerson,
+            @Part("type") RequestBody type,
+            @Part("description") RequestBody description,
+            @Part("beds") RequestBody beds,
+            @Part("baths") RequestBody baths,
+            @Part("bedrooms") RequestBody bedrooms,
+            @Part("livingRoom") RequestBody livingRoom,
+            @Part("area") RequestBody area,
+            @Part MultipartBody.Part imageFile);
 
 
 

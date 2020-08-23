@@ -130,7 +130,7 @@ public class RegisterActivity extends AppCompatActivity {
                             mBitmapUri.getLastPathSegment(),
                             imageFile
                     );
-                    System.out.println("filep art initialized");
+                    System.out.println("file part art initialized");
                 } else {
                     RequestBody attachmentEmpty = RequestBody.create(MediaType.parse("text/plain"), "");
                     imageFilePart = MultipartBody.Part.createFormData("picture", "", attachmentEmpty);

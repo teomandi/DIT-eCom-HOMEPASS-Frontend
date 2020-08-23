@@ -170,7 +170,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
                 }
             });
         }
-
+        myPlace.printDetails();
         enableGalleryEffect();
         havingPlaceView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);

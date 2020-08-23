@@ -44,17 +44,21 @@ public class Place {
         System.out.println("livingRoom: " + livingRoom);
         System.out.println("area: " + area);
         System.out.println("~~Benefits: ");
-        for(Benefit b: benefits)
-            System.out.println("- " + b.getContent());
+        if (benefits != null)
+            for(Benefit b: benefits)
+                System.out.println("- " + b.getContent());
         System.out.println("~~Rules: ");
-        for(Rule r: rules)
-            System.out.println("- " + r.getContent());
+        if (rules != null)
+            for(Rule r: rules)
+                System.out.println("- " + r.getContent());
         System.out.println("~~Images: ");
-        for(Image i: images)
-            System.out.println("- " + i.getId() + ") " + i.getFilename());
+        if (images != null)
+            for(Image i: images)
+                System.out.println("- " + i.getId() + ") " + i.getFilename());
         System.out.println("~~Availabilities: ");
-        for(Availability a: availabilities)
-            a.print();
+        if (availabilities != null)
+            for(Availability a: availabilities)
+                a.print();
     }
 
     public String getCreatedAt() {

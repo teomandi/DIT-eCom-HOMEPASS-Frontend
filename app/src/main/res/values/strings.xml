@@ -92,4 +92,5 @@
     <string name="you_don_t_have_set_your_place_yet">You don\'t have set your place yet.</string>
     <string name="create_place">Create Place</string>
     <string name="fetching_your_place">Fetching your place..</string>
+    <string name="place_is_creating">Your place is being created..</string>
 </resources>
