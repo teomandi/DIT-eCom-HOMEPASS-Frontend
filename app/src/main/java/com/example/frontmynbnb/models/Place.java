@@ -11,7 +11,7 @@ public class Place {
     private String address;
     private String latitude;
     private String longitude;
-    private int maxGuest;
+    private int maxGuests;
     private int minCost;
     private int costPerPerson;
     private String type;
@@ -33,7 +33,7 @@ public class Place {
         System.out.println("address: " + address);
         System.out.println("latitude: " + latitude);
         System.out.println("longitude: " + longitude);
-        System.out.println("maxGuest: " + maxGuest);
+        System.out.println("maxGuest: " + maxGuests);
         System.out.println("minCost: " + minCost);
         System.out.println("costPerPerson: " + costPerPerson);
         System.out.println("type: " + type);
@@ -117,12 +117,12 @@ public class Place {
         this.longitude = longitude;
     }
 
-    public int getMaxGuest() {
-        return maxGuest;
+    public int getMaxGuests() {
+        return maxGuests;
     }
 
-    public void setMaxGuest(int maxGuest) {
-        this.maxGuest = maxGuest;
+    public void setMaxGuests(int maxGuests) {
+        this.maxGuests = maxGuests;
     }
 
     public int getMinCost() {

@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,8 +69,9 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
     private boolean stopGalleryThread = false;
 
     private void setPlaceOnView(){
+        myPlace.printDetails();
         textAddress.setText(myPlace.getAddress());
-        textMaxGuest.setText(String.valueOf(myPlace.getMaxGuest()));
+        textMaxGuest.setText(String.valueOf(myPlace.getMaxGuests()));
         textMinCost.setText(String.valueOf(myPlace.getMinCost()));
         textCostPerPerson.setText(String.valueOf(myPlace.getCostPerPerson()));
         textBeds.setText(String.valueOf(myPlace.getBeds()));
@@ -92,7 +90,6 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
             av.setFrom(av.getFrom().split("T")[0]);
             av.setTo(av.getTo().split("T")[0]);
         }
-        myPlace.printDetails();
         mAvAdapter = new AvailabilitiesAdapter(getActivity(), (ArrayList<Availability>)myPlace.getAvailabilities());
         containerAvailability.setAdapter(mAvAdapter);
         //set GoogleMap
@@ -100,6 +97,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
                 Double.parseDouble(myPlace.getLatitude()),
                 Double.parseDouble(myPlace.getLongitude())
         );
+
         //fetch images
         mBitmapList = new ArrayList<>();
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
@@ -170,7 +168,6 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
                 }
             });
         }
-        myPlace.printDetails();
         enableGalleryEffect();
         havingPlaceView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
@@ -244,7 +241,6 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
                         Toast.LENGTH_SHORT
                 ).show();
                 myPlace = response.body();
-                myPlace.printDetails();
                 setPlaceOnView();
             }
 
@@ -302,11 +298,6 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         }
         mMapView.onCreate(mapViewBundle);
         mMapView.getMapAsync(this);
-        if(mlatLng!=null) {
-            mGoogleMap.addMarker(new MarkerOptions().position(mlatLng).title("Your Place"));
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mlatLng, 11));
-        }
-
     }
 
     @Override
@@ -318,6 +309,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
             mapViewBundle = new Bundle();
             outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
         }
+
 
         mMapView.onSaveInstanceState(mapViewBundle);
     }
@@ -343,7 +335,12 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         mGoogleMap = map;
-        map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+
+//        map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        if(mlatLng!=null) {
+            mGoogleMap.addMarker(new MarkerOptions().position(mlatLng).title("Your Place"));
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mlatLng, 11));
+        }
     }
 
     @Override

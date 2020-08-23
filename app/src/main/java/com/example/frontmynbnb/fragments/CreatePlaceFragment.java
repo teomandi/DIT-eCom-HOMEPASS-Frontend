@@ -315,6 +315,8 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                     }
                     Address address = addressList.get(0);
                     latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                    System.out.println("lat: " + latLng.latitude);
+                    System.out.println("long: " + latLng.longitude);
                     mGoogleMap.clear();
                     mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(location));
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
@@ -411,8 +413,8 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     DatePickerDialog.OnDateSetListener onDateTo = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            mAvTo = String.valueOf(year) + "-" + String.valueOf(monthOfYear + 1)
-                    + "-" + String.valueOf(dayOfMonth);
+            mAvTo = String.valueOf(year) + "/" + String.valueOf(monthOfYear + 1)
+                    + "/" + String.valueOf(dayOfMonth);
 
             Availability availability = new Availability(mAvFrom, mAvTo);
             availabilityList.add(availability);
@@ -476,7 +478,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 mScrollLayout.post(new Runnable() {
                     @Override
                     public void run() {
-                        mScrollLayout.smoothScrollTo(0, mImageMultpiple.getBottom());
+                        mScrollLayout.smoothScrollTo(0, mImageMultpiple.getTop() - 30);
                     }
                 });
                 setMultipleImagesEffect();
@@ -544,20 +546,6 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
             mPostingProgressView.setVisibility(View.INVISIBLE);
             return;
         }
-//        Place place = new Place();
-//        place.setAddress(mSearchAddress.getQuery().toString());
-//        place.setLatitude(String.valueOf(latLng.latitude));
-//        place.setLongitude(String.valueOf(latLng.longitude));
-//        place.setMaxGuest(Integer.parseInt(mEditMaxGeusts.getText().toString()));
-//        place.setMinCost(Integer.parseInt(mEditMinCost.getText().toString()));
-//        place.setCostPerPerson(Integer.parseInt(mEditCostPerPerson.getText().toString()));
-//        place.setType(mRadioType.getCheckedRadioButtonId() == R.id.radio_house ? "House" : "Room");
-//        place.setDescription(mEditDescription.getText().toString());
-//        place.setBeds(Integer.parseInt(mEditBeds.getText().toString()));
-//        place.setBaths(Integer.parseInt(mEditBaths.getText().toString()));
-//        place.setBedrooms(Integer.parseInt(mEditBedrooms.getText().toString()));
-//        place.setLivingRoom(mCheckLivingRoom.isChecked());
-//        place.setArea(Integer.parseInt(mEditArea.getText().toString()));
         RequestBody addressPart = RequestBody.create(
                 MultipartBody.FORM,
                 mSearchAddress.getQuery().toString()
@@ -635,7 +623,6 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         call.enqueue(new Callback<Place>() {
             @Override
             public void onResponse(Call<Place> call, Response<Place> response) {
-                mPostingProgressView.setVisibility(View.INVISIBLE);
                 if( !response.isSuccessful() ) {
                     Toast.makeText(
                             getContext(),
@@ -645,7 +632,12 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                     return;
                 }
                 Place p = response.body();
-                p.printDetails();
+                postBenefits(p.getId());
+                postRules(p.getId());
+                postAvailabilities(p.getId());
+                postImages(p.getId());
+                mPostingProgressView.setVisibility(View.INVISIBLE);
+
             }
 
             @Override
@@ -659,18 +651,154 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 System.out.println("Error message:: " + t.getMessage());
             }
         });
+    }
 
+    private void postBenefits(int pid){
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        for(Benefit b: benefitList){
+            System.out.println("sending b:" + b.getContent());
 
+            Call<Benefit> call = jsonPlaceHolderApi.postPlaceBenefit(pid, b.getContent());
+            call.enqueue(new Callback<Benefit>() {
+                @Override
+                public void onResponse(Call<Benefit> call, Response<Benefit> response) {
+                    if( !response.isSuccessful() ) {
+                        Toast.makeText(
+                                getContext(),
+                                "Not successful response " + response.code(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        return;
+                    }
+                    System.out.println("Benefit sent!");
+                }
 
+                @Override
+                public void onFailure(Call<Benefit> call, Throwable t) {
+                    Toast.makeText(
+                            getContext(),
+                            "Failure on putting benefit!",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    System.out.println("Error message:: " + t.getMessage());
+                }
+            });
 
+        }
+    }
 
+    private void postRules(int pid){
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        for(Rule r: ruleList){
+            Call<Rule> call = jsonPlaceHolderApi.postPlaceRule(pid, r.getContent());
+            call.enqueue(new Callback<Rule>() {
+                @Override
+                public void onResponse(Call<Rule> call, Response<Rule> response) {
+                    if( !response.isSuccessful() ) {
+                        Toast.makeText(
+                                getContext(),
+                                "Not successful response " + response.code(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        return;
+                    }
+                    System.out.println("Rule sent!");
+                }
 
+                @Override
+                public void onFailure(Call<Rule> call, Throwable t) {
+                    Toast.makeText(
+                            getContext(),
+                            "Failure on putting Rule!",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    System.out.println("Error message:: " + t.getMessage());
+                }
+            });
 
+        }
+    }
 
+    private void postAvailabilities(int pid){
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        for(Availability av: availabilityList){
+            av.print();
+            Call<Availability> call = jsonPlaceHolderApi.postPlaceAvailability(
+                    pid, av.getFrom(), av.getTo());
+            call.enqueue(new Callback<Availability>() {
+                @Override
+                public void onResponse(Call<Availability> call, Response<Availability> response) {
+                    if( !response.isSuccessful() ) {
+                        Toast.makeText(
+                                getContext(),
+                                "Not successful response " + response.code(),
+                                Toast.LENGTH_LONG
+                        ).show();
+                        return;
+                    }
+                    System.out.println("Availability sent!");
+                }
 
+                @Override
+                public void onFailure(Call<Availability> call, Throwable t) {
+                    Toast.makeText(
+                            getContext(),
+                            "Failure on putting availability!",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    System.out.println("Error message:: " + t.getMessage());
+                }
+            });
+        }
+    }
 
+    private void postImages(int pid) {
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        for(Uri imgUri: mImagesUrisList){
+            byte[] img = null;
+            try {
+                InputStream iStream = getActivity().getContentResolver().openInputStream(imgUri);
+                img = Utils.getBytes(iStream);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("uri ~~> " + imgUri + "   " + img.length);
+            RequestBody imageFile = RequestBody.create(MediaType.parse("image/jpeg"), img);
+            MultipartBody.Part  imageFilePart = MultipartBody.Part.createFormData(
+                    "images",
+                    imgUri.getLastPathSegment(),
+                    imageFile
+            );
+            Call<String> call = jsonPlaceHolderApi.postPlaceImage(pid, imageFilePart);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if( !response.isSuccessful() ) {
+                        Toast.makeText(
+                                getContext(),
+                                "Not successful response " + response.code(),
+                                Toast.LENGTH_LONG
+                        ).show();
+                        return;
+                    }
+                    System.out.println("Image sent!");
+                }
 
-
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(
+                            getContext(),
+                            "Failure on putting image!",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    System.out.println("Error message:: " + t.getMessage());
+                }
+            });
+        }
     }
 
 

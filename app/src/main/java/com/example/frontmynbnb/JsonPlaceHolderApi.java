@@ -1,9 +1,12 @@
 package com.example.frontmynbnb;
 
 
+import com.example.frontmynbnb.models.Availability;
+import com.example.frontmynbnb.models.Benefit;
 import com.example.frontmynbnb.models.Login;
 import com.example.frontmynbnb.models.Message;
 import com.example.frontmynbnb.models.Place;
+import com.example.frontmynbnb.models.Rule;
 import com.example.frontmynbnb.models.User;
 
 import java.util.List;
@@ -13,6 +16,8 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -89,6 +94,32 @@ public interface JsonPlaceHolderApi {
             @Part("livingRoom") RequestBody livingRoom,
             @Part("area") RequestBody area,
             @Part MultipartBody.Part imageFile);
+
+    @FormUrlEncoded
+    @POST("places/{id}/benefits")
+    Call<Benefit> postPlaceBenefit(@Path("id") int id, @Field("content") String content);
+
+    @FormUrlEncoded
+    @POST("places/{id}/rules")
+    Call<Rule> postPlaceRule(@Path("id") int id, @Field("content") String content);
+
+    @FormUrlEncoded
+    @POST("places/{id}/availabilities")
+    Call<Availability> postPlaceAvailability(
+            @Path("id") int id,
+            @Field("from") String from,
+            @Field("to") String to
+    );
+
+    @Multipart
+    @POST("places/{id}/images")
+    Call<String> postPlaceImage(
+            @Path("id") int id,
+            @Part MultipartBody.Part imageFile
+
+    );
+
+
 
 
 

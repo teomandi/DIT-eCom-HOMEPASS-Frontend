@@ -12,7 +12,7 @@
         android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="150dp"
         android:background="@drawable/dark_round"
         android:gravity="center_horizontal"
         android:orientation="vertical"
