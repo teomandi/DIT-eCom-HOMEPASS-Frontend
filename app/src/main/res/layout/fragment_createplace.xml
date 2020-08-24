@@ -356,6 +356,7 @@
                 android:id="@+id/textview_editmulimages_info"
                 android:textSize="15sp"
                 android:textColor="@color/colorMoreRed"
+                android:drawableStart="@drawable/ic_warning_24dp"
                 android:text="@string/the_last_images_will_be_removed_if_this_field_is_set"
                 android:visibility="invisible"
                 />

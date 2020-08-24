@@ -66,7 +66,6 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
     private LatLng mlatLng;
 
     private List<Bitmap> mBitmapList;
-    private boolean stopGalleryThread = false;
 
     private void setPlaceOnView(){
         myPlace.printDetails();
@@ -97,7 +96,6 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
                 Double.parseDouble(myPlace.getLatitude()),
                 Double.parseDouble(myPlace.getLongitude())
         );
-
         //fetch images
         mBitmapList = new ArrayList<>();
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
@@ -202,6 +200,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         buttonCreatePlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                galleryThread.interrupt();
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
                         new CreatePlaceFragment()
@@ -212,15 +211,36 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         buttonEditPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stopGalleryThread = true;
+                galleryThread.interrupt();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("edit", true);
+                CreatePlaceFragment fragment = new CreatePlaceFragment();
+                fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
-                        new CreatePlaceFragment()
+                        fragment
                 ).commit();
             }
         });
         buttonDeletePlace = (Button) view.findViewById(R.id.button_delete_myplace);
+        buttonDeletePlace.setOnClickListener(new View.OnClickListener() {  //DELEEEEEEEEETEEEE
+            @Override
+            public void onClick(View v) {
+                galleryThread.interrupt();
+                CreatePlaceFragment fragment = new CreatePlaceFragment();
+                getFragmentManager().beginTransaction().replace(
+                        R.id.fragment_container2,
+                        fragment
+                ).commit();
+            }
+        });
         //fetch the place of the user
+        fetchPlace();
+        initGoogleMap(savedInstanceState);
+        return view;
+    }
+
+    private void fetchPlace(){
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         Call<Place> call = jsonPlaceHolderApi.getUsersPlaceByUsername(AppConstants.USERNAME);
@@ -256,36 +276,36 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
                 progressBar.setVisibility(View.INVISIBLE);
             }
         });
-
-        initGoogleMap(savedInstanceState);
-        return view;
     }
 
+
+    private Thread galleryThread;
     private void enableGalleryEffect(){
-        new Thread(new Runnable() {
+        galleryThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while(true) {
                     for (final Bitmap b : mBitmapList) {
-                        if(stopGalleryThread)
+                        try {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    placeGallery.setImageBitmap(b);
+                                }
+                            });
+                        }catch (NullPointerException e){
                             break;
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                placeGallery.setImageBitmap(b);
-                            }
-                        });
+                        }
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-                    if(stopGalleryThread)
-                        break;
                 }
             }
-        }).start();
+        });
+        galleryThread.start();
     }
 
     private void initGoogleMap(Bundle savedInstanceState) {
@@ -314,23 +334,19 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
 
     @Override
     public void onResume() {
-        stopGalleryThread = false;
-        enableGalleryEffect();
         super.onResume();
         mMapView.onResume();
     }
 
     @Override
     public void onStart() {
-        stopGalleryThread = false;
-        enableGalleryEffect();
         super.onStart();
         mMapView.onStart();
     }
 
     @Override
     public void onStop() {
-        stopGalleryThread = true;
+        galleryThread.interrupt();
         super.onStop();
         mMapView.onStop();
     }
@@ -346,7 +362,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
 
     @Override
     public void onPause() {
-        stopGalleryThread = true;
+        galleryThread.interrupt();
         mMapView.onPause();
         super.onPause();
     }

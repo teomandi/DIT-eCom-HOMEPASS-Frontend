@@ -42,6 +42,7 @@ import com.example.frontmynbnb.adapters.RulesAdapter;
 import com.example.frontmynbnb.misc.Utils;
 import com.example.frontmynbnb.models.Availability;
 import com.example.frontmynbnb.models.Benefit;
+import com.example.frontmynbnb.models.Image;
 import com.example.frontmynbnb.models.Place;
 import com.example.frontmynbnb.models.Rule;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -61,6 +62,7 @@ import java.util.Objects;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,7 +83,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     private Button mButtonAddAvailability, mButtonMultipleImages, mButtonAddBenefit, mButtonAddRule, mButtonCancel, mButtonPost;
     private ListView availableContainer, benefitContainer, ruleContainer;
     private ImageView mMainImage, mImageMultpiple;
-    private TextView mTextMultImages;
+    private TextView mTextMultImages, mMultImagesInformer;
     private ScrollView mScrollLayout;
     private EditText mEditBenefit, mEditRule, mEditMaxGeusts, mEditMinCost, mEditCostPerPerson, mEditBeds, mEditBaths, mEditArea, mEditDescription, mEditBedrooms;
     private CheckBox mCheckLivingRoom;
@@ -101,7 +103,8 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     private List<Bitmap> mImagesBitmapList;
 
     private String mAvFrom, mAvTo;
-    private boolean galleryThread = true;
+    private boolean isEditing = false;
+    private Place editPlace = null;
 
     public CreatePlaceFragment() {
         // Required empty public constructor
@@ -138,6 +141,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mEditDescription = (EditText) view.findViewById(R.id.edittext_description);
         mCheckLivingRoom = (CheckBox) view.findViewById(R.id.checkbox_livingroom);
         mRadioType = (RadioGroup) view.findViewById(R.id.radio_type);
+        mMultImagesInformer = (TextView) view.findViewById(R.id.textview_editmulimages_info);
 
         // benefits
         mButtonPost = (Button) view.findViewById(R.id.button_postplace);
@@ -151,7 +155,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                galleryThread = false;
+                galleryThread.interrupt();
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
                         new PlaceFragment()
@@ -258,7 +262,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mMainImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                galleryThread = false;
+                galleryThread.interrupt();
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -273,7 +277,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mButtonMultipleImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                galleryThread = false;
+                galleryThread.interrupt();
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -292,8 +296,6 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 mAvAdapter.notifyDataSetChanged();
                 return false;
             }
-
-
         });
         mAvAdapter = new AvailabilitiesAdapter(getActivity(), availabilityList);
         availableContainer.setAdapter(mAvAdapter);
@@ -330,15 +332,21 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 }
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
         });
-
-
         initGoogleMap(savedInstanceState);
+
+        if (getArguments() != null) {
+            isEditing = getArguments().getBoolean("edit");
+        }
+        System.out.println("isEdit??? " + isEditing);
+        if(isEditing){
+            //fetch place and images!
+            fetchPlace();
+        }
         return view;
     }
 
@@ -358,13 +366,11 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         Bundle mapViewBundle = outState.getBundle(MAPVIEW_BUNDLE_KEY);
         if (mapViewBundle == null) {
             mapViewBundle = new Bundle();
             outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
         }
-
         mMapView.onSaveInstanceState(mapViewBundle);
     }
 
@@ -382,6 +388,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
 
     @Override
     public void onStop() {
+        galleryThread.interrupt();
         super.onStop();
         mMapView.onStop();
     }
@@ -394,12 +401,14 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
 
     @Override
     public void onPause() {
+        galleryThread.interrupt();
         mMapView.onPause();
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
+        galleryThread.interrupt();
         mMapView.onDestroy();
         super.onDestroy();
     }
@@ -487,7 +496,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                         mScrollLayout.smoothScrollTo(0, mImageMultpiple.getTop() - 30);
                     }
                 });
-                setMultipleImagesEffect();
+                enableGalleryEffect();
 
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(getActivity(), "Canceled", Toast.LENGTH_SHORT).show();
@@ -496,35 +505,41 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         }
     }
 
-    private void setMultipleImagesEffect() {
-        String textImgCounter = mImagesBitmapList.size() + "images have been added";
+    private Thread galleryThread;
+
+    private void enableGalleryEffect() {
+        String textImgCounter = mImagesBitmapList.size() + " images have been added";
+        System.out.println("Gallery efee starts !" + mImagesBitmapList.size());
         mTextMultImages.setText(textImgCounter);
-        new Thread(new Runnable() {
+        galleryThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 for (final Bitmap b : mImagesBitmapList) {
-                    if( galleryThread ) {
+                    try {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 mImageMultpiple.setImageBitmap(b);
                             }
                         });
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    } catch (NullPointerException e) {
+                        break;
+                    }
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             }
-        }).start();
+        });
+        galleryThread.start();
     }
 
     @Override
     public boolean onBackPressed() {
         System.out.println("Create ~~" + AppConstants.MODE);
-        galleryThread = false;
+        galleryThread.interrupt();
         Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container2,
                 new PlaceFragment()
@@ -805,7 +820,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                         "Your place was set!",
                         Toast.LENGTH_SHORT
                 ).show();
-                galleryThread = false;
+                galleryThread.interrupt();
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
                         new PlaceFragment()
@@ -822,6 +837,169 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 System.out.println("Error message:: " + t.getMessage());
             }
         });
+    }
+
+    private void fetchPlace(){
+        mPostingProgressView.setVisibility(View.VISIBLE);
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<Place> call = jsonPlaceHolderApi.getUsersPlaceByUsername(AppConstants.USERNAME);
+        call.enqueue(new Callback<Place>() {
+            @Override
+            public void onResponse(Call<Place> call, Response<Place> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + String.valueOf(response.code()),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                Toast.makeText(
+                        getContext(),
+                        "Place fetched with success!",
+                        Toast.LENGTH_SHORT
+                ).show();
+                editPlace = response.body();
+                editPlace.printDetails();
+                setEditPlaceOnView();
+                mPostingProgressView.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(Call<Place> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "No place fetched!",
+                        Toast.LENGTH_SHORT
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+                mPostingProgressView.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
+    private void setEditPlaceOnView(){
+        mSearchAddress.setQuery(editPlace.getAddress(), true);
+        mEditMaxGeusts.setText(String.valueOf(editPlace.getMaxGuests()));
+        mEditMinCost.setText(String.valueOf(editPlace.getMinCost()));
+        mEditCostPerPerson.setText(String.valueOf(editPlace.getCostPerPerson()));
+        mEditBeds.setText(String.valueOf(editPlace.getBeds()));
+        mEditBaths.setText(String.valueOf(editPlace.getBaths()));
+        mEditBedrooms.setText(String.valueOf(editPlace.getBedrooms()));
+        mCheckLivingRoom.setChecked(editPlace.isLivingRoom());
+        mEditArea.setText(String.valueOf(editPlace.getArea()));
+        mEditDescription.setText(editPlace.getDescription());
+        mRadioType.check(editPlace.getType().equals("House") ? R.id.radio_house : R.id.radio_room );
+        ruleList.addAll(editPlace.getRules());
+        mRulAdapter.notifyDataSetChanged();
+        benefitList.addAll(editPlace.getBenefits());
+        mBenAdapter.notifyDataSetChanged();
+        availabilityList.addAll(editPlace.getAvailabilities());
+        mAvAdapter.notifyDataSetChanged();
+
+        fetchMainImage();
+        fetchImages();
+        mMultImagesInformer.setVisibility(View.VISIBLE);
+    }
+
+    private void fetchMainImage(){
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create((JsonPlaceHolderApi.class));
+        Call<ResponseBody> call = jsonPlaceHolderApi.getPlaceMainImage(editPlace.getId());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + String.valueOf(response.code()),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                byte[] mainImageBytes = new byte[0];
+                try {
+                    mainImageBytes = response.body().bytes();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                assert mainImageBytes != null;
+                mMainBitmap = BitmapFactory.decodeByteArray(mainImageBytes, 0, mainImageBytes.length);
+                mMainImageUri = null;
+                mMainImage.setImageBitmap(mMainBitmap);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure on main-image call!!",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
+    }
+
+    private void fetchImages(){
+
+        mImagesBitmapList = new ArrayList<>();
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create((JsonPlaceHolderApi.class));
+        for(Image img: editPlace.getImages()) {
+            System.out.println("Fetching imagE: " + img.getFilename());
+            Call<ResponseBody> call2 = jsonPlaceHolderApi.getImageById(img.getId());
+            call2.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (!response.isSuccessful()) {
+                        Toast.makeText(
+                                getContext(),
+                                "Not successful response " + String.valueOf(response.code()),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        return;
+                    }
+
+                    System.out.println("image got");
+                    byte[] imageBytes = new byte[0];
+                    try {
+                        imageBytes = response.body().bytes();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    assert imageBytes != null;
+                    mImagesBitmapList.add(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(
+                            getContext(),
+                            "Failure on simple-image call!!",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    System.out.println("Error message:: " + t.getMessage());
+                }
+            });
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            enableGalleryEffect();
+                        }
+                    });
+                }
+            }).start();
+        }
     }
 
 
