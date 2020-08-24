@@ -309,25 +309,28 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
             mapViewBundle = new Bundle();
             outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
         }
-
-
         mMapView.onSaveInstanceState(mapViewBundle);
     }
 
     @Override
     public void onResume() {
+        stopGalleryThread = false;
+        enableGalleryEffect();
         super.onResume();
         mMapView.onResume();
     }
 
     @Override
     public void onStart() {
+        stopGalleryThread = false;
+        enableGalleryEffect();
         super.onStart();
         mMapView.onStart();
     }
 
     @Override
     public void onStop() {
+        stopGalleryThread = true;
         super.onStop();
         mMapView.onStop();
     }
@@ -335,8 +338,6 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         mGoogleMap = map;
-
-//        map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         if(mlatLng!=null) {
             mGoogleMap.addMarker(new MarkerOptions().position(mlatLng).title("Your Place"));
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mlatLng, 11));
@@ -345,6 +346,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
 
     @Override
     public void onPause() {
+        stopGalleryThread = true;
         mMapView.onPause();
         super.onPause();
     }

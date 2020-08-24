@@ -78,14 +78,12 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     private GoogleMap mGoogleMap;
     private LatLng latLng;
     private SearchView mSearchAddress;
-    private Button mButtonAddAvailability, mButtonMultipleImages, mButtonAddBenefit, mButtonAddRule
-            , mButtonCancel, mButtonPost;
+    private Button mButtonAddAvailability, mButtonMultipleImages, mButtonAddBenefit, mButtonAddRule, mButtonCancel, mButtonPost;
     private ListView availableContainer, benefitContainer, ruleContainer;
     private ImageView mMainImage, mImageMultpiple;
     private TextView mTextMultImages;
     private ScrollView mScrollLayout;
-    private EditText mEditBenefit, mEditRule, mEditMaxGeusts, mEditMinCost, mEditCostPerPerson
-            , mEditBeds, mEditBaths, mEditArea, mEditDescription, mEditBedrooms;
+    private EditText mEditBenefit, mEditRule, mEditMaxGeusts, mEditMinCost, mEditCostPerPerson, mEditBeds, mEditBaths, mEditArea, mEditDescription, mEditBedrooms;
     private CheckBox mCheckLivingRoom;
     private RadioGroup mRadioType;
 
@@ -103,7 +101,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     private List<Bitmap> mImagesBitmapList;
 
     private String mAvFrom, mAvTo;
-
+    private boolean galleryThread = true;
 
     public CreatePlaceFragment() {
         // Required empty public constructor
@@ -153,6 +151,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                galleryThread = false;
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
                         new PlaceFragment()
@@ -160,12 +159,12 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
             }
         });
         mEditBenefit = (EditText) view.findViewById(R.id.edittext_newbenefit);
-        mButtonAddBenefit = (Button)  view.findViewById(R.id.button_addbenefit);
+        mButtonAddBenefit = (Button) view.findViewById(R.id.button_addbenefit);
         mButtonAddBenefit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String content = mEditBenefit.getText().toString();
-                if( content.isEmpty() ) {
+                if (content.isEmpty()) {
                     Toast.makeText(
                             getContext(),
                             "Benefit is empty!",
@@ -196,12 +195,12 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         benefitContainer.setAdapter(mBenAdapter);
         // rules
         mEditRule = (EditText) view.findViewById(R.id.edittext_newrule);
-        mButtonAddRule = (Button)  view.findViewById(R.id.button_addrule);
+        mButtonAddRule = (Button) view.findViewById(R.id.button_addrule);
         mButtonAddRule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String content = mEditRule.getText().toString();
-                if( content.isEmpty() ) {
+                if (content.isEmpty()) {
                     Toast.makeText(
                             getContext(),
                             "Rule is empty!",
@@ -249,10 +248,17 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
             }
         });
         mImageMultpiple = (ImageView) view.findViewById(R.id.imageview_multiple);
+        mImageMultpiple.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Click the button above!", Toast.LENGTH_SHORT).show();
+            }
+        });
         mMainImage = (ImageView) view.findViewById(R.id.imageview_main);
         mMainImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                galleryThread = false;
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -267,6 +273,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mButtonMultipleImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                galleryThread = false;
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -274,7 +281,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 startActivityForResult(Intent.createChooser(
                         intent,
                         "Select Picture"
-                        ), SELECT_MULTIPLE_IMAGES);
+                ), SELECT_MULTIPLE_IMAGES);
             }
         });
         availableContainer = (ListView) view.findViewById(R.id.listview_availablecontainer);
@@ -406,7 +413,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     DatePickerDialog.OnDateSetListener onDateFrom = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            mAvFrom =  String.valueOf(year) + "/" + String.valueOf(monthOfYear + 1)
+            mAvFrom = String.valueOf(year) + "/" + String.valueOf(monthOfYear + 1)
                     + "/" + String.valueOf(dayOfMonth);
         }
     };
@@ -435,7 +442,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                         e.printStackTrace();
                     }
                 }
-            } else if (resultCode == Activity.RESULT_CANCELED)  {
+            } else if (resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(getActivity(), "Canceled", Toast.LENGTH_SHORT).show();
             }
             //scroll there
@@ -451,15 +458,14 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 mImagesUrisList = new ArrayList<>();
                 ClipData clipData = data.getClipData();
                 if (clipData != null) {
-                    for ( int i=0; i<clipData.getItemCount(); i++){
+                    for (int i = 0; i < clipData.getItemCount(); i++) {
                         Uri imageUri = clipData.getItemAt(i).getUri();
-                        mImagesUrisList.add(imageUri);
                         try {
                             InputStream is = getContext().getContentResolver().openInputStream(imageUri);
                             Bitmap bmp = BitmapFactory.decodeStream(is);
                             mImagesBitmapList.add(bmp);
                             mImagesUrisList.add(imageUri);
-                        } catch (FileNotFoundException e){
+                        } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
                     }
@@ -490,23 +496,25 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         }
     }
 
-    private void setMultipleImagesEffect(){
+    private void setMultipleImagesEffect() {
         String textImgCounter = mImagesBitmapList.size() + "images have been added";
         mTextMultImages.setText(textImgCounter);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for (final Bitmap b : mImagesBitmapList){
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mImageMultpiple.setImageBitmap(b);
+                for (final Bitmap b : mImagesBitmapList) {
+                    if( galleryThread ) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mImageMultpiple.setImageBitmap(b);
+                            }
+                        });
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                    });
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
                 }
             }
@@ -516,6 +524,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     @Override
     public boolean onBackPressed() {
         System.out.println("Create ~~" + AppConstants.MODE);
+        galleryThread = false;
         Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container2,
                 new PlaceFragment()
@@ -535,9 +544,9 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 mMainImageUri != null);
     }
 
-    private void postPlace(){
+    private void postPlace() {
         mPostingProgressView.setVisibility(View.VISIBLE);
-        if(!validate()){
+        if (!validate()) {
             Toast.makeText(
                     getActivity(),
                     "Please fulfill all the fields",
@@ -607,7 +616,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         }
         System.out.println("uri ~~> " + mMainImageUri + "   " + img.length);
         RequestBody imageFile = RequestBody.create(MediaType.parse("image/jpeg"), img);
-        MultipartBody.Part  mainImageFilePart = MultipartBody.Part.createFormData(
+        MultipartBody.Part mainImageFilePart = MultipartBody.Part.createFormData(
                 "image",
                 mMainImageUri.getLastPathSegment(),
                 imageFile
@@ -617,13 +626,13 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         Call<Place> call = jsonPlaceHolderApi.postUsersPlace(
                 AppConstants.USER.getId(),
                 addressPart, latPart, longPart, maxGuestPart, minCostPart,
-                costPerPersonPart, typePart, descriptionPart, bedsPart,bathsPart, bedroomsPart,
+                costPerPersonPart, typePart, descriptionPart, bedsPart, bathsPart, bedroomsPart,
                 livingRoomPart, areaPart, mainImageFilePart
         );
         call.enqueue(new Callback<Place>() {
             @Override
             public void onResponse(Call<Place> call, Response<Place> response) {
-                if( !response.isSuccessful() ) {
+                if (!response.isSuccessful()) {
                     Toast.makeText(
                             getContext(),
                             "Not successful response " + response.code(),
@@ -653,17 +662,17 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         });
     }
 
-    private void postBenefits(int pid){
+    private void postBenefits(int pid) {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        for(Benefit b: benefitList){
+        for (Benefit b : benefitList) {
             System.out.println("sending b:" + b.getContent());
 
             Call<Benefit> call = jsonPlaceHolderApi.postPlaceBenefit(pid, b.getContent());
             call.enqueue(new Callback<Benefit>() {
                 @Override
                 public void onResponse(Call<Benefit> call, Response<Benefit> response) {
-                    if( !response.isSuccessful() ) {
+                    if (!response.isSuccessful()) {
                         Toast.makeText(
                                 getContext(),
                                 "Not successful response " + response.code(),
@@ -688,15 +697,15 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         }
     }
 
-    private void postRules(int pid){
+    private void postRules(int pid) {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        for(Rule r: ruleList){
+        for (Rule r : ruleList) {
             Call<Rule> call = jsonPlaceHolderApi.postPlaceRule(pid, r.getContent());
             call.enqueue(new Callback<Rule>() {
                 @Override
                 public void onResponse(Call<Rule> call, Response<Rule> response) {
-                    if( !response.isSuccessful() ) {
+                    if (!response.isSuccessful()) {
                         Toast.makeText(
                                 getContext(),
                                 "Not successful response " + response.code(),
@@ -721,17 +730,17 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         }
     }
 
-    private void postAvailabilities(int pid){
+    private void postAvailabilities(int pid) {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        for(Availability av: availabilityList){
+        for (Availability av : availabilityList) {
             av.print();
             Call<Availability> call = jsonPlaceHolderApi.postPlaceAvailability(
                     pid, av.getFrom(), av.getTo());
             call.enqueue(new Callback<Availability>() {
                 @Override
                 public void onResponse(Call<Availability> call, Response<Availability> response) {
-                    if( !response.isSuccessful() ) {
+                    if (!response.isSuccessful()) {
                         Toast.makeText(
                                 getContext(),
                                 "Not successful response " + response.code(),
@@ -758,7 +767,9 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     private void postImages(int pid) {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        for(Uri imgUri: mImagesUrisList){
+        List<MultipartBody.Part> imagesPart = new ArrayList<>();
+        System.out.println("selected images are: " + mImagesUrisList.size());
+        for (Uri imgUri : mImagesUrisList) {
             byte[] img = null;
             try {
                 InputStream iStream = getActivity().getContentResolver().openInputStream(imgUri);
@@ -768,37 +779,49 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
             }
             System.out.println("uri ~~> " + imgUri + "   " + img.length);
             RequestBody imageFile = RequestBody.create(MediaType.parse("image/jpeg"), img);
-            MultipartBody.Part  imageFilePart = MultipartBody.Part.createFormData(
+            MultipartBody.Part imageFilePart = MultipartBody.Part.createFormData(
                     "images",
                     imgUri.getLastPathSegment(),
                     imageFile
             );
-            Call<String> call = jsonPlaceHolderApi.postPlaceImage(pid, imageFilePart);
-            call.enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(Call<String> call, Response<String> response) {
-                    if( !response.isSuccessful() ) {
-                        Toast.makeText(
-                                getContext(),
-                                "Not successful response " + response.code(),
-                                Toast.LENGTH_LONG
-                        ).show();
-                        return;
-                    }
-                    System.out.println("Image sent!");
-                }
-
-                @Override
-                public void onFailure(Call<String> call, Throwable t) {
+            imagesPart.add(imageFilePart);
+        }
+        System.out.println("Will send: " + + imagesPart.size());
+        Call<Void> call = jsonPlaceHolderApi.postPlaceImage(pid, imagesPart);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
                     Toast.makeText(
                             getContext(),
-                            "Failure on putting image!",
+                            "Not successful response " + response.code(),
                             Toast.LENGTH_LONG
                     ).show();
-                    System.out.println("Error message:: " + t.getMessage());
+                    return;
                 }
-            });
-        }
+                System.out.println("Images sent!");
+                Toast.makeText(
+                        getContext(),
+                        "Your place was set!",
+                        Toast.LENGTH_SHORT
+                ).show();
+                galleryThread = false;
+                getFragmentManager().beginTransaction().replace(
+                        R.id.fragment_container2,
+                        new PlaceFragment()
+                ).commit();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure on putting image!",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
     }
 
 

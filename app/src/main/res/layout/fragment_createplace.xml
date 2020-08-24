@@ -350,6 +350,16 @@
                 android:text="@string/select_images"
                 android:textColor="#fff" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textview_editmulimages_info"
+                android:textSize="15sp"
+                android:textColor="@color/colorMoreRed"
+                android:text="@string/the_last_images_will_be_removed_if_this_field_is_set"
+                android:visibility="invisible"
+                />
+
             <ImageView
                 android:id="@+id/imageview_multiple"
                 android:layout_width="200dp"
@@ -357,7 +367,6 @@
                 android:layout_marginBottom="10dp"
                 android:contentDescription="@string/main_image_of_the_house"
                 android:src="@drawable/simple_home" />
-
 
             <TextView
                 android:id="@+id/textview_multimages"

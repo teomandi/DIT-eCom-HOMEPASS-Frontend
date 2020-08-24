@@ -113,9 +113,9 @@ public interface JsonPlaceHolderApi {
 
     @Multipart
     @POST("places/{id}/images")
-    Call<String> postPlaceImage(
+    Call<Void> postPlaceImage(
             @Path("id") int id,
-            @Part MultipartBody.Part imageFile
+            @Part List<MultipartBody.Part> images
 
     );
 
