@@ -1,7 +1,7 @@
 package com.example.frontmynbnb.models;
 
 public class Availability {
-    private int id;
+    private int id=-1;
     private String from;
     private String to;
 

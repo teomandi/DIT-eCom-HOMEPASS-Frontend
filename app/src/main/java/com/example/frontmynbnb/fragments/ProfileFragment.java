@@ -433,8 +433,6 @@ public class ProfileFragment extends MyFragment {
         return true;
     }
 
-
-
     @Override
     public boolean onBackPressed() {
         System.out.println("PROFILE ~~" + AppConstants.MODE);

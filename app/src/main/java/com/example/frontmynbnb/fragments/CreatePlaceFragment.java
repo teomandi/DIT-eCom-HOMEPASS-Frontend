@@ -148,14 +148,18 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mButtonPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postPlace();
+                if (!isEditing)
+                    postPlace();
+                else
+                    putPlace();
             }
         });
         mButtonCancel = (Button) view.findViewById(R.id.button_cancelcreate);
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                galleryThread.interrupt();
+                if(galleryThread!=null)
+                    galleryThread.interrupt();
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
                         new PlaceFragment()
@@ -262,7 +266,8 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mMainImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                galleryThread.interrupt();
+                if(galleryThread!=null)
+                    galleryThread.interrupt();
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -277,7 +282,8 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mButtonMultipleImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                galleryThread.interrupt();
+                if(galleryThread!=null)
+                    galleryThread.interrupt();
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -332,6 +338,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 }
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
@@ -343,7 +350,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
             isEditing = getArguments().getBoolean("edit");
         }
         System.out.println("isEdit??? " + isEditing);
-        if(isEditing){
+        if (isEditing) {
             //fetch place and images!
             fetchPlace();
         }
@@ -388,7 +395,8 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
 
     @Override
     public void onStop() {
-        galleryThread.interrupt();
+        if(galleryThread!=null)
+            galleryThread.interrupt();
         super.onStop();
         mMapView.onStop();
     }
@@ -401,14 +409,16 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
 
     @Override
     public void onPause() {
-        galleryThread.interrupt();
+        if(galleryThread!=null)
+            galleryThread.interrupt();
         mMapView.onPause();
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        galleryThread.interrupt();
+        if(galleryThread!=null)
+            galleryThread.interrupt();
         mMapView.onDestroy();
         super.onDestroy();
     }
@@ -539,7 +549,8 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     @Override
     public boolean onBackPressed() {
         System.out.println("Create ~~" + AppConstants.MODE);
-        galleryThread.interrupt();
+        if(galleryThread!=null)
+            galleryThread.interrupt();
         Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container2,
                 new PlaceFragment()
@@ -548,15 +559,25 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     }
 
     private boolean validate() {
-        return (latLng != null &&
-                !mEditMaxGeusts.getText().toString().equals("") &&
-                !mEditMinCost.getText().toString().equals("") &&
-                !mEditCostPerPerson.getText().toString().equals("") &&
-                !mEditBeds.getText().toString().equals("") &&
-                !mEditBaths.getText().toString().equals("") &&
-                !mEditArea.getText().toString().equals("") &&
-                !mEditDescription.getText().toString().equals("") &&
-                mMainImageUri != null);
+        if (!isEditing)
+            return (latLng != null &&
+                    !mEditMaxGeusts.getText().toString().equals("") &&
+                    !mEditMinCost.getText().toString().equals("") &&
+                    !mEditCostPerPerson.getText().toString().equals("") &&
+                    !mEditBeds.getText().toString().equals("") &&
+                    !mEditBaths.getText().toString().equals("") &&
+                    !mEditArea.getText().toString().equals("") &&
+                    !mEditDescription.getText().toString().equals("") &&
+                    mMainImageUri != null);
+        else
+            return (latLng != null &&
+                    !mEditMaxGeusts.getText().toString().equals("") &&
+                    !mEditMinCost.getText().toString().equals("") &&
+                    !mEditCostPerPerson.getText().toString().equals("") &&
+                    !mEditBeds.getText().toString().equals("") &&
+                    !mEditBaths.getText().toString().equals("") &&
+                    !mEditArea.getText().toString().equals("") &&
+                    !mEditDescription.getText().toString().equals(""));
     }
 
     private void postPlace() {
@@ -682,7 +703,6 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         for (Benefit b : benefitList) {
             System.out.println("sending b:" + b.getContent());
-
             Call<Benefit> call = jsonPlaceHolderApi.postPlaceBenefit(pid, b.getContent());
             call.enqueue(new Callback<Benefit>() {
                 @Override
@@ -801,7 +821,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
             );
             imagesPart.add(imageFilePart);
         }
-        System.out.println("Will send: " + + imagesPart.size());
+        System.out.println("Will send: " + +imagesPart.size());
         Call<Void> call = jsonPlaceHolderApi.postPlaceImage(pid, imagesPart);
         call.enqueue(new Callback<Void>() {
             @Override
@@ -820,7 +840,8 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                         "Your place was set!",
                         Toast.LENGTH_SHORT
                 ).show();
-                galleryThread.interrupt();
+                if(galleryThread!=null)
+                    galleryThread.interrupt();
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
                         new PlaceFragment()
@@ -839,7 +860,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         });
     }
 
-    private void fetchPlace(){
+    private void fetchPlace() {
         mPostingProgressView.setVisibility(View.VISIBLE);
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
@@ -861,6 +882,10 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                         Toast.LENGTH_SHORT
                 ).show();
                 editPlace = response.body();
+                for (Availability av : editPlace.getAvailabilities()){
+                    av.setFrom(av.getFrom().split("T")[0]);
+                    av.setTo(av.getTo().split("T")[0]);
+                }
                 editPlace.printDetails();
                 setEditPlaceOnView();
                 mPostingProgressView.setVisibility(View.INVISIBLE);
@@ -879,7 +904,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         });
     }
 
-    private void setEditPlaceOnView(){
+    private void setEditPlaceOnView() {
         mSearchAddress.setQuery(editPlace.getAddress(), true);
         mEditMaxGeusts.setText(String.valueOf(editPlace.getMaxGuests()));
         mEditMinCost.setText(String.valueOf(editPlace.getMinCost()));
@@ -890,7 +915,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mCheckLivingRoom.setChecked(editPlace.isLivingRoom());
         mEditArea.setText(String.valueOf(editPlace.getArea()));
         mEditDescription.setText(editPlace.getDescription());
-        mRadioType.check(editPlace.getType().equals("House") ? R.id.radio_house : R.id.radio_room );
+        mRadioType.check(editPlace.getType().equals("House") ? R.id.radio_house : R.id.radio_room);
         ruleList.addAll(editPlace.getRules());
         mRulAdapter.notifyDataSetChanged();
         benefitList.addAll(editPlace.getBenefits());
@@ -903,7 +928,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mMultImagesInformer.setVisibility(View.VISIBLE);
     }
 
-    private void fetchMainImage(){
+    private void fetchMainImage() {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create((JsonPlaceHolderApi.class));
         Call<ResponseBody> call = jsonPlaceHolderApi.getPlaceMainImage(editPlace.getId());
@@ -942,12 +967,11 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         });
     }
 
-    private void fetchImages(){
-
+    private void fetchImages() {
         mImagesBitmapList = new ArrayList<>();
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create((JsonPlaceHolderApi.class));
-        for(Image img: editPlace.getImages()) {
+        for (Image img : editPlace.getImages()) {
             System.out.println("Fetching imagE: " + img.getFilename());
             Call<ResponseBody> call2 = jsonPlaceHolderApi.getImageById(img.getId());
             call2.enqueue(new Callback<ResponseBody>() {
@@ -1002,7 +1026,409 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         }
     }
 
+    private void putPlace() {
+        mPostingProgressView.setVisibility(View.VISIBLE);
+        if (!validate()) {
+            Toast.makeText(
+                    getActivity(),
+                    "Please fulfill all the fields (except the main image)",
+                    Toast.LENGTH_SHORT
+            ).show();
+            mPostingProgressView.setVisibility(View.INVISIBLE);
+            return;
+        }
+        RequestBody addressPart = RequestBody.create(
+                MultipartBody.FORM,
+                mSearchAddress.getQuery().toString()
+        );
+        RequestBody latPart = RequestBody.create(
+                MultipartBody.FORM,
+                String.valueOf(latLng.latitude)
+        );
+        RequestBody longPart = RequestBody.create(
+                MultipartBody.FORM,
+                String.valueOf(latLng.longitude)
+        );
+        RequestBody maxGuestPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditMaxGeusts.getText().toString()
+        );
+        RequestBody minCostPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditMinCost.getText().toString()
+        );
+        RequestBody costPerPersonPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditCostPerPerson.getText().toString()
+        );
+        RequestBody typePart = RequestBody.create(
+                MultipartBody.FORM,
+                mRadioType.getCheckedRadioButtonId() == R.id.radio_house ? "House" : "Room"
+        );
+        RequestBody descriptionPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditDescription.getText().toString()
+        );
+        RequestBody bedsPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditBeds.getText().toString()
+        );
+        RequestBody bathsPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditBaths.getText().toString()
+        );
+        RequestBody bedroomsPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditBedrooms.getText().toString()
+        );
+        RequestBody livingRoomPart = RequestBody.create(
+                MultipartBody.FORM,
+                String.valueOf(mCheckLivingRoom.isChecked())
+        );
+        RequestBody areaPart = RequestBody.create(
+                MultipartBody.FORM,
+                mEditArea.getText().toString()
+        );
+        MultipartBody.Part mainImageFilePart = null;
+        if (mMainImageUri != null) {
+            byte[] img = null;
+            try {
+                InputStream iStream = getContext().getContentResolver().openInputStream(mMainImageUri);
+                img = Utils.getBytes(iStream);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("uri ~~> " + mMainImageUri + "   " + img.length);
+            RequestBody imageFile = RequestBody.create(MediaType.parse("image/jpeg"), img);
+            mainImageFilePart = MultipartBody.Part.createFormData(
+                    "image",
+                    mMainImageUri.getLastPathSegment(),
+                    imageFile
+            );
+            System.out.println("file-part initialized");
+        }
+        else {
+            RequestBody attachmentEmpty = RequestBody.create(MediaType.parse("text/plain"), "");
+            mainImageFilePart = MultipartBody.Part.createFormData("image", "", attachmentEmpty);
+        }
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<Place> call = jsonPlaceHolderApi.putUsersPlace(AppConstants.USER.getId(),
+                editPlace.getId(),addressPart, latPart, longPart, maxGuestPart, minCostPart,
+                costPerPersonPart, typePart, descriptionPart, bedsPart, bathsPart, bedroomsPart,
+                livingRoomPart, areaPart, mainImageFilePart
+        );
+        call.enqueue(new Callback<Place>() {
+            @Override
+            public void onResponse(Call<Place> call, Response<Place> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                Place p = response.body();
+                putBenefits(p.getId());
+                putRules(p.getId());
+                putAvailabilities(p.getId());
+                if(mImagesUrisList!=null) {
+                    if (mImagesUrisList.size() > 0) {
+                        putImages(p.getId());
+                    } else {
+                        if(galleryThread!=null)
+                            galleryThread.interrupt();
+                        getFragmentManager().beginTransaction().replace(
+                                R.id.fragment_container2,
+                                new PlaceFragment()
+                        ).commit();
+                    }
+                }
+                else{
+                    if(galleryThread!=null)
+                        galleryThread.interrupt();
+                    getFragmentManager().beginTransaction().replace(
+                            R.id.fragment_container2,
+                            new PlaceFragment()
+                    ).commit();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<Place> call, Throwable t) {
+                mPostingProgressView.setVisibility(View.INVISIBLE);
+                Toast.makeText(
+                        getContext(),
+                        "Failure on putting place!",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
+    }
+
+    private void putBenefits(int pid){
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        for(Benefit b: benefitList){
+            if(b.getId()==-1){
+                //post this benefit
+                System.out.println("sending b:" + b.getContent());
+                Call<Benefit> call = jsonPlaceHolderApi.postPlaceBenefit(pid, b.getContent());
+                call.enqueue(new Callback<Benefit>() {
+                    @Override
+                    public void onResponse(Call<Benefit> call, Response<Benefit> response) {
+                        if (!response.isSuccessful()) {
+                            Toast.makeText(
+                                    getContext(),
+                                    "Not successful response " + response.code(),
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                            return;
+                        }
+                        System.out.println("Benefit sent!");
+                    }
+
+                    @Override
+                    public void onFailure(Call<Benefit> call, Throwable t) {
+                        Toast.makeText(
+                                getContext(),
+                                "Failure on putting benefit!",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        System.out.println("Error message:: " + t.getMessage());
+                    }
+                });
+            }
+        }
+        for(Benefit b: editPlace.getBenefits()){
+            if(!benefitList.contains(b)){
+                //delete this benefit
+                System.out.println("deleting b:" + b.getContent());
+                Call<Void> call = jsonPlaceHolderApi.deleteBenefit(b.getId());
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (!response.isSuccessful()) {
+                            Toast.makeText(
+                                    getContext(),
+                                    "Benefit: Not successful response " + response.code(),
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                            return;
+                        }
+                        System.out.println("benefit deleted!");
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(
+                                getContext(),
+                                "Failure on putting benefit!",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        System.out.println("Error message:: " + t.getMessage());
+                    }
+                });
+            }
+        }
+    }
+
+    private void putRules(int pid){
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        for(Rule r: ruleList){
+            if(r.getId()==-1){
+                //post this benefit
+                System.out.println("sending r:" + r.getContent());
+                Call<Rule> call = jsonPlaceHolderApi.postPlaceRule(pid, r.getContent());
+                call.enqueue(new Callback<Rule>() {
+                    @Override
+                    public void onResponse(Call<Rule> call, Response<Rule> response) {
+                        if (!response.isSuccessful()) {
+                            Toast.makeText(
+                                    getContext(),
+                                    "Not successful response " + response.code(),
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                            return;
+                        }
+                        System.out.println("Rule sent!");
+                    }
+
+                    @Override
+                    public void onFailure(Call<Rule> call, Throwable t) {
+                        Toast.makeText(
+                                getContext(),
+                                "Failure on putting Rule!",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        System.out.println("Error message:: " + t.getMessage());
+                    }
+                });
+            }
+        }
+        for(Rule r: editPlace.getRules()){
+            if(!ruleList.contains(r)){
+                //delete this benefit
+                System.out.println("deleting r:" + r.getContent());
+                Call<Void> call = jsonPlaceHolderApi.deleteRule(r.getId());
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (!response.isSuccessful()) {
+                            Toast.makeText(
+                                    getContext(),
+                                    "Rule: Not successful response " + response.code(),
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                            return;
+                        }
+                        System.out.println("Rule deleted!");
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(
+                                getContext(),
+                                "Failure on putting benefit!",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        System.out.println("Error message:: " + t.getMessage());
+                    }
+                });
+            }
+        }
+    }
+
+    private void putAvailabilities(int pid){
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        for(Availability av: availabilityList){
+            if(av.getId() == -1){
+                //post this av
+                Call<Availability> call = jsonPlaceHolderApi.postPlaceAvailability(
+                        pid, av.getFrom(), av.getTo());
+                call.enqueue(new Callback<Availability>() {
+                    @Override
+                    public void onResponse(Call<Availability> call, Response<Availability> response) {
+                        if (!response.isSuccessful()) {
+                            Toast.makeText(
+                                    getContext(),
+                                    "Not successful response " + response.code(),
+                                    Toast.LENGTH_LONG
+                            ).show();
+                            return;
+                        }
+                        System.out.println("Availability sent!");
+                    }
+
+                    @Override
+                    public void onFailure(Call<Availability> call, Throwable t) {
+                        Toast.makeText(
+                                getContext(),
+                                "Failure on putting availability!",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        System.out.println("Error message:: " + t.getMessage());
+                    }
+                });
+            }
+        }
+        for(Availability av: editPlace.getAvailabilities()){
+            if(!availabilityList.contains(av)){
+                //delete this avail
+                Call<Void> call = jsonPlaceHolderApi.deleteAvailability(av.getId());
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (!response.isSuccessful()) {
+                            Toast.makeText(
+                                    getContext(),
+                                    "Not successful response " + response.code(),
+                                    Toast.LENGTH_LONG
+                            ).show();
+                            return;
+                        }
+                        System.out.println("Availability sent!");
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(
+                                getContext(),
+                                "Failure on deleting availability!",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        System.out.println("Error message:: " + t.getMessage());
+                    }
+                });
+            }
+        }
+    }
+
+    private void putImages(int pid) {
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        List<MultipartBody.Part> imagesPart = new ArrayList<>();
+        System.out.println("selected images are: " + mImagesUrisList.size());
+        for (Uri imgUri : mImagesUrisList) {
+            byte[] img = null;
+            try {
+                InputStream iStream = getActivity().getContentResolver().openInputStream(imgUri);
+                img = Utils.getBytes(iStream);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("uri ~~> " + imgUri + "   " + img.length);
+            RequestBody imageFile = RequestBody.create(MediaType.parse("image/jpeg"), img);
+            MultipartBody.Part imageFilePart = MultipartBody.Part.createFormData(
+                    "images",
+                    imgUri.getLastPathSegment(),
+                    imageFile
+            );
+            imagesPart.add(imageFilePart);
+        }
+        System.out.println("Will send: " + +imagesPart.size());
+        Call<Void> call = jsonPlaceHolderApi.putPlaceImage(pid, imagesPart);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + response.code(),
+                            Toast.LENGTH_LONG
+                    ).show();
+                    return;
+                }
+                System.out.println("Images sent!");
+                Toast.makeText(
+                        getContext(),
+                        "Your place was edited!",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+                if(galleryThread!=null)
+                    galleryThread.interrupt();
+                getFragmentManager().beginTransaction().replace(
+                        R.id.fragment_container2,
+                        new PlaceFragment()
+                ).commit();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure on putting image!",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
+    }
 }
 
 

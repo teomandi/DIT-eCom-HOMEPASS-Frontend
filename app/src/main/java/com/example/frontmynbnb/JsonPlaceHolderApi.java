@@ -16,6 +16,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -116,10 +117,62 @@ public interface JsonPlaceHolderApi {
     Call<Void> postPlaceImage(
             @Path("id") int id,
             @Part List<MultipartBody.Part> images
-
     );
 
+    @Multipart
+    @PUT("places/{id}/images")
+    Call<Void> putPlaceImage(
+            @Path("id") int id,
+            @Part List<MultipartBody.Part> images
+    );
 
+    @PUT("benefits/{id}")
+    Call<Benefit> putBenefit(
+            @Path("id") int id,
+            @Body Benefit b
+    );
+
+    @DELETE("benefits/{id}")
+    Call<Void> deleteBenefit(@Path("id") int id);
+
+    @PUT("rules/{id}")
+    Call<Rule> putRule(
+            @Path("id") int id,
+            @Body Rule r
+    );
+
+    @DELETE("rules/{id}")
+    Call<Void> deleteRule(@Path("id") int id);
+
+    @PUT("availabilities/{id}")
+    Call<Benefit> putAvailability(
+            @Path("id") int id,
+            @Body Benefit b
+    );
+
+    @DELETE("availabilities/{id}")
+    Call<Void> deleteAvailability(@Path("id") int id);
+
+
+    @Multipart
+    @PUT("users/{uid}/places/{pid}")
+    Call<Place> putUsersPlace(
+            @Path("uid") int uid,
+            @Path("pid") int pid,
+            @Part("address") RequestBody address,
+            @Part("latitude") RequestBody latitude,
+            @Part("longitude") RequestBody longitude,
+            @Part("maxGuests") RequestBody maxGuests,
+            @Part("minCost") RequestBody minCost,
+            @Part("costPerPerson") RequestBody costPerPerson,
+            @Part("type") RequestBody type,
+            @Part("description") RequestBody description,
+            @Part("beds") RequestBody beds,
+            @Part("baths") RequestBody baths,
+            @Part("bedrooms") RequestBody bedrooms,
+            @Part("livingRoom") RequestBody livingRoom,
+            @Part("area") RequestBody area,
+            @Part MultipartBody.Part imageFile);
 
 
 
