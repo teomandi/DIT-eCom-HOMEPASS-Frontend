@@ -94,4 +94,7 @@
     <string name="fetching_your_place">Fetching your place..</string>
     <string name="place_is_creating">Your place is being created..</string>
     <string name="the_last_images_will_be_removed_if_this_field_is_set">The last images will be removed if this field is set!</string>
+    <string name="loading_place">Loading place..</string>
+    <string name="seting_place">Setting place..</string>
+    <string name="deleting_place_msg">Your place is being deleted..</string>
 </resources>

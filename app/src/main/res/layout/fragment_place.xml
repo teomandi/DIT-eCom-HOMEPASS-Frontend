@@ -58,6 +58,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/text_on_bar"
             android:text="@string/fetching_your_place"
             android:textColor="#fff"
             android:textSize="25sp" />

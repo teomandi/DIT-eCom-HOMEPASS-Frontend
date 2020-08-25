@@ -83,7 +83,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     private Button mButtonAddAvailability, mButtonMultipleImages, mButtonAddBenefit, mButtonAddRule, mButtonCancel, mButtonPost;
     private ListView availableContainer, benefitContainer, ruleContainer;
     private ImageView mMainImage, mImageMultpiple;
-    private TextView mTextMultImages, mMultImagesInformer;
+    private TextView mTextMultImages, mMultImagesInformer, mTextOnProgress;
     private ScrollView mScrollLayout;
     private EditText mEditBenefit, mEditRule, mEditMaxGeusts, mEditMinCost, mEditCostPerPerson, mEditBeds, mEditBaths, mEditArea, mEditDescription, mEditBedrooms;
     private CheckBox mCheckLivingRoom;
@@ -142,6 +142,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mCheckLivingRoom = (CheckBox) view.findViewById(R.id.checkbox_livingroom);
         mRadioType = (RadioGroup) view.findViewById(R.id.radio_type);
         mMultImagesInformer = (TextView) view.findViewById(R.id.textview_editmulimages_info);
+        mTextOnProgress = (TextView) view.findViewById(R.id.text_on_bar2);
 
         // benefits
         mButtonPost = (Button) view.findViewById(R.id.button_postplace);
@@ -582,6 +583,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
 
     private void postPlace() {
         mPostingProgressView.setVisibility(View.VISIBLE);
+        mTextOnProgress.setText(R.string.place_is_creating);
         if (!validate()) {
             Toast.makeText(
                     getActivity(),
@@ -862,6 +864,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
 
     private void fetchPlace() {
         mPostingProgressView.setVisibility(View.VISIBLE);
+        mTextOnProgress.setText(R.string.loading_place);
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         Call<Place> call = jsonPlaceHolderApi.getUsersPlaceByUsername(AppConstants.USERNAME);
@@ -1028,6 +1031,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
 
     private void putPlace() {
         mPostingProgressView.setVisibility(View.VISIBLE);
+        mTextOnProgress.setText(R.string.seting_place);
         if (!validate()) {
             Toast.makeText(
                     getActivity(),

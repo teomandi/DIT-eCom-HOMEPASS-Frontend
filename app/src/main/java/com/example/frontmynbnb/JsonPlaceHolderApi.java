@@ -174,6 +174,15 @@ public interface JsonPlaceHolderApi {
             @Part("area") RequestBody area,
             @Part MultipartBody.Part imageFile);
 
+    @DELETE("users/{uid}/places/{pid}")
+    Call<Void> deletePlace(
+            @Path("uid") int uid,
+            @Path("pid") int pid
+    );
+
+    @DELETE("images/{id}")
+    Call<Void> deleteImage(@Path("id") int id);
+
 
 
 

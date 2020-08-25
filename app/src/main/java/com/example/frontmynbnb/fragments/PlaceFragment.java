@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +54,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
     private LinearLayout noPlaceView, progressBar;
     private ScrollView havingPlaceView;
     private TextView textAddress, textMaxGuest, textMinCost, textCostPerPerson, textBeds, textBaths,
-            textBedrooms, textLivingRoom, textArea, textType, textDescription;
+            textBedrooms, textLivingRoom, textArea, textType, textDescription, mTextOnProgress;
     private ListView containerBenefits, containerRules, containerAvailability;
     private Button buttonCreatePlace, buttonDeletePlace, buttonEditPlace;
     private ImageView placeGallery;
@@ -197,10 +200,12 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         containerRules = (ListView) view.findViewById(R.id.listview_rulescontainer2);
         containerAvailability = (ListView) view.findViewById(R.id.listview_availablecontainer2);
         buttonCreatePlace = (Button) view.findViewById(R.id.button_setplace);
+        mTextOnProgress = (TextView) view.findViewById(R.id.text_on_bar);
         buttonCreatePlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                galleryThread.interrupt();
+                if(galleryThread!=null)
+                    galleryThread.interrupt();
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
                         new CreatePlaceFragment()
@@ -211,7 +216,8 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         buttonEditPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                galleryThread.interrupt();
+                if(galleryThread!=null)
+                    galleryThread.interrupt();
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("edit", true);
                 CreatePlaceFragment fragment = new CreatePlaceFragment();
@@ -226,12 +232,9 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         buttonDeletePlace.setOnClickListener(new View.OnClickListener() {  //DELEEEEEEEEETEEEE
             @Override
             public void onClick(View v) {
-                galleryThread.interrupt();
-                CreatePlaceFragment fragment = new CreatePlaceFragment();
-                getFragmentManager().beginTransaction().replace(
-                        R.id.fragment_container2,
-                        fragment
-                ).commit();
+                if(galleryThread!=null)
+                    galleryThread.interrupt();
+                deletePlace();
             }
         });
         //fetch the place of the user
@@ -241,6 +244,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
     }
 
     private void fetchPlace(){
+        mTextOnProgress.setText(R.string.fetching_your_place);
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         Call<Place> call = jsonPlaceHolderApi.getUsersPlaceByUsername(AppConstants.USERNAME);
@@ -346,7 +350,8 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
 
     @Override
     public void onStop() {
-        galleryThread.interrupt();
+        if(galleryThread!=null)
+            galleryThread.interrupt();
         super.onStop();
         mMapView.onStop();
     }
@@ -362,7 +367,8 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
 
     @Override
     public void onPause() {
-        galleryThread.interrupt();
+        if(galleryThread!=null)
+            galleryThread.interrupt();
         mMapView.onPause();
         super.onPause();
     }
@@ -377,6 +383,161 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+
+    private void deletePlace(){
+        progressBar.setVisibility(View.VISIBLE);
+        mTextOnProgress.setText(R.string.deleting_place_msg);
+
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        //delete availabilities
+        for(Availability av: myPlace.getAvailabilities()){
+            Call<Void> call = jsonPlaceHolderApi.deleteAvailability(av.getId());
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (!response.isSuccessful()) {
+                        Toast.makeText(
+                                getContext(),
+                                "Not successful response " + response.code(),
+                                Toast.LENGTH_LONG
+                        ).show();
+                        return;
+                    }
+                    System.out.println("Availability sent!");
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(
+                            getContext(),
+                            "Failure on deleting availability!",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    System.out.println("Error message:: " + t.getMessage());
+                }
+            });
+        }
+        //delete benefits
+        for (Benefit b : myPlace.getBenefits()) {
+            System.out.println("deleting b:" + b.getContent());
+            Call<Void> call = jsonPlaceHolderApi.deleteBenefit(b.getId());
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (!response.isSuccessful()) {
+                        Toast.makeText(
+                                getContext(),
+                                "Benefit: Not successful response " + response.code(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        return;
+                    }
+                    System.out.println("benefit deleted!");
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(
+                            getContext(),
+                            "Failure on deleting benefit!",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    System.out.println("Error message:: " + t.getMessage());
+                }
+            });
+        }
+        //delete rules
+        for (Rule r : myPlace.getRules()) {
+            System.out.println("deleting r:" + r.getContent());
+            Call<Void> call = jsonPlaceHolderApi.deleteRule(r.getId());
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (!response.isSuccessful()) {
+                        Toast.makeText(
+                                getContext(),
+                                "Rule: Not successful response " + response.code(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        return;
+                    }
+                    System.out.println("Rule deleted!");
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(
+                            getContext(),
+                            "Failure on deleting rule!",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    System.out.println("Error message:: " + t.getMessage());
+                }
+            });
+        }
+        //delete images
+        for(Image img: myPlace.getImages()){
+            System.out.println("deleting image: " + img.getFilename());
+            Call<Void> call = jsonPlaceHolderApi.deleteImage(img.getId());
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (!response.isSuccessful()) {
+                        Toast.makeText(
+                                getContext(),
+                                "Rule: Not successful response " + response.code(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        return;
+                    }
+                    System.out.println("Image deleted!");
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(
+                            getContext(),
+                            "Failure on deleting images!",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    System.out.println("Error message:: " + t.getMessage());
+                }
+            });
+        }
+        //finally delete the place
+        Call<Void> call = jsonPlaceHolderApi.deletePlace(AppConstants.USER.getId(), myPlace.getId());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "DeletePlace: Not successful response " + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                System.out.println("Place deleted!");
+                if(galleryThread!=null)
+                    galleryThread.interrupt();
+                getFragmentManager().beginTransaction().replace(
+                        R.id.fragment_container2,
+                        new PlaceFragment()
+                ).commit();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure on deleting place!!!",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
     }
 
 }
