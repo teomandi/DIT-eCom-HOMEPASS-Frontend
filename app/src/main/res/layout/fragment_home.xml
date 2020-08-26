@@ -8,7 +8,7 @@
 
 
     <LinearLayout
-        android:id="@+id/layout_progresscomponent"
+        android:id="@+id/layout_progresscomponent2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
@@ -18,8 +18,8 @@
         android:padding="10dp"
         android:translationZ="10dp"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="@+id/layout_background"
+        app:layout_constraintStart_toStartOf="@+id/layout_background"
         app:layout_constraintTop_toTopOf="parent">
 
         <ProgressBar
@@ -38,7 +38,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/layout_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
@@ -131,20 +131,21 @@
                     android:textSize="20sp"
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="50dp"
-                    android:padding="5dp"
                     android:text="@string/from_ask"
                     />
-                    <Button
-                        android:id="@+id/button_selectfrom"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/empty_date"
-                        />
+                <Button
+                    android:id="@+id/button_selectfrom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:background="@drawable/default_button"
+                    android:text="@string/empty_date"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
                 >
                 <TextView
                     android:layout_width="100dp"
@@ -159,7 +160,8 @@
                 <Button
                     android:id="@+id/button_selectto"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
+                    android:background="@drawable/default_button"
                     android:text="@string/empty_date"
                     />
             </LinearLayout>
@@ -167,32 +169,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginBottom="8dp"
                 >
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:textColor="#000"
                     android:textSize="20sp"
                     android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:padding="5dp"
-                    android:text="@string/number_of_persons_ask"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/number_of_people_ask"
                     />
                 <EditText
+                    android:id="@+id/edittext_numofpeople"
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:inputType="number"
-                    android:background="@drawable/dark_round"
                     />
-
-
             </LinearLayout>
+
+            <View
+                android:layout_width="200dp"
+                android:layout_height="2dp"
+                android:background="#111"
+                android:layout_gravity="center_horizontal"
+            />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="end"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="10dp"
                 >
                 <ImageView
                     android:layout_width="0dp"
@@ -202,28 +212,20 @@
                     android:layout_weight="1"
 
                     />
-
                 <Button
                     android:id="@+id/button_searchplaces"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:text="@string/search"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/default_button"
                     android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
                     />
-
-
             </LinearLayout>
 
         </LinearLayout>
 
-
-
-
-
-
-
-    </LinearLayout>
-
+        <!--              $$$$$$$$$$$$$$$$$$$$              -->
 
         <ListView
             android:id="@+id/listview_result_placescontainer"

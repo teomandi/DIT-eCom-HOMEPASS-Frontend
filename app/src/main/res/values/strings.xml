@@ -102,6 +102,6 @@
     <string name="from_ask">From:</string>
     <string name="select1">select</string>
     <string name="to_ask">To:</string>
-    <string name="number_of_persons_ask">Number of Persons:</string>
+    <string name="number_of_people_ask">Number of People:</string>
     <string name="search">Search</string>
 </resources>
