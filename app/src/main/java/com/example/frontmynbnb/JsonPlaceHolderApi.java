@@ -25,6 +25,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface JsonPlaceHolderApi {
     @POST("login")
@@ -182,6 +183,16 @@ public interface JsonPlaceHolderApi {
 
     @DELETE("images/{id}")
     Call<Void> deleteImage(@Path("id") int id);
+
+    @GET("search")
+    Call<List<Place>> searchPlaces(
+            @Query("type") String type,
+            @Query("from") String from,
+            @Query("to") String to,
+            @Query("lat") double lat,
+            @Query("lon") double lon,
+            @Query("num") double num
+    );
 
 
 
