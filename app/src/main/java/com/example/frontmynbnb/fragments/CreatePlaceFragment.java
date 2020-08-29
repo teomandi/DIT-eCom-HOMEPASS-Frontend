@@ -331,8 +331,8 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                     }
                     Address address = addressList.get(0);
                     latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                    System.out.println("lat: " + latLng.latitude);
-                    System.out.println("long: " + latLng.longitude);
+                    System.out.println("lat: " + latLng.latitude + " long: " + latLng.longitude);
+                    System.out.println();
                     mGoogleMap.clear();
                     mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(location));
                     mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
