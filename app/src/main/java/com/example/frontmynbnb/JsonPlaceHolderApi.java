@@ -185,13 +185,13 @@ public interface JsonPlaceHolderApi {
     Call<Void> deleteImage(@Path("id") int id);
 
     @GET("search")
-    Call<List<Place>> searchPlaces(
+    Call<ResponseBody> searchPlaces(
             @Query("type") String type,
             @Query("from") String from,
             @Query("to") String to,
             @Query("lat") double lat,
             @Query("lon") double lon,
-            @Query("num") double num
+            @Query("num") int num
     );
 
 

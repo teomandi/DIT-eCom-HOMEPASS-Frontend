@@ -21,7 +21,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.frontmynbnb.AppConstants;
+import com.example.frontmynbnb.JsonPlaceHolderApi;
 import com.example.frontmynbnb.R;
+import com.example.frontmynbnb.RestClient;
 import com.example.frontmynbnb.models.Availability;
 import com.example.frontmynbnb.models.Place;
 import com.google.android.gms.maps.model.LatLng;
@@ -29,6 +33,12 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 
 public class HomeFragment extends Fragment {
@@ -103,32 +113,81 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String location = mEditSearch.getText().toString();
+                String from = mButtonFrom.getText().toString();
+                String to = mButtonTo.getText().toString();
+                String type = mRadioType.getCheckedRadioButtonId() == R.id.radio_house2 ? "House" : "Room";
+                String numOfPeople = mEditNumPeople.getText().toString();
+                if(!validate(location, from, to, numOfPeople)){
+                    Toast.makeText(getContext(), "Fields are missing!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                int numPeople = Integer.parseInt(numOfPeople);
                 List<Address> addressList = null;
-                if (location != null || !location.equals("")) {
-                    Geocoder geocoder = new Geocoder(getContext());
-                    try {
-                        addressList = geocoder.getFromLocationName(location, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    if (addressList.size() == 0) {
+                Geocoder geocoder = new Geocoder(getContext());
+                try {
+                    addressList = geocoder.getFromLocationName(location, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (addressList.size() == 0) {
+                    Toast.makeText(
+                            getContext(),
+                            "No location found.",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                Address address = addressList.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                System.out.println("~~> Search vars:");
+                System.out.println("lat: " + latLng.latitude);
+                System.out.println("long: " + latLng.longitude);
+                System.out.println("From: " + from);
+                System.out.println("To: " + to);
+                System.out.println("NumberOfPeople: " + numOfPeople);
+                System.out.println("Type: " + type);
+                Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+                JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+                Call<ResponseBody> call = jsonPlaceHolderApi.searchPlaces(
+                        type, from, to,latLng.latitude, latLng.longitude, numPeople);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (!response.isSuccessful()) {
+                            Toast.makeText(
+                                    getContext(),
+                                    "Not successful response " + response.code(),
+                                    Toast.LENGTH_LONG
+                            ).show();
+                            return;
+                        }
+                        String show = null;
+                        try {
+                            show = response.code() + " | " + response.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println(show);
                         Toast.makeText(
                                 getContext(),
-                                "No location found.",
-                                Toast.LENGTH_SHORT
+                                show,
+                                Toast.LENGTH_LONG
                         ).show();
-                        return;
                     }
-                    Address address = addressList.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                    System.out.println("lat: " + latLng.latitude);
-                    System.out.println("long: " + latLng.longitude);
-                } else {
-                    Toast.makeText(getContext(), "Fields are missing!", Toast.LENGTH_SHORT).show();
-                }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(
+                                getContext(),
+                                "Failure on search!",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        System.out.println("Error message:: " + t.getMessage());
+                    }
+                });
+
             }
         });
-
 
         return view;
     }
@@ -137,19 +196,33 @@ public class HomeFragment extends Fragment {
     DatePickerDialog.OnDateSetListener onDateFrom = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            mFrom = String.valueOf(year) + "/" + String.valueOf(monthOfYear + 1)
+             String from = String.valueOf(year) + "/" + String.valueOf(monthOfYear + 1)
                     + "/" + String.valueOf(dayOfMonth);
-            mButtonFrom.setText(mFrom);
+            mButtonFrom.setText(from);
 
         }
     };
     DatePickerDialog.OnDateSetListener onDateTo = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            mTo = String.valueOf(year) + "/" + String.valueOf(monthOfYear + 1)
+            String to = String.valueOf(year) + "/" + String.valueOf(monthOfYear + 1)
                     + "/" + String.valueOf(dayOfMonth);
-            mButtonTo.setText(mTo);
+            mButtonTo.setText(to);
         }
     };
+
+    private boolean validate(String location, String from, String to, String numOfPeople){
+        if(location == null || location.equals(""))
+            return false;
+        if(from.equals(getResources().getString(R.string.empty_date)) ||
+                to.equals(getResources().getString(R.string.empty_date)))
+            return false;
+        try {
+            Integer.parseInt(numOfPeople);
+        }catch(NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
 
 }
