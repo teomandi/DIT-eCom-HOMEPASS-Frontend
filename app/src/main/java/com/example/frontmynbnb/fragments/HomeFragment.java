@@ -1,6 +1,8 @@
 package com.example.frontmynbnb.fragments;
 
 import android.app.DatePickerDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -9,11 +11,13 @@ import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +53,9 @@ public class HomeFragment extends Fragment {
     private RadioGroup mRadioType;
     private Button mButtonFrom, mButtonTo, mButtonSearch;
 
-    private String mFrom, mTo;
+    private int pageNo;
+    private final int pageSize = 10;
+    private boolean fetchedAll;
 
 
 
@@ -74,14 +80,20 @@ public class HomeFragment extends Fragment {
         mButtonTo = (Button) view.findViewById(R.id.button_selectto);
         mButtonSearch = (Button) view.findViewById(R.id.button_searchplaces);
         mPlacesContainer = (ListView) view.findViewById(R.id.listview_result_placescontainer);
+        mPlacesContainer.setOnScrollListener(new AbsListView.OnScrollListener() {
+            public void onScrollStateChanged(AbsListView view, int scrollState) { }
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
 
-        // buttons listeners
-        mEditSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mSearchGroup.getVisibility() == View.GONE) {
-                    TransitionManager.beginDelayedTransition(mSearchGroup, new AutoTransition());
-                    mSearchGroup.setVisibility(View.VISIBLE);
+                System.out.println("firstVisibleItem: " + firstVisibleItem);
+                System.out.println("visibleItemCount: " + visibleItemCount);
+                System.out.println("totalItemCount: " + totalItemCount);
+                System.out.println("totalItemCount: " + totalItemCount);
+                if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0 && !fetchedAll)
+                {
+                    System.out.println("Fetching places!!!" + pageNo);
+                    pageNo +=1;
+                    fetchPlaces();
                 }
             }
         });
@@ -195,7 +207,8 @@ public class HomeFragment extends Fragment {
         mPlaceList = new ArrayList<>();
         mPlaceAdapter = new PlacesAdapter(getActivity(), mPlaceList);
         mPlacesContainer.setAdapter(mPlaceAdapter);
-
+        pageNo = 0;
+        fetchedAll = false;
         fetchPlaces();
         return view;
     }
@@ -236,10 +249,10 @@ public class HomeFragment extends Fragment {
         mProgressView.setVisibility(View.VISIBLE);
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        Call<Place> call = jsonPlaceHolderApi.getUsersPlaceByUsername(AppConstants.USERNAME);
-        call.enqueue(new Callback<Place>() {
+        Call<List<Place>> call = jsonPlaceHolderApi.getAllPlaces(pageNo, pageSize);
+        call.enqueue(new Callback<List<Place>>() {
             @Override
-            public void onResponse(Call<Place> call, Response<Place> response) {
+            public void onResponse(Call<List<Place>> call, Response<List<Place>> response) {
                 if (!response.isSuccessful()) {
                     Toast.makeText(
                             getContext(),
@@ -254,15 +267,17 @@ public class HomeFragment extends Fragment {
                         Toast.LENGTH_SHORT
                 ).show();
                 mProgressView.setVisibility(View.INVISIBLE);
-                Place p = response.body();
-                p.printDetails();
-                mPlaceList.add(p);
-                mPlaceAdapter.notifyDataSetChanged();
-
+                List<Place> fetchedPlaces = response.body();
+                fetchedAll = fetchedPlaces.size() < pageSize;
+                for(Place p: fetchedPlaces){
+                    mPlaceList.add(p);
+                    fetchMainImage(p);
+                    mPlaceAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
-            public void onFailure(Call<Place> call, Throwable t) {
+            public void onFailure(Call<List<Place>> call, Throwable t) {
                 Toast.makeText(
                         getContext(),
                         "No place fetched!",
@@ -272,8 +287,46 @@ public class HomeFragment extends Fragment {
                 mProgressView.setVisibility(View.INVISIBLE);
             }
         });
-
-
     }
 
+    private void fetchMainImage(final Place place){
+        //fetch main image
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create((JsonPlaceHolderApi.class));
+        Call<ResponseBody> call = jsonPlaceHolderApi.getPlaceMainImage(place.getId());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response on place: " + place.getId() + " || "  + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                byte[] mainImageBytes = new byte[0];
+                try {
+                    mainImageBytes = response.body().bytes();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("got image bro " + place.getId());
+                assert mainImageBytes != null;
+                Bitmap mainImage = BitmapFactory.decodeByteArray(mainImageBytes, 0, mainImageBytes.length);
+                place.setMainBitmap(mainImage);
+                mPlaceAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure on main-image call!! place: " + place.getId(),
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
+    }
 }

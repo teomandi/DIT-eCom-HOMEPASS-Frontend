@@ -1,5 +1,7 @@
 package com.example.frontmynbnb.models;
 
+import android.graphics.Bitmap;
+
 import java.util.List;
 
 public class Place {
@@ -8,6 +10,7 @@ public class Place {
     private String updatedAt=null;
     private int id=-1;
     private String mainImage;
+    private Bitmap mainBitmap=null;
     private String address;
     private String latitude;
     private String longitude;
@@ -240,5 +243,13 @@ public class Place {
 
     public void setRatings(List<Rating> ratings) {
         this.ratings = ratings;
+    }
+
+    public Bitmap getMainBitmap() {
+        return mainBitmap;
+    }
+
+    public void setMainBitmap(Bitmap mainBitmap) {
+        this.mainBitmap = mainBitmap;
     }
 }

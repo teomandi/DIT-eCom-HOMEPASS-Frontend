@@ -79,43 +79,9 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
         float ratingMean = (float)ratingSum/place.getRatings().size();
         ratingTextView.setText(String.valueOf(ratingMean));
         ratingView.setRating(ratingMean);
+        if(place.getMainBitmap() != null)
+            mainImageView.setImageBitmap(place.getMainBitmap());
 
-        //fetch main image
-        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
-        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create((JsonPlaceHolderApi.class));
-        Call<ResponseBody> call = jsonPlaceHolderApi.getPlaceMainImage(place.getId());
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (!response.isSuccessful()) {
-                    Toast.makeText(
-                            getContext(),
-                            "Not successful response on place: " + place.getId() + " || "  + response.code(),
-                            Toast.LENGTH_SHORT
-                    ).show();
-                    return;
-                }
-                byte[] mainImageBytes = new byte[0];
-                try {
-                    mainImageBytes = response.body().bytes();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                assert mainImageBytes != null;
-                Bitmap mainImage = BitmapFactory.decodeByteArray(mainImageBytes, 0, mainImageBytes.length);
-                mainImageView.setImageBitmap(mainImage);
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(
-                        getContext(),
-                        "Failure on main-image call!! place: " + place.getId(),
-                        Toast.LENGTH_LONG
-                ).show();
-                System.out.println("Error message:: " + t.getMessage());
-            }
-        });
 
         return view;
 

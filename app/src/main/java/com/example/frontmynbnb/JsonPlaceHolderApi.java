@@ -66,6 +66,12 @@ public interface JsonPlaceHolderApi {
             @Part("address") RequestBody address,
             @Part MultipartBody.Part imageFile);
 
+    @GET("places")
+    Call<List<Place>> getAllPlaces(
+            @Query("pageNo") int pageNo,
+            @Query("pageSize") int pageSize
+    );
+
     @GET("users/{id}/places")
     Call<Place> getUsersPlaceById(@Path("id") int id);
 
