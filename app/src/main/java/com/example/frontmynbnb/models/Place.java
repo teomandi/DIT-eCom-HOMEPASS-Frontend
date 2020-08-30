@@ -25,6 +25,7 @@ public class Place {
     private List<Rule> rules;
     private List<Image> images;
     private List<Availability> availabilities;
+    private List<Rating> ratings;
 
     public void printDetails(){
         System.out.println("Place Details");
@@ -55,6 +56,10 @@ public class Place {
         if (images != null)
             for(Image i: images)
                 System.out.println("- " + i.getId() + ") " + i.getFilename());
+        System.out.println("~~Ratings: ");
+        if (ratings != null)
+            for(Rating r: ratings)
+                System.out.println("- " + r.getId() + ") [" + r.getDegree() + "] " + r.getComment());
         System.out.println("~~Availabilities: ");
         if (availabilities != null)
             for(Availability a: availabilities)
@@ -227,5 +232,13 @@ public class Place {
 
     public void setAvailabilities(List<Availability> availabilities) {
         this.availabilities = availabilities;
+    }
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
     }
 }

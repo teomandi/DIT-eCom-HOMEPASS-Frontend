@@ -19,8 +19,7 @@
     <string name="home">Home</string>
     <string name="messages">Messages</string>
     <string name="malibu_image">malibu image</string>
-    <string name="cost_per_day">Cost per Day ($):</string>
-    <string name="cost_per_person">Cost per Person ($):</string>
+    <string name="cost_per">Cost per Person: </string>
     <string name="rating">Rating:</string>
     <string name="profile">Profile</string>
     <string name="help">Help</string>
@@ -104,4 +103,5 @@
     <string name="to_ask">To:</string>
     <string name="number_of_people_ask">Number of People:</string>
     <string name="search">Search</string>
+    <string name="fetching_places">Fetching places..</string>
 </resources>

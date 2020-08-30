@@ -254,7 +254,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
                 if (!response.isSuccessful()) {
                     Toast.makeText(
                             getContext(),
-                            "Not successful response " + String.valueOf(response.code()),
+                            "Not successful response " + response.code(),
                             Toast.LENGTH_SHORT
                     ).show();
                     return;

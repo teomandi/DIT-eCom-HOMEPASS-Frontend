@@ -2,6 +2,8 @@ package com.example.frontmynbnb.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +17,31 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.frontmynbnb.AppConstants;
+import com.example.frontmynbnb.JsonPlaceHolderApi;
 import com.example.frontmynbnb.R;
+import com.example.frontmynbnb.RestClient;
 import com.example.frontmynbnb.models.Place;
+import com.example.frontmynbnb.models.Rating;
+
+import org.w3c.dom.Text;
+
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 
 public class PlacesAdapter extends ArrayAdapter<Place> {
+    ImageView mainImageView;
+    TextView addressView;
+    TextView costPerPersonView;
+    TextView ratingTextView;
+    RatingBar ratingView;
 
     public PlacesAdapter(Context ctx, ArrayList<Place> placeList){
         super(ctx, 0, placeList);
@@ -34,33 +55,67 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
             view = LayoutInflater.from(getContext()).inflate(R.layout.place_component, parent, false);
         }
 
-//        Place place = getItem(position);
+        final Place place = getItem(position);
 //
-//        ImageView placeImage = view.findViewById(R.id.imageview_place);
-//        placeImage.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(getContext(), "Fuck you <3", Toast.LENGTH_LONG).show();
-//            }
-//        });
-//        TextView placeCountryCity = view.findViewById(R.id.textview_countrycity);
-//        TextView placeName = view.findViewById(R.id.textview_name);
-//        TextView placeCostPerDay = view.findViewById(R.id.textview_costperday);
-//        TextView placeCostPerPerson = view.findViewById(R.id.textview_costperperson);
-//        RatingBar placeRating = view.findViewById(R.id.rating);
-//
-//
-//        assert place != null;
-//        String cc = place.getCountry() + ", " + place.getCity();
-//
-//        placeImage.setImageResource(place.getImage());
-//        placeCountryCity.setText(cc);
-//        placeName.setText(place.getName());
-//        placeCostPerDay.setText(String.valueOf(place.getCostPerDay()));
-//        placeCostPerPerson.setText(String.valueOf(place.getGetCostPerPerson()));
-//        placeRating.setRating(place.getRating());
-//
-//        Log.d("Place List", "Creating " + place.getCity());
+        mainImageView = (ImageView) view.findViewById(R.id.imageview_pc_mainimage);
+        addressView = (TextView) view.findViewById(R.id.textview_pc_address);
+        costPerPersonView = (TextView) view.findViewById(R.id.textview_pc_costperperson);
+        ratingTextView = (TextView) view.findViewById(R.id.textview_pc_ratingvalue);
+        ratingView = (RatingBar) view.findViewById(R.id.rating_pc_rating);
+
+        mainImageView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Clicked: " +
+                        place.getAddress(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        addressView.setText(place.getAddress());
+        costPerPersonView.setText(String.valueOf(place.getCostPerPerson()));
+        float ratingSum = 0;
+        for(Rating r: place.getRatings())
+            ratingSum += r.getDegree();
+        float ratingMean = (float)ratingSum/place.getRatings().size();
+        ratingTextView.setText(String.valueOf(ratingMean));
+        ratingView.setRating(ratingMean);
+
+        //fetch main image
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create((JsonPlaceHolderApi.class));
+        Call<ResponseBody> call = jsonPlaceHolderApi.getPlaceMainImage(place.getId());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response on place: " + place.getId() + " || "  + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                byte[] mainImageBytes = new byte[0];
+                try {
+                    mainImageBytes = response.body().bytes();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                assert mainImageBytes != null;
+                Bitmap mainImage = BitmapFactory.decodeByteArray(mainImageBytes, 0, mainImageBytes.length);
+                mainImageView.setImageBitmap(mainImage);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure on main-image call!! place: " + place.getId(),
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
 
         return view;
 

@@ -26,7 +26,7 @@ import com.example.frontmynbnb.AppConstants;
 import com.example.frontmynbnb.JsonPlaceHolderApi;
 import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.RestClient;
-import com.example.frontmynbnb.models.Availability;
+import com.example.frontmynbnb.adapters.PlacesAdapter;
 import com.example.frontmynbnb.models.Place;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -53,8 +53,9 @@ public class HomeFragment extends Fragment {
 
 
 
-    private ListView placesContainer;
-    private ArrayList<Place> placeList;
+    private ListView mPlacesContainer;
+    private ArrayList<Place> mPlaceList;
+    private PlacesAdapter mPlaceAdapter;
 
 
     @Nullable
@@ -72,6 +73,7 @@ public class HomeFragment extends Fragment {
         mButtonFrom = (Button) view.findViewById(R.id.button_selectfrom);
         mButtonTo = (Button) view.findViewById(R.id.button_selectto);
         mButtonSearch = (Button) view.findViewById(R.id.button_searchplaces);
+        mPlacesContainer = (ListView) view.findViewById(R.id.listview_result_placescontainer);
 
         // buttons listeners
         mEditSearch.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +123,7 @@ public class HomeFragment extends Fragment {
                     Toast.makeText(getContext(), "Fields are missing!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                mProgressView.setVisibility(View.VISIBLE);
                 int numPeople = Integer.parseInt(numOfPeople);
                 List<Address> addressList = null;
                 Geocoder geocoder = new Geocoder(getContext());
@@ -173,6 +176,7 @@ public class HomeFragment extends Fragment {
                                 show,
                                 Toast.LENGTH_LONG
                         ).show();
+                        mProgressView.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
@@ -183,12 +187,16 @@ public class HomeFragment extends Fragment {
                                 Toast.LENGTH_LONG
                         ).show();
                         System.out.println("Error message:: " + t.getMessage());
+                        mProgressView.setVisibility(View.INVISIBLE);
                     }
                 });
-
             }
         });
+        mPlaceList = new ArrayList<>();
+        mPlaceAdapter = new PlacesAdapter(getActivity(), mPlaceList);
+        mPlacesContainer.setAdapter(mPlaceAdapter);
 
+        fetchPlaces();
         return view;
     }
 
@@ -199,7 +207,6 @@ public class HomeFragment extends Fragment {
              String from = String.valueOf(year) + "/" + String.valueOf(monthOfYear + 1)
                     + "/" + String.valueOf(dayOfMonth);
             mButtonFrom.setText(from);
-
         }
     };
     DatePickerDialog.OnDateSetListener onDateTo = new DatePickerDialog.OnDateSetListener() {
@@ -223,6 +230,50 @@ public class HomeFragment extends Fragment {
             return false;
         }
         return true;
+    }
+
+    private void fetchPlaces(){
+        mProgressView.setVisibility(View.VISIBLE);
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<Place> call = jsonPlaceHolderApi.getUsersPlaceByUsername(AppConstants.USERNAME);
+        call.enqueue(new Callback<Place>() {
+            @Override
+            public void onResponse(Call<Place> call, Response<Place> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                Toast.makeText(
+                        getContext(),
+                        "Place fetched with success!",
+                        Toast.LENGTH_SHORT
+                ).show();
+                mProgressView.setVisibility(View.INVISIBLE);
+                Place p = response.body();
+                p.printDetails();
+                mPlaceList.add(p);
+                mPlaceAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<Place> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "No place fetched!",
+                        Toast.LENGTH_SHORT
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+                mProgressView.setVisibility(View.INVISIBLE);
+            }
+        });
+
+
     }
 
 }

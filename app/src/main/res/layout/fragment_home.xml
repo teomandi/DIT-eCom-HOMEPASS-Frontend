@@ -32,7 +32,7 @@
             android:id="@+id/text_on_bar3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/place_is_creating"
+            android:text="@string/fetching_places"
             android:textColor="#fff"
             android:textSize="25sp" />
     </LinearLayout>
@@ -232,6 +232,8 @@
             android:id="@+id/listview_result_placescontainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:divider="@android:color/transparent"

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="150dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/dark_round"
     android:orientation="horizontal"
-    android:weightSum="2">
+    android:weightSum="5">
 
     <ImageView
-        android:id="@+id/imageview_place"
+        android:id="@+id/imageview_pc_mainimage"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:scaleType="fitXY"
         android:src="@drawable/malibu"
         android:contentDescription="@string/image_place" />
@@ -20,107 +20,84 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:layout_marginStart="2dp"
         android:orientation="vertical"
+        android:gravity="center_horizontal"
         >
 
         <TextView
-            android:id="@+id/textview_countrycity"
+            android:id="@+id/textview_pc_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorWhite"
+            android:textColor="#fff"
             android:textStyle="bold"
             android:layout_marginTop="15dp"
-            android:textSize="24sp"
-
-            />
-
-        <TextView
-            android:id="@+id/textview_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorWhite"
-            android:textStyle="normal"
-            android:textSize="15sp"
+            android:paddingBottom="5dp"
+            android:textSize="20sp"
             />
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:stretchColumns="2"
-            android:layout_marginTop="10dp"
             >
 
             <TableRow>
-
                 <TextView
-                    android:text="@string/cost_per_day"
+                    android:text="@string/cost_per"
                     android:layout_column="1"
                     android:padding="3dp"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="#fff"
+                    android:drawableStart="@drawable/ic_attach_money_white_24dp"
+                    android:textSize="15sp"
                     />
 
                 <TextView
-                    android:id="@+id/textview_costperday"
+                    android:id="@+id/textview_pc_costperperson"
                     android:layout_column="2"
                     android:padding="3dp"
-                    android:textColor="@color/colorWhite"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#fff"
                     />
-
             </TableRow>
 
             <TableRow>
                 <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_column="1"
-                    android:text="@string/cost_per_person"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#fff"
+                    android:text="@string/rating"
                     android:padding="3dp"
-                    android:textColor="@color/colorWhite"
+                    android:textSize="15sp"
                     />
-
                 <TextView
-                    android:id="@+id/textview_costperperson"
+                    android:id="@+id/textview_pc_ratingvalue"
                     android:layout_column="2"
                     android:padding="3dp"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="#fff"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
                     />
             </TableRow>
+
 
         </TableLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- mRatingBar.setRating(int)   -->
+        <RatingBar
+            android:id="@+id/rating_pc_rating"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_marginTop="10dp"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:isIndicator="true"
+        />
 
-            >
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:textColor="@color/colorWhite"
-                android:text="@string/rating"
-                android:textStyle="bold"
-                android:padding="3dp"
-
-                />
-
-            <!-- mRatingBar.setRating(int)   -->
-
-            <RatingBar
-                android:id="@+id/rating"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:paddingTop="6dp"
-                style="?android:attr/ratingBarStyleSmall"
-                android:numStars="5"
-                android:stepSize="0.1"
-                android:isIndicator="true"
-                />
-
-        </LinearLayout>
 
     </LinearLayout>
 
