@@ -84,16 +84,15 @@ public class HomeFragment extends Fragment {
             public void onScrollStateChanged(AbsListView view, int scrollState) { }
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
-
-                System.out.println("firstVisibleItem: " + firstVisibleItem);
-                System.out.println("visibleItemCount: " + visibleItemCount);
-                System.out.println("totalItemCount: " + totalItemCount);
-                System.out.println("totalItemCount: " + totalItemCount);
                 if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0 && !fetchedAll)
                 {
-                    System.out.println("Fetching places!!!" + pageNo);
                     pageNo +=1;
                     fetchPlaces();
+                    System.out.println("firstVisibleItem: " + firstVisibleItem);
+                    System.out.println("visibleItemCount: " + visibleItemCount);
+                    System.out.println("totalItemCount: " + totalItemCount);
+                    System.out.println("totalItemCount: " + totalItemCount);
+                    System.out.println("Fetching places!!!" + pageNo);
                 }
             }
         });

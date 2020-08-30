@@ -72,6 +72,9 @@ public interface JsonPlaceHolderApi {
             @Query("pageSize") int pageSize
     );
 
+    @GET("places/{id}")
+    Call<Place> getPlaceById(@Path("id") int id);
+
     @GET("users/{id}/places")
     Call<Place> getUsersPlaceById(@Path("id") int id);
 

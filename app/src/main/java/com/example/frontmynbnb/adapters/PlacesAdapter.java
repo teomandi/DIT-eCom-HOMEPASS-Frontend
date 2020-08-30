@@ -1,10 +1,7 @@
 package com.example.frontmynbnb.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,24 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.frontmynbnb.AppConstants;
-import com.example.frontmynbnb.JsonPlaceHolderApi;
 import com.example.frontmynbnb.R;
-import com.example.frontmynbnb.RestClient;
+import com.example.frontmynbnb.activities.MainActivity;
+import com.example.frontmynbnb.fragments.DetailedPlaceFragment;
 import com.example.frontmynbnb.models.Place;
 import com.example.frontmynbnb.models.Rating;
-
-import org.w3c.dom.Text;
-
-import java.io.IOException;
 import java.util.ArrayList;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-
 
 public class PlacesAdapter extends ArrayAdapter<Place> {
     ImageView mainImageView;
@@ -42,9 +27,11 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
     TextView costPerPersonView;
     TextView ratingTextView;
     RatingBar ratingView;
+    Context mContext;
 
     public PlacesAdapter(Context ctx, ArrayList<Place> placeList){
         super(ctx, 0, placeList);
+        mContext = ctx;
     }
 
     @NonNull
@@ -68,6 +55,14 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Clicked: " +
                         place.getAddress(), Toast.LENGTH_LONG).show();
+                //pass the place id
+                Bundle bundle = new Bundle();
+                bundle.putInt("place_id", place.getId());
+                DetailedPlaceFragment fragment = new DetailedPlaceFragment();
+                fragment.setArguments(bundle);
+                ((MainActivity)mContext).getSupportFragmentManager().beginTransaction().replace(
+                        R.id.fragment_container, fragment
+                ).commit();
             }
         });
 

@@ -4,39 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.PlaceFragment">
-
-
-    <LinearLayout
-        android:id="@+id/no_having_home_view"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="100dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/you_don_t_have_set_your_place_yet"
-            android:textSize="20sp"
-            android:layout_marginBottom="10dp"
-        />
-        <Button
-            android:layout_width="140dp"
-            android:layout_height="40dp"
-            android:id="@+id/button_setplace"
-            android:textColor="#fff"
-            android:background="@drawable/default_button"
-            android:text="@string/create_place"
-            />
-    </LinearLayout>
+    tools:context=".fragments.DetailedPlaceFragment">
 
     <LinearLayout
-        android:id="@+id/progressBarPlace"
+        android:id="@+id/progressBarPlace2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -58,21 +29,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/text_on_bar"
+            android:id="@+id/text_on_bar4"
             android:text="@string/fetching_your_place"
             android:textColor="#fff"
             android:textSize="25sp" />
     </LinearLayout>
 
     <ScrollView
-        android:id="@+id/having_home_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="vertical"
         android:background="@drawable/dark_round"
-        android:visibility="invisible"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -81,29 +50,29 @@
             android:orientation="vertical"
             >
 
-
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:id="@+id/imageview_mygallery"
+                android:id="@+id/imageview_place_gallery"
                 android:contentDescription="@string/place_gallery"
                 />
 
             <TextView
-                android:id="@+id/textview_myaddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#fff"
+                android:text="@string/your_place"
+                android:layout_marginBottom="20dp"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="40sp"
                 />
 
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/mapview2"
-                android:layout_width="match_parent"
-                android:layout_height="325dp"
-                android:layout_margin="10dp"
-                android:layout_marginBottom="20dp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/place_details"
+                android:textColor="#fff"
+                android:textSize="30sp"
                 />
             <TableLayout
                 android:layout_width="match_parent"
@@ -113,67 +82,6 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/light_round"
                 >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/details"
-                    android:textColor="#fff"
-                    android:textSize="30sp"
-                    />
-                <TableRow>
-                    <TextView
-                        android:text="@string/max_guests_ask"
-                        android:layout_column="1"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
-                        android:drawableStart="@drawable/ic_person_white_24dp"
-                        android:padding="5dp"
-                        />
-                    <TextView
-                        android:id="@+id/textview_mymaxguest"
-                        android:layout_width="130dp"
-                        android:layout_column="2"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
-                        android:padding="5dp"
-                        />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:text="@string/min_cost"
-                        android:layout_column="1"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
-                        android:drawableStart="@drawable/ic_attach_money_white_24dp"
-                        android:padding="5dp"
-                        />
-                    <TextView
-                        android:id="@+id/textview_mymincost"
-                        android:layout_column="2"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
-                        android:padding="5dp"
-                        />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:text="@string/cost_per_person_ask"
-                        android:layout_column="1"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
-                        android:drawableStart="@drawable/ic_attach_money_white_24dp"
-                        android:padding="5dp"
-                        />
-
-                    <TextView
-                        android:id="@+id/textview_mycostperperson"
-                        android:layout_column="2"
-                        android:padding="5dp"
-                        android:textColor="#fff"
-                        android:textSize="25sp" />
-                </TableRow>
                 <TableRow>
                     <TextView
                         android:text="@string/number_of_beds_ask"
@@ -184,7 +92,7 @@
                         android:padding="5dp"
                         />
                     <TextView
-                        android:id="@+id/textview_mybeds"
+                        android:id="@+id/textview_place_beds"
                         android:layout_column="2"
                         android:textColor="#fff"
                         android:textSize="25sp"
@@ -201,7 +109,7 @@
                         android:padding="5dp"
                         />
                     <TextView
-                        android:id="@+id/textview_mybaths"
+                        android:id="@+id/textview_place_baths"
                         android:layout_column="2"
                         android:textColor="#fff"
                         android:textSize="25sp"
@@ -218,7 +126,7 @@
                         android:padding="5dp"
                         />
                     <TextView
-                        android:id="@+id/textview_mybedrooms"
+                        android:id="@+id/textview_place_bedrooms"
                         android:layout_column="2"
                         android:textColor="#fff"
                         android:textSize="25sp"
@@ -235,7 +143,7 @@
                         android:padding="5dp"
                         />
                     <TextView
-                        android:id="@+id/textview_mylivingroom"
+                        android:id="@+id/textview_place_livingroom"
                         android:layout_column="2"
                         android:textColor="#fff"
                         android:textSize="25sp"
@@ -252,7 +160,7 @@
                         android:padding="5dp"
                         />
                     <TextView
-                        android:id="@+id/textview_myarea"
+                        android:id="@+id/textview_place_area"
                         android:layout_column="2"
                         android:textColor="#fff"
                         android:textSize="25sp"
@@ -269,7 +177,7 @@
                         android:padding="5dp"
                         />
                     <TextView
-                        android:id="@+id/textview_mytype"
+                        android:id="@+id/textview_place_type"
                         android:layout_column="2"
                         android:textColor="#fff"
                         android:textSize="25sp"
@@ -290,13 +198,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/light_round"
-                android:id="@+id/textview_mydescription"
+                android:id="@+id/textview_place_description"
                 android:layout_marginBottom="25dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:textColor="#fff"
-                android:textSize="15sp"
+                android:textSize="25sp"
                 />
+
+            <TextView
+                android:id="@+id/textview_place_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapview3"
+                android:layout_width="match_parent"
+                android:layout_height="325dp"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="20dp"
+                />
+
 
             <TextView
                 android:text="@string/benefits"
@@ -308,7 +234,7 @@
                 />
 
             <ListView
-                android:id="@+id/listview_benefitcontainer2"
+                android:id="@+id/listview_benefitcontainer3"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
@@ -329,7 +255,7 @@
                 />
 
             <ListView
-                android:id="@+id/listview_rulescontainer2"
+                android:id="@+id/listview_rulescontainer3"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
@@ -350,7 +276,7 @@
                 />
 
             <ListView
-                android:id="@+id/listview_availablecontainer2"
+                android:id="@+id/listview_availablecontainer3"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
@@ -361,32 +287,6 @@
                 android:dividerHeight="1sp"
                 android:nestedScrollingEnabled="true" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="40dp"
-                android:layout_gravity="center_horizontal"
-                >
-                <Button
-                    android:layout_width="120dp"
-                    android:layout_height="40dp"
-                    android:text="Delete"
-                    android:textColor="@color/colorRed"
-                    android:id="@+id/button_delete_myplace"
-                    android:background="@drawable/default_button"
-                    android:layout_marginRight="15dp"
-                    />
-                <Button
-                    android:layout_width="120dp"
-                    android:layout_height="40dp"
-                    android:text="Edit"
-                    android:textColor="#f50"
-                    android:id="@+id/button_edit_myplace"
-                    android:background="@drawable/cancel_button"
-                    />
-
-            </LinearLayout>
         </LinearLayout>
 
 
