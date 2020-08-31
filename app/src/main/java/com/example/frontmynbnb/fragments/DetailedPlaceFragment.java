@@ -112,6 +112,10 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 bundle.putInt("user_id", mOwner.getId());
                 DetailedOwnerFragment fragment = new DetailedOwnerFragment();
                 fragment.setArguments(bundle);
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
+                        R.id.fragment_container,
+                        fragment
+                );
             }
         });
         if (getArguments() != null) {
