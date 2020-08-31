@@ -30,7 +30,6 @@
     <string name="hompass_logo">HomPass Logo</string>
     <string name="click_here_to_become_a_host">Click here to become a Host</string>
     <string name="address">Address</string>
-    <string name="edit">Edit</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="username_ask">Username:</string>
@@ -105,4 +104,7 @@
     <string name="search">Search</string>
     <string name="fetching_places">Fetching places..</string>
     <string name="place_details">Place Details</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="message_to_host">Message</string>
 </resources>

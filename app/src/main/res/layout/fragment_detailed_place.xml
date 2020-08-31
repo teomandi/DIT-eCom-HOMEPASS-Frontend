@@ -60,15 +60,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/your_place"
-                android:layout_marginBottom="20dp"
-                android:textStyle="bold"
-                android:textSize="40sp"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="@string/place_details"
                 android:textColor="#fff"
@@ -287,10 +278,39 @@
                 android:dividerHeight="1sp"
                 android:nestedScrollingEnabled="true" />
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/asianx"
+                android:id="@+id/imageview_place_ownerpic"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="40dp"
+                android:layout_gravity="center_horizontal"
+                >
+                <Button
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:text="@string/message_to_host"
+                    android:textColor="#fff"
+                    android:id="@+id/button_place_sendmessage"
+                    android:background="@drawable/default_button"
+                    />
+                <Button
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:text="Reservation"
+                    android:textColor="#f50"
+                    android:id="@+id/button_place_makereservation"
+                    android:background="@drawable/success_button"
+                    />
+            </LinearLayout>
         </LinearLayout>
-
-
-
     </ScrollView>
 
 

@@ -4,15 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +25,7 @@ import com.example.frontmynbnb.models.Benefit;
 import com.example.frontmynbnb.models.Image;
 import com.example.frontmynbnb.models.Place;
 import com.example.frontmynbnb.models.Rule;
+import com.example.frontmynbnb.models.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -40,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,10 +51,12 @@ import static com.example.frontmynbnb.AppConstants.MAPVIEW_BUNDLE_KEY;
 public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallback {
     private int placeId;
     private Place targetPlace = null;
+    private User mOwner = null;
     private List<Bitmap> galleryBitmapList;
 
     private LinearLayout mProgressBarView;
     private ImageView mGalleryView;
+    private CircleImageView mOwnerImage;
     private TextView mTextBeds, mTextBaths, mTextBedrooms, mTextLivingRoom, mTextArea, mTextType,
             mTextDescription, mTextAddress;
     private ListView mBenefitContainer, mRuleContainer, mAvailabilityContainer;
@@ -102,10 +103,21 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         mBenefitContainer = (ListView) view.findViewById(R.id.listview_benefitcontainer3);
         mRuleContainer = (ListView) view.findViewById(R.id.listview_rulescontainer3);
         mAvailabilityContainer = (ListView) view.findViewById(R.id.listview_availablecontainer3);
-
+        mOwnerImage = (CircleImageView) view.findViewById(R.id.imageview_place_ownerpic);
+        mOwnerImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("place_id", targetPlace.getId());
+                bundle.putInt("user_id", mOwner.getId());
+                DetailedOwnerFragment fragment = new DetailedOwnerFragment();
+                fragment.setArguments(bundle);
+            }
+        });
         if (getArguments() != null) {
             placeId = getArguments().getInt("place_id");
             fetchPlace();
+            fetchOwner();
         }
         initGoogleMap(savedInstanceState);
         return view;
@@ -114,6 +126,8 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
     @Override
     public boolean onBackPressed() {
         System.out.println("detailed place fragment");
+        if(galleryThread!=null)
+            galleryThread.interrupt();
         Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container,
                 new HomeFragment()
@@ -144,6 +158,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 ).show();
                 targetPlace = response.body();
                 fetchImages();
+                fetchOwner();
                 setPlaceOnView();
                 mProgressBarView.setVisibility(View.INVISIBLE);
             }
@@ -263,6 +278,11 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         galleryThread = new Thread(new Runnable() {
             @Override
             public void run() {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 while(true) {
                     for (final Bitmap b : galleryBitmapList) {
                         try {
@@ -285,6 +305,78 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
             }
         });
         galleryThread.start();
+    }
+
+
+    private void fetchOwner(){
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<User> call = jsonPlaceHolderApi.getPlaceOwner(placeId);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + String.valueOf(response.code()),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                mOwner = response.body();
+                fetchOwnerImage();
+
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure on fetching owner",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
+    }
+
+    private void fetchOwnerImage(){
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<ResponseBody> call = jsonPlaceHolderApi.getUserImage(mOwner.getId());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + String.valueOf(response.code()),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                byte[] imageBytes = new byte[0];
+                try {
+                    imageBytes = response.body().bytes();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                assert imageBytes != null;
+                Bitmap ownerBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                mOwnerImage.setImageBitmap(ownerBitmap);
+                System.out.println("Owner image set");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure on image call!!",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
     }
 
     private void initGoogleMap(Bundle savedInstanceState) {

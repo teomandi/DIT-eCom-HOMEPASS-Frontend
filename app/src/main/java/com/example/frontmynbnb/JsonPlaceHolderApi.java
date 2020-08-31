@@ -203,16 +203,7 @@ public interface JsonPlaceHolderApi {
             @Query("num") int num
     );
 
-
-
-
-
-    //tests---------------------------------------------------------//
-
-    @GET("messages")
-    Call<List<Message>> getAllMessages();
-
-    @POST("places/6/multi-rules") //not works
-    Call<String> setMultipleRules(@Body List<String> rules);
+    @GET("places/{id}/users")
+    Call<User> getPlaceOwner(@Path("id") int id);
 
 }

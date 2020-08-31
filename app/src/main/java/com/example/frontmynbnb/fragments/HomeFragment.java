@@ -57,8 +57,6 @@ public class HomeFragment extends Fragment {
     private final int pageSize = 10;
     private boolean fetchedAll;
 
-
-
     private ListView mPlacesContainer;
     private ArrayList<Place> mPlaceList;
     private PlacesAdapter mPlaceAdapter;

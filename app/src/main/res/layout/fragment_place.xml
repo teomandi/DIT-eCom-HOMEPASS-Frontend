@@ -90,6 +90,15 @@
                 />
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/your_place"
+                android:layout_marginBottom="20dp"
+                android:textStyle="bold"
+                android:textSize="40sp"
+                />
+
+            <TextView
                 android:id="@+id/textview_myaddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -371,7 +380,7 @@
                 <Button
                     android:layout_width="120dp"
                     android:layout_height="40dp"
-                    android:text="Delete"
+                    android:text="@string/delete"
                     android:textColor="@color/colorRed"
                     android:id="@+id/button_delete_myplace"
                     android:background="@drawable/default_button"
@@ -380,13 +389,13 @@
                 <Button
                     android:layout_width="120dp"
                     android:layout_height="40dp"
-                    android:text="Edit"
+                    android:text="@string/edit"
                     android:textColor="#f50"
                     android:id="@+id/button_edit_myplace"
                     android:background="@drawable/cancel_button"
                     />
-
             </LinearLayout>
+
         </LinearLayout>
 
 
