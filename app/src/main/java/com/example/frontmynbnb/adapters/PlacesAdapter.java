@@ -76,9 +76,6 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
         ratingView.setRating(ratingMean);
         if(place.getMainBitmap() != null)
             mainImageView.setImageBitmap(place.getMainBitmap());
-
-
         return view;
-
     }
 }

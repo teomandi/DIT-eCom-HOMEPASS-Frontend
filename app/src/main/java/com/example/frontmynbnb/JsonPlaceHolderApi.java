@@ -6,10 +6,12 @@ import com.example.frontmynbnb.models.Benefit;
 import com.example.frontmynbnb.models.Login;
 import com.example.frontmynbnb.models.Message;
 import com.example.frontmynbnb.models.Place;
+import com.example.frontmynbnb.models.Rating;
 import com.example.frontmynbnb.models.Rule;
 import com.example.frontmynbnb.models.User;
 
 import java.util.List;
+import java.util.Set;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -205,5 +207,8 @@ public interface JsonPlaceHolderApi {
 
     @GET("places/{id}/users")
     Call<User> getPlaceOwner(@Path("id") int id);
+
+    @GET("places/{id}/benefits")
+    Call<Set<Rating>> getRatingsByPlace(@Path("id") int id);
 
 }

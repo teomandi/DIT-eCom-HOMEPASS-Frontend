@@ -94,7 +94,6 @@
             style="?android:attr/ratingBarStyleSmall"
             android:layout_marginTop="10dp"
             android:numStars="5"
-            android:stepSize="0.5"
             android:isIndicator="true"
         />
 

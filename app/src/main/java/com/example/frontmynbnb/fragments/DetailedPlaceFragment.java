@@ -107,6 +107,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         mOwnerImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("owner image clickeddd");
                 Bundle bundle = new Bundle();
                 bundle.putInt("place_id", targetPlace.getId());
                 bundle.putInt("user_id", mOwner.getId());
@@ -115,7 +116,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                         R.id.fragment_container,
                         fragment
-                );
+                ).commit();
             }
         });
         if (getArguments() != null) {
@@ -201,7 +202,6 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         }
         mAvAdapter = new AvailabilitiesAdapter(getActivity(), (ArrayList<Availability>)targetPlace.getAvailabilities());
         mAvailabilityContainer.setAdapter(mAvAdapter);
-
     }
 
     private void fetchImages(){
