@@ -28,10 +28,13 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
     TextView ratingTextView;
     RatingBar ratingView;
     Context mContext;
+    String mFrom, mTo;
 
-    public PlacesAdapter(Context ctx, ArrayList<Place> placeList){
+    public PlacesAdapter(Context ctx, ArrayList<Place> placeList, String from, String to){
         super(ctx, 0, placeList);
         mContext = ctx;
+        mFrom = from;
+        mTo = to;
     }
 
     @NonNull
@@ -57,6 +60,8 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
                         place.getAddress(), Toast.LENGTH_LONG).show();
                 //pass the place id
                 Bundle bundle = new Bundle();
+                bundle.putString("from", mFrom);
+                bundle.putString("to", mTo);
                 bundle.putInt("place_id", place.getId());
                 DetailedPlaceFragment fragment = new DetailedPlaceFragment();
                 fragment.setArguments(bundle);

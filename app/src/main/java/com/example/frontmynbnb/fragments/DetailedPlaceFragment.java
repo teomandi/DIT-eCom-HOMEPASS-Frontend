@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -33,6 +34,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +61,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
     private ImageView mGalleryView;
     private CircleImageView mOwnerImage;
     private TextView mTextBeds, mTextBaths, mTextBedrooms, mTextLivingRoom, mTextArea, mTextType,
-            mTextDescription, mTextAddress;
+            mTextDescription, mTextAddress, mTextReservation;
     private ListView mBenefitContainer, mRuleContainer, mAvailabilityContainer;
 
     private BenefitsAdapter mBenAdapter;
@@ -69,6 +72,8 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
     private GoogleMap mGoogleMap;
 
     private Thread galleryThread;
+    private String mFrom, mTo;
+    private Button mButtonReserve, mButtonMessage;
 
     public DetailedPlaceFragment() {
         // Required empty public constructor
@@ -103,6 +108,10 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         mBenefitContainer = (ListView) view.findViewById(R.id.listview_benefitcontainer3);
         mRuleContainer = (ListView) view.findViewById(R.id.listview_rulescontainer3);
         mAvailabilityContainer = (ListView) view.findViewById(R.id.listview_availablecontainer3);
+        mTextReservation = (TextView) view.findViewById(R.id.text_place_makereservation);
+        mButtonReserve = (Button) view.findViewById(R.id.button_place_makereservation);
+        mButtonMessage = (Button) view.findViewById(R.id.button_place_sendmessage);
+
         mOwnerImage = (CircleImageView) view.findViewById(R.id.imageview_place_ownerpic);
         mOwnerImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +130,17 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         });
         if (getArguments() != null) {
             placeId = getArguments().getInt("place_id");
+            mFrom = getArguments().getString("from");
+            mTo= getArguments().getString("to");
+            String emptyDate = getResources().getString(R.string.empty_date);
+            if(!mFrom.equals(emptyDate)  && !mTo.equals(emptyDate)){
+                mTextReservation.setText("Reserve the place from: " + mFrom + " to " + mTo);
+                mButtonReserve.setEnabled(true);
+            } else {
+                mTextReservation.setText("No dates have been provided");
+                mTextReservation.setTextColor(getResources().getColor(R.color.colorRed));
+            }
+
             fetchPlace();
             fetchOwner();
         }

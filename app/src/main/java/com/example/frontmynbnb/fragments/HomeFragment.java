@@ -202,7 +202,7 @@ public class HomeFragment extends Fragment {
             }
         });
         mPlaceList = new ArrayList<>();
-        mPlaceAdapter = new PlacesAdapter(getActivity(), mPlaceList);
+        mPlaceAdapter = new PlacesAdapter(getActivity(), mPlaceList, mButtonFrom.getText().toString(), mButtonTo.getText().toString());
         mPlacesContainer.setAdapter(mPlaceAdapter);
         pageNo = 0;
         fetchedAll = false;

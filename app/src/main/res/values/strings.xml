@@ -105,4 +105,5 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="message_to_host">Message</string>
+    <string name="click_on_the_image_to_get_details_about_the_user">Click on the image to get details about the user</string>
 </resources>
