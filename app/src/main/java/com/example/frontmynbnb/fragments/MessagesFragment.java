@@ -72,7 +72,9 @@ public class MessagesFragment extends MyFragment {
     private void fetchMessages(boolean host){
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        Call<List<Message>> call = host ? jsonPlaceHolderApi.getMessagesAsHost() : jsonPlaceHolderApi.getMessagesAsGuest();
+        Call<List<Message>> call = host ?
+                jsonPlaceHolderApi.getMessagesAsHost(AppConstants.USER.getId())
+                : jsonPlaceHolderApi.getMessagesAsGuest(AppConstants.USER.getId());
         call.enqueue(new Callback<List<Message>>() {
             @Override
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
@@ -148,18 +150,5 @@ public class MessagesFragment extends MyFragment {
             }
         });
     }
-
-
-    //chat fragment
-//    mTextTitle.setOnClickListener(new View.OnClickListener(){
-//        @Override
-//        public void onClick(View v) {
-//            ChatFragment chatF = ChatFragment.newInstance(10, "Sarah");
-//            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
-//                    R.id.fragment_container,
-//                    new ChatFragment()
-//            ).addToBackStack(null).commit();
-//        }
-//    });
 
 }

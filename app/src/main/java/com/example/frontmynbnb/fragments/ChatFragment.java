@@ -9,37 +9,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.frontmynbnb.AppConstants;
 import com.example.frontmynbnb.R;
 
-public class ChatFragment extends Fragment {
-    private static final String ARG_ID = "id";
-    private static final String ARG_NAME = "name";
+import java.util.Objects;
 
-
-    private int id;
-    private String name;
-
-    public static ChatFragment newInstance(int id, String name){
-        ChatFragment fragment = new ChatFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_ID, id);
-        args.putString(ARG_NAME, name);
-        fragment.setArguments(args);
-        return fragment;
-    }
+public class ChatFragment extends MyFragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =  inflater.inflate(R.layout.fragment_chat, container, false);
-
+        View view =  inflater.inflate(R.layout.fragment_chat, container, false);
         if(getArguments() != null){
-            id = getArguments().getInt(ARG_ID);
-            name = getArguments().getString(ARG_NAME);
-            System.out.println("id: " + id + " name: " + name);
-
+            int otherUserId = getArguments().getInt("other_user_id");
+            System.out.println("otherUserId: " + otherUserId);
         }
+        return view;
+    }
 
-        return v;
+    @Override
+    public boolean onBackPressed() {
+        System.out.println("CHAT");
+        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
+                AppConstants.MODE.equals("GUEST") ? R.id.fragment_container : R.id.fragment_container2,
+                AppConstants.MODE.equals("GUEST") ? new MessagesFragment() : new MessagesFragment()
+        ).addToBackStack(null).commit();
+        return true;
     }
 }
