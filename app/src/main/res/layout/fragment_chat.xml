@@ -8,14 +8,16 @@
         android:id="@+id/listview_chat_messagescontainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_margin="10dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="5.0sp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearlayout_send_message_control"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearlayout_send_message_control"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="5dp"

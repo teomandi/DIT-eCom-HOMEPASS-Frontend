@@ -223,4 +223,12 @@ public interface JsonPlaceHolderApi {
     @GET("messages/{u1id}/{u2id}/chat")//in the u1id is the current user
     Call<List<Message>> getChatNotAsHost(@Path("u1id") int u1id, @Path("u2id") int u2id);
 
+    @POST("messages/{sid}/{rid}/{hid}")
+    Call<Message> postMessage(
+            @Path("sid") int sid,
+            @Path("rid") int rid,
+            @Path("hid") int hid,
+            @Query("text") String text
+    );
+
 }

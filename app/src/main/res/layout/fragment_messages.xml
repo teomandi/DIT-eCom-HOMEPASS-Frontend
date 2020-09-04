@@ -25,7 +25,7 @@
             android:orientation="vertical"
             android:id="@+id/listview_messages_container"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="90dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:divider="@android:color/transparent"

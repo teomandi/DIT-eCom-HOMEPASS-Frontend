@@ -56,7 +56,7 @@ public class MessagesFragment extends MyFragment {
             HostActivity.setBottomNavChecked(0);
             fetchMessages(true);
         }
-            return view;
+        return view;
     }
 
     @Override

@@ -18,6 +18,8 @@ import com.example.frontmynbnb.AppConstants;
 import com.example.frontmynbnb.JsonPlaceHolderApi;
 import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.RestClient;
+import com.example.frontmynbnb.activities.HostActivity;
+import com.example.frontmynbnb.activities.MainActivity;
 import com.example.frontmynbnb.adapters.AvailabilitiesAdapter;
 import com.example.frontmynbnb.adapters.BenefitsAdapter;
 import com.example.frontmynbnb.adapters.RulesAdapter;
@@ -111,6 +113,19 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         mTextReservation = (TextView) view.findViewById(R.id.text_place_makereservation);
         mButtonReserve = (Button) view.findViewById(R.id.button_place_makereservation);
         mButtonMessage = (Button) view.findViewById(R.id.button_place_sendmessage);
+        mButtonMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatFragment chatFragment = new ChatFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("other_user_id", mOwner.getId());
+                chatFragment.setArguments(bundle);
+                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
+                            R.id.fragment_container,
+                            chatFragment
+                    ).addToBackStack(null).commit();
+            }
+        });
 
         mOwnerImage = (CircleImageView) view.findViewById(R.id.imageview_place_ownerpic);
         mOwnerImage.setOnClickListener(new View.OnClickListener() {

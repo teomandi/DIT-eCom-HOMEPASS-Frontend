@@ -42,6 +42,7 @@ public class ChatFragment extends MyFragment {
     private MessagesAdapter mMesAdapter;
     private List<Message> mMessagesList;
     private int mOtherUserId;
+    private Bitmap mBitmap;
 
     @Nullable
     @Override
@@ -51,12 +52,24 @@ public class ChatFragment extends MyFragment {
         System.out.println("otherUserId: " + mOtherUserId);
 
         mEditMessage = view.findViewById(R.id.edittext_chat_messagetext);
-        mButtonSend = view.findViewById(R.id.button_chat_sendmessage);
         mMessegeContainer = view.findViewById(R.id.listview_chat_messagescontainer);
         mMessagesList = new ArrayList<>();
         mMesAdapter = new MessagesAdapter(getContext(), mMessagesList, true);
         mMessegeContainer.setAdapter(mMesAdapter);
-
+        mButtonSend = view.findViewById(R.id.button_chat_sendmessage);
+        mButtonSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = mEditMessage.getText().toString();
+                if(message.equals("")){
+                    Toast.makeText(getContext(), "Text is empty!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                postMessage(message);
+            }
+        });
+        if(AppConstants.MODE.equals("HOST"))
+            mButtonSend.setBackground(getContext().getDrawable(R.drawable.success_button));
         fetchChatMesseges();
 
         return view;
@@ -93,6 +106,7 @@ public class ChatFragment extends MyFragment {
                 mMesAdapter.notifyDataSetChanged();
                 fetchUserImage(AppConstants.USER.getId());
                 fetchUserImage(mOtherUserId);
+                scrollMyListViewToBottom();
             }
 
             @Override
@@ -134,11 +148,11 @@ public class ChatFragment extends MyFragment {
                 for (Message m : mMessagesList) {
                     if (m.getSender().getId() == targetUserId) {
                         m.setUserImage(imageBitmap);
+                        if(targetUserId == AppConstants.USER.getId())
+                            mBitmap = imageBitmap;
                         mMesAdapter.notifyDataSetChanged();
                     }
-
                 }
-
             }
 
             @Override
@@ -149,6 +163,57 @@ public class ChatFragment extends MyFragment {
                         Toast.LENGTH_LONG
                 ).show();
                 System.out.println("Error message:: " + t.getMessage());
+            }
+        });
+    }
+
+    private void postMessage(String content){
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<Message> call = jsonPlaceHolderApi.postMessage(
+                AppConstants.USER.getId(),
+                mOtherUserId,
+                AppConstants.MAPVIEW_BUNDLE_KEY.equals("GUEST") ? mOtherUserId : AppConstants.USER.getId(),
+                content
+        );
+        call.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                mEditMessage.setText("");
+                Message mymsg = response.body();
+                mymsg.setUserImage(mBitmap);
+                mMessagesList.add(mymsg);
+//                mMesAdapter.notifyDataSetChanged();
+                mMessegeContainer.setAdapter(mMesAdapter);
+                scrollMyListViewToBottom();
+            }
+
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure on image call!!",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
+    }
+
+    private void scrollMyListViewToBottom() {
+        mMessegeContainer.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                mMessegeContainer.setSelection(mMesAdapter.getCount() - 1);
             }
         });
     }
