@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/message_view"
-    android:background="@drawable/light_round"
+    android:background="@drawable/dark_round"
     android:orientation="horizontal"
     android:weightSum="3"
     android:layout_marginTop="10dp"
@@ -12,7 +12,7 @@
     android:layout_marginEnd="5dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/cicleview_profile"
+            android:id="@+id/imageview_chat_profile"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -29,21 +29,20 @@
             >
 
             <TextView
-                android:id="@+id/textview_username"
+                android:id="@+id/textview_chat_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="@color/colorWhite"
-                android:text="Sarah"
+                android:textSize="22sp"
+                android:textColor="#fff"
                 />
 
             <TextView
-                android:id="@+id/textview_content"
+                android:id="@+id/textview_chat_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorWhite"
-                android:text="Hallo Saror,s a viral disease that causes inflammati inflammatiinflammati inflammati"
+                android:textSize="15sp"
                 />
 
         </LinearLayout>

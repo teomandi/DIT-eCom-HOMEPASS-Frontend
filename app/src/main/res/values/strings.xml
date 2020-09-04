@@ -17,7 +17,7 @@
     <string name="search_place">Search place..</string>
     <string name="switch_role">Switch Role</string>
     <string name="home">Home</string>
-    <string name="messages">Messages</string>
+    <string name="your_messages">Your Messages</string>
     <string name="malibu_image">malibu image</string>
     <string name="cost_per">Cost per Person: </string>
     <string name="rating">Rating:</string>
@@ -106,4 +106,5 @@
     <string name="edit">Edit</string>
     <string name="message_to_host">Message</string>
     <string name="click_on_the_image_to_get_details_about_the_user">Click on the image to get details about the user</string>
+    <string name="messages">Messages</string>
 </resources>

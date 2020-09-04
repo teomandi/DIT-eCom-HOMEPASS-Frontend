@@ -22,19 +22,6 @@
             android:orientation="vertical"
             >
 
-            <include layout="@layout/message_component"/>
-            <include layout="@layout/mymessage_component"/>
-            <include layout="@layout/message_component"/>
-            <include layout="@layout/mymessage_component"/>
-            <include layout="@layout/message_component"/>
-            <include layout="@layout/mymessage_component"/>
-            <include layout="@layout/message_component"/>
-            <include layout="@layout/mymessage_component"/>
-            <include layout="@layout/message_component"/>
-            <include layout="@layout/mymessage_component"/>
-            <include layout="@layout/message_component"/>
-            <include layout="@layout/mymessage_component"/>
-
         </LinearLayout>
 
     </ScrollView>

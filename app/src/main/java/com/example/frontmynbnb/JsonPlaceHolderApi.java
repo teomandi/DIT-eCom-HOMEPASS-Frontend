@@ -211,4 +211,10 @@ public interface JsonPlaceHolderApi {
     @GET("places/{id}/benefits")
     Call<Set<Rating>> getRatingsByPlace(@Path("id") int id);
 
+    @GET("messages/host/36")
+    Call<List<Message>> getMessagesAsHost();
+
+    @GET("messages/36")
+    Call<List<Message>> getMessagesAsGuest();
+
 }

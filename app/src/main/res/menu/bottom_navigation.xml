@@ -21,5 +21,4 @@
         android:id="@+id/nav_switch"
         android:icon="@drawable/ic_compare_arrows_black_24dp"
         android:title="@string/switch_role" />
-<!-- ic_hotel_black_24dp-->
 </menu>

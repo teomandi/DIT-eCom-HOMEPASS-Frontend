@@ -41,7 +41,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="vertical"
-        android:background="@drawable/dark_round"
         >
         <LinearLayout
             android:layout_width="match_parent"

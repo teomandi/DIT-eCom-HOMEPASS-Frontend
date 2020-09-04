@@ -332,8 +332,6 @@ public class ProfileFragment extends MyFragment {
                 System.out.println("Error message:: " + t.getMessage());
             }
         });
-        AppConstants.USERNAME = "4321";
-        System.out.println("uname1: ~~~~~~~~~~~~~~~~~~~~~~> " + AppConstants.MODE);
         if(AppConstants.MODE.equals("GUEST"))
             MainActivity.setBottomNavChecked(1);
         else

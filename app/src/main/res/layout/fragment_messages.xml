@@ -11,43 +11,26 @@
     app:layout_constraintTop_toTopOf="parent"
     >
     <TextView
-        android:id="@+id/textview_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/messages"
+        android:text="@string/your_messages"
         android:layout_margin="25dp"
+        android:textStyle="bold"
         android:textSize="40sp"
         />
-    <Button
-        android:id="@+id/button_addmessage"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:text="add message"
-        android:background="@drawable/default_button"
-        android:textColor="@color/colorWhite"
-        />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <LinearLayout
+        <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/messages_container"
-            >
+            android:id="@+id/listview_messages_container"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="5.0sp"
+            />
 
-            <include layout="@layout/message_component"/>
-            <include layout="@layout/message_component"/>
-            <include layout="@layout/message_component"/>
-            <include layout="@layout/message_component"/>
-            <include layout="@layout/message_component"/>
-            <include layout="@layout/message_component" />
-            <include layout="@layout/message_component"/>
-            <include layout="@layout/message_component"/>
-
-        </LinearLayout>
-    </ScrollView>
 
 </LinearLayout>
