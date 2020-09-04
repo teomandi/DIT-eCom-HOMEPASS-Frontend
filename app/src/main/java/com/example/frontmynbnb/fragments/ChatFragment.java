@@ -173,7 +173,7 @@ public class ChatFragment extends MyFragment {
         Call<Message> call = jsonPlaceHolderApi.postMessage(
                 AppConstants.USER.getId(),
                 mOtherUserId,
-                AppConstants.MAPVIEW_BUNDLE_KEY.equals("GUEST") ? mOtherUserId : AppConstants.USER.getId(),
+                AppConstants.MODE.equals("GUEST") ? mOtherUserId : AppConstants.USER.getId(),
                 content
         );
         call.enqueue(new Callback<Message>() {

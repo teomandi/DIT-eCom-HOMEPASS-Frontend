@@ -50,8 +50,10 @@ public class MessagesFragment extends MyFragment {
         mMessagesList = new ArrayList<>();
         mMesAdapter = new MessagesAdapter(getContext(), mMessagesList, false);
         mMessagesContainer.setAdapter(mMesAdapter);
-        if(AppConstants.MODE.equals("GUEST"))
+        if(AppConstants.MODE.equals("GUEST")) {
             MainActivity.setBottomNavChecked(0);
+            fetchMessages(false);
+        }
         else {
             HostActivity.setBottomNavChecked(0);
             fetchMessages(true);
