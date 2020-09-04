@@ -59,6 +59,6 @@ public class Message {
     }
 
     public void printMessage(){
-        System.out.println("Message: Sender: " + sender.getUsername() + " reciever: " + reciever.getUsername() + " hoster: " + hoster.getUsername() + " text: " + text);
+        System.out.println("~~> Message: Sender: " + sender.getUsername() + " reciever: " + reciever.getUsername() + " hoster: " + hoster.getUsername() + " text: " + text);
     }
 }

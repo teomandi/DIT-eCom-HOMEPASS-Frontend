@@ -25,30 +25,54 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MessagesAdapter extends ArrayAdapter<Message> {
 
-    public MessagesAdapter(Context ctx, List<Message> messages){
+    public MessagesAdapter(Context ctx, List<Message> messages, boolean isChat){
         super(ctx, 0, messages);
         mContext = ctx;
+        mIsChat = isChat;
     }
     private TextView mTextUsername, mTextText;
     private CircleImageView mImageViewProfile;
     private Context mContext;
-    private Message mMessage;
+    private boolean mIsChat;
+    private String username =null;
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
-        if (view == null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.message_component, parent, false);
+        final Message mMessage = getItem(position);
+
+        if(view == null){
+            if(mIsChat) {
+                if(mMessage.getSender().getId() == AppConstants.USER.getId()) {
+                    view = LayoutInflater.from(getContext()).inflate(R.layout.mymessage_component, parent, false);
+                }else{
+                    view = LayoutInflater.from(getContext()).inflate(R.layout.message_component, parent, false);
+                }
+            }else{
+                view = LayoutInflater.from(getContext()).inflate(R.layout.message_component, parent, false);
+            }
         }
+        username = mIsChat ? mMessage.getSender().getUsername() :
+                mMessage.getSender().getId() == AppConstants.USER.getId() ?
+                        mMessage.getReciever().getUsername() : mMessage.getSender().getUsername();
+
+        mTextUsername = (TextView) view.findViewById(R.id.textview_chat_username);
+        mTextText = (TextView) view.findViewById(R.id.textview_chat_text);
+        mImageViewProfile = (CircleImageView) view.findViewById(R.id.imageview_chat_profile);
+
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mIsChat)
+                    return;
                 int otherUserId = mMessage.getSender().getId() == AppConstants.USER.getId() ?
                         mMessage.getReciever().getId() : mMessage.getSender().getId();
                 ChatFragment chatFragment = new ChatFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt("other_user_id", otherUserId);
+                System.out.println("other user is  " + otherUserId);
                 chatFragment.setArguments(bundle);
                 if (AppConstants.MODE.equals("GUEST")) {
                     ((MainActivity) mContext).getSupportFragmentManager().beginTransaction().replace(
@@ -63,14 +87,7 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
                 }
             }
         });
-        mMessage = getItem(position);
-        mTextUsername = (TextView) view.findViewById(R.id.textview_chat_username);
-        mTextText = (TextView) view.findViewById(R.id.textview_chat_text);
-        mImageViewProfile = (CircleImageView) view.findViewById(R.id.imageview_chat_profile);
 
-        String username = mMessage.getSender().getId() == AppConstants.USER.getId() ?
-                mMessage.getReciever().getUsername() : mMessage.getSender().getUsername();
-        System.out.println("Username:: " + username);
         mTextUsername.setText(username);
         mTextText.setText(mMessage.getText());
         if(mMessage.getUserImage() != null)

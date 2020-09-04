@@ -41,7 +41,7 @@
                 android:id="@+id/textview_chat_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorWhite"
+                android:textColor="#fff"
                 android:textSize="15sp"
                 />
 

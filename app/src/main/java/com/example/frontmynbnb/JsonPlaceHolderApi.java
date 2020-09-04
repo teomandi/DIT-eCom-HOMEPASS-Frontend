@@ -220,7 +220,7 @@ public interface JsonPlaceHolderApi {
     @GET("messages/host/{huid}/{uid}/chat")
     Call<List<Message>> getChatAsHost(@Path("huid") int huid, @Path("uid") int uid);
 
-    @GET("messages/host/{u1id}/{u2id}/chat")
+    @GET("messages/{u1id}/{u2id}/chat")//in the u1id is the current user
     Call<List<Message>> getChatNotAsHost(@Path("u1id") int u1id, @Path("u2id") int u2id);
 
 }

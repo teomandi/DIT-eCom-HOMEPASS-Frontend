@@ -48,7 +48,7 @@ public class MessagesFragment extends MyFragment {
 
         mMessagesContainer = view.findViewById(R.id.listview_messages_container);
         mMessagesList = new ArrayList<>();
-        mMesAdapter = new MessagesAdapter(getContext(), mMessagesList);
+        mMesAdapter = new MessagesAdapter(getContext(), mMessagesList, false);
         mMessagesContainer.setAdapter(mMesAdapter);
         if(AppConstants.MODE.equals("GUEST"))
             MainActivity.setBottomNavChecked(0);
