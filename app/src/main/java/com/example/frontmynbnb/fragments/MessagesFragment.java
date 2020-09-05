@@ -50,6 +50,10 @@ public class MessagesFragment extends MyFragment {
         mMessagesList = new ArrayList<>();
         mMesAdapter = new MessagesAdapter(getContext(), mMessagesList, false);
         mMessagesContainer.setAdapter(mMesAdapter);
+        if(AppConstants.USER == null){
+            Toast.makeText(getContext(), "User messages could not be fetched", Toast.LENGTH_SHORT).show();
+            return view;
+        }
         if(AppConstants.MODE.equals("GUEST")) {
             MainActivity.setBottomNavChecked(0);
             fetchMessages(false);

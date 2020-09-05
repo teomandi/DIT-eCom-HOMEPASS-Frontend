@@ -25,33 +25,31 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MessagesAdapter extends ArrayAdapter<Message> {
 
-    public MessagesAdapter(Context ctx, List<Message> messages, boolean isChat){
+    public MessagesAdapter(Context ctx, List<Message> messages, boolean isChat) {
         super(ctx, 0, messages);
         mContext = ctx;
         mIsChat = isChat;
     }
+
     private TextView mTextUsername, mTextText;
     private CircleImageView mImageViewProfile;
     private Context mContext;
     private boolean mIsChat;
-    private String username =null;
+    private String username = null;
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
         final Message mMessage = getItem(position);
-
-        if(view == null){
-            if(mIsChat) {
-                if(mMessage.getSender().getId() == AppConstants.USER.getId()) {
-                    view = LayoutInflater.from(getContext()).inflate(R.layout.mymessage_component, parent, false);
-                }else{
-                    view = LayoutInflater.from(getContext()).inflate(R.layout.message_component, parent, false);
-                }
-            }else{
+        if (mIsChat) {
+            if (mMessage.getSender().getId() == AppConstants.USER.getId()) {
+                view = LayoutInflater.from(getContext()).inflate(R.layout.mymessage_component, parent, false);
+            } else {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.message_component, parent, false);
             }
+        } else {
+            view = LayoutInflater.from(getContext()).inflate(R.layout.message_component, parent, false);
         }
         username = mIsChat ? mMessage.getSender().getUsername() :
                 mMessage.getSender().getId() == AppConstants.USER.getId() ?
@@ -65,7 +63,7 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mIsChat)
+                if (mIsChat)
                     return;
                 int otherUserId = mMessage.getSender().getId() == AppConstants.USER.getId() ?
                         mMessage.getReciever().getId() : mMessage.getSender().getId();
@@ -90,7 +88,7 @@ public class MessagesAdapter extends ArrayAdapter<Message> {
 
         mTextUsername.setText(username);
         mTextText.setText(mMessage.getText());
-        if(mMessage.getUserImage() != null)
+        if (mMessage.getUserImage() != null)
             mImageViewProfile.setImageBitmap(mMessage.getUserImage());
 
         return view;

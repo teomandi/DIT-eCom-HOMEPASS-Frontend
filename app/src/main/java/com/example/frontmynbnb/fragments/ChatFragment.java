@@ -106,7 +106,8 @@ public class ChatFragment extends MyFragment {
                 mMesAdapter.notifyDataSetChanged();
                 fetchUserImage(AppConstants.USER.getId());
                 fetchUserImage(mOtherUserId);
-                scrollMyListViewToBottom();
+                mMessegeContainer.smoothScrollToPosition(mMesAdapter.getCount());
+
             }
 
             @Override
@@ -193,7 +194,7 @@ public class ChatFragment extends MyFragment {
                 mMessagesList.add(mymsg);
 //                mMesAdapter.notifyDataSetChanged();
                 mMessegeContainer.setAdapter(mMesAdapter);
-                scrollMyListViewToBottom();
+                mMessegeContainer.smoothScrollToPosition(mMesAdapter.getCount());
             }
 
             @Override
@@ -204,16 +205,6 @@ public class ChatFragment extends MyFragment {
                         Toast.LENGTH_LONG
                 ).show();
                 System.out.println("Error message:: " + t.getMessage());
-            }
-        });
-    }
-
-    private void scrollMyListViewToBottom() {
-        mMessegeContainer.post(new Runnable() {
-            @Override
-            public void run() {
-                // Select the last row so it will scroll into view...
-                mMessegeContainer.setSelection(mMesAdapter.getCount() - 1);
             }
         });
     }
