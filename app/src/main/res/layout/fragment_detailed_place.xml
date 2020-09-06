@@ -356,6 +356,7 @@
                     android:id="@+id/button_place_makereservation"
                     android:layout_width="120dp"
                     android:layout_height="40dp"
+                    android:layout_marginBottom="200dp"
                     android:background="@drawable/success_button"
                     android:enabled="false"
                     android:text="Reservation"

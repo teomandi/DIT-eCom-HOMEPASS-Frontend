@@ -157,9 +157,9 @@ public interface JsonPlaceHolderApi {
     Call<Void> deleteRule(@Path("id") int id);
 
     @PUT("availabilities/{id}")
-    Call<Benefit> putAvailability(
+    Call<Availability> putAvailability(
             @Path("id") int id,
-            @Body Benefit b
+            @Body Availability b
     );
 
     @DELETE("availabilities/{id}")
@@ -211,10 +211,13 @@ public interface JsonPlaceHolderApi {
     @GET("places/{id}/benefits")
     Call<Set<Rating>> getRatingsByPlace(@Path("id") int id);
 
+    @FormUrlEncoded
     @POST("users/{uid}/places/{pid}/ratings")
     Call<Rating> postRatingForPlace(
             @Path("uid") int uid,
-            @Path("pid") int pid
+            @Path("pid") int pid,
+            @Field("degree") float degree,
+            @Field("comment") String comment
     );
 
     @GET("messages/host/{uid}")

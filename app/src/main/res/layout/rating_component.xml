@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/textview_rating_comment"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_weight="3"
         android:textAlignment="center"

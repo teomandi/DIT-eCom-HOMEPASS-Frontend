@@ -150,6 +150,7 @@
                 android:dividerHeight="2.0sp"
                 android:background="@drawable/dark_round"
                 android:layout_margin="25dp"
+                android:nestedScrollingEnabled="true"
                 android:visibility="visible">
             </ListView>
 

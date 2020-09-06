@@ -1,6 +1,7 @@
 package com.example.frontmynbnb.dialogs;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
@@ -32,6 +34,7 @@ public class RatingDialog extends AppCompatDialogFragment {
     private EditText mEditComment;
     private int mPlaceId;
     private String mPlaceAddress;
+    private RatingDialogListener listener;
 
     public static RatingDialog newInstance(int pid, String address) {
         RatingDialog f = new RatingDialog();
@@ -60,41 +63,11 @@ public class RatingDialog extends AppCompatDialogFragment {
         }).setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        String comment = mEditComment.getText().toString();
+                        float degree = mRatingBar.getRating();
+                        Rating rating = new Rating(degree, comment);
+                        listener.applyRatings(rating, mPlaceId);
                         System.out.println("OK!! Sending rating!");
-                        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
-                        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-                        Call<Rating> call = jsonPlaceHolderApi.postRatingForPlace(
-                                AppConstants.USER.getId(), mPlaceId);
-                        call.enqueue(new Callback<Rating>() {
-                            @Override
-                            public void onResponse(Call<Rating> call, Response<Rating> response) {
-                                if (!response.isSuccessful()) {
-                                    Toast.makeText(
-                                            getContext(),
-                                            "Not successful response " + response.code(),
-                                            Toast.LENGTH_SHORT
-                                    ).show();
-                                    return;
-                                }
-                                System.out.println("Rating send!");
-                                Toast.makeText(
-                                        getActivity(),
-                                        "Thank you for rating!",
-                                        Toast.LENGTH_SHORT
-                                ).show();
-                            }
-
-                            @Override
-                            public void onFailure(Call<Rating> call, Throwable t) {
-                                Toast.makeText(
-                                        getContext(),
-                                        "Failure on posting rating",
-                                        Toast.LENGTH_LONG
-                                ).show();
-                                System.out.println("Error message:: " + t.getMessage());
-                            }
-                        });
-
                     }
         });
         mPlaceAddress = getArguments().getString("place_address");
@@ -105,6 +78,20 @@ public class RatingDialog extends AppCompatDialogFragment {
         mEditComment = view.findViewById(R.id.edittext_ratingdialog_comment);
         mRatingBar = view.findViewById(R.id.ratingbar_dialog_rate);
         return builder.create();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            listener = (RatingDialogListener)context;
+        } catch ( ClassCastException e) {
+            throw new ClassCastException(context.toString() + "must implement RatingDialogListener");
+        }
+    }
+
+    public interface RatingDialogListener{
+        void applyRatings(Rating rating, int placeid);
     }
 
 

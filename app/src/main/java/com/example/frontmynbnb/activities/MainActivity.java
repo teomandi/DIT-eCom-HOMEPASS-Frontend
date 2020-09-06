@@ -15,10 +15,12 @@ import com.example.frontmynbnb.AppConstants;
 import com.example.frontmynbnb.JsonPlaceHolderApi;
 import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.RestClient;
+import com.example.frontmynbnb.dialogs.RatingDialog;
 import com.example.frontmynbnb.fragments.HomeFragment;
 import com.example.frontmynbnb.fragments.MessagesFragment;
 import com.example.frontmynbnb.fragments.ProfileFragment;
 import com.example.frontmynbnb.fragments.MyFragment;
+import com.example.frontmynbnb.models.Rating;
 import com.example.frontmynbnb.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -30,7 +32,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RatingDialog.RatingDialogListener{
 
     private static BottomNavigationView bottomNav;
     private boolean fetched = false;
@@ -170,6 +172,41 @@ public class MainActivity extends AppCompatActivity {
                 ).show();
                 System.out.println("Error message:: " + t.getMessage());
                 fetched = false;
+            }
+        });
+    }
+
+
+    @Override
+    public void applyRatings(Rating rating, int placeId) {
+        System.out.println("rating: " + rating.getComment());
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<Rating> call = jsonPlaceHolderApi.postRatingForPlace(
+                AppConstants.USER.getId(), placeId, rating.getDegree(), rating.getComment());
+        call.enqueue(new Callback<Rating>() {
+            @Override
+            public void onResponse(Call<Rating> call, Response<Rating> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                System.out.println("Rating send!");
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Thank you for rating!",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+
+            @Override
+            public void onFailure(Call<Rating> call, Throwable t) {
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Failure on posting rating",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
             }
         });
     }

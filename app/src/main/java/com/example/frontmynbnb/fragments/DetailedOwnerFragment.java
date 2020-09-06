@@ -18,6 +18,7 @@ import com.example.frontmynbnb.AppConstants;
 import com.example.frontmynbnb.JsonPlaceHolderApi;
 import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.RestClient;
+import com.example.frontmynbnb.activities.MainActivity;
 import com.example.frontmynbnb.adapters.RatingAdapter;
 import com.example.frontmynbnb.models.Place;
 import com.example.frontmynbnb.models.Rating;
@@ -43,6 +44,7 @@ public class DetailedOwnerFragment extends MyFragment {
     private TextView mTextName, mTextSurname, mTextUsername, mTextEmail, mTextPhone, mTextAddress;
     private ListView mRatingContainer;
     private List<Rating> mRatingList;
+    private String mTo, mFrom;
 
     public DetailedOwnerFragment() {
         // Required empty public constructor
@@ -78,6 +80,8 @@ public class DetailedOwnerFragment extends MyFragment {
             mProgressBar.setVisibility(View.VISIBLE);
             placeId = getArguments().getInt("place_id");
             userId = getArguments().getInt("user_id");
+            mFrom = getArguments().getString("from");
+            mTo= getArguments().getString("to");
             System.out.println("Place: " + placeId + " user: " + userId);
             fetchOwner();
             fetchOwnerImage();
@@ -89,11 +93,14 @@ public class DetailedOwnerFragment extends MyFragment {
     @Override
     public boolean onBackPressed() {
         System.out.println("detailed owner fragment");
-        Bundle bundle = new Bundle();
-        bundle.putInt("place_id", placeId);
 
+        Bundle bundle = new Bundle();
+        bundle.putString("from", mFrom);
+        bundle.putString("to", mTo);
+        bundle.putInt("place_id", placeId);
         DetailedPlaceFragment fragment = new DetailedPlaceFragment();
         fragment.setArguments(bundle);
+
         Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container,
                 fragment

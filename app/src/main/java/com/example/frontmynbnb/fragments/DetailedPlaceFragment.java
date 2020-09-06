@@ -26,6 +26,7 @@ import com.example.frontmynbnb.models.Availability;
 import com.example.frontmynbnb.models.Benefit;
 import com.example.frontmynbnb.models.Image;
 import com.example.frontmynbnb.models.Place;
+import com.example.frontmynbnb.models.Rating;
 import com.example.frontmynbnb.models.Rule;
 import com.example.frontmynbnb.models.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -144,6 +145,8 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 Bundle bundle = new Bundle();
                 bundle.putInt("place_id", targetPlace.getId());
                 bundle.putInt("user_id", mOwner.getId());
+                bundle.putString("from", mFrom);
+                bundle.putString("to", mTo);
                 DetailedOwnerFragment fragment = new DetailedOwnerFragment();
                 fragment.setArguments(bundle);
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
@@ -431,6 +434,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
     private void checkIfCanRate(){
 
     }
+
 
     private void initGoogleMap(Bundle savedInstanceState) {
         // *** IMPORTANT ***
