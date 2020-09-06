@@ -573,8 +573,8 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         mGoogleMap = map;
         if(targetPlace!=null) {
             LatLng latLng = new LatLng(
-                    Double.parseDouble(targetPlace.getLatitude()),
-                    Double.parseDouble(targetPlace.getLatitude())
+                    targetPlace.getLatitude(),
+                    targetPlace.getLongitude()
             );
             mGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Your Place"));
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));

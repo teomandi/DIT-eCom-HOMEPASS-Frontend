@@ -96,8 +96,8 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         containerAvailability.setAdapter(mAvAdapter);
         //set GoogleMap
         mlatLng = new LatLng(
-                Double.parseDouble(myPlace.getLatitude()),
-                Double.parseDouble(myPlace.getLongitude())
+                myPlace.getLatitude(),
+                myPlace.getLongitude()
         );
         //fetch images
         mBitmapList = new ArrayList<>();
