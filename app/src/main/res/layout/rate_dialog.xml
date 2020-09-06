@@ -21,7 +21,6 @@
         android:textColor="#fff"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="Chios"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -34,6 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:numStars="5"
+        android:rating="1"
         android:stepSize="0.5"
         android:id="@+id/ratingbar_dialog_rate"
         />
@@ -51,6 +51,7 @@
         android:id="@+id/edittext_ratingdialog_comment"
         android:autofillHints="leave a comment"
         android:textColor="#fff"
+        android:hint="Write a comment.."
         android:layout_marginBottom="10dp"
         />
 

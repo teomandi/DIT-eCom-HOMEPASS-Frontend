@@ -148,10 +148,12 @@ public class ChatFragment extends MyFragment {
                 for (Message m : mMessagesList) {
                     if (m.getSender().getId() == targetUserId) {
                         m.setUserImage(imageBitmap);
-                        if(targetUserId == AppConstants.USER.getId())
+                        if(targetUserId == AppConstants.USER.getId()){
                             mBitmap = imageBitmap;
-                        mMesAdapter.notifyDataSetChanged();
+                            System.out.println("my image fetched!!!");
 
+                        }
+                        mMesAdapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -190,10 +192,11 @@ public class ChatFragment extends MyFragment {
                 }
                 mEditMessage.setText("");
                 Message mymsg = response.body();
-                mymsg.setUserImage(mBitmap);
+                if(mBitmap != null)
+                    mymsg.setUserImage(mBitmap);
                 mMessagesList.add(mymsg);
+                System.out.println("my image added!!!");
                 mMesAdapter.notifyDataSetChanged();
-//                mMessegeContainer.setAdapter(mMesAdapter);
                 mMessegeContainer.smoothScrollToPosition(mMesAdapter.getCount());
             }
 

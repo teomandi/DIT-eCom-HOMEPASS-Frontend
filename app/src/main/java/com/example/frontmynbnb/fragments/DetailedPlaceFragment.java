@@ -111,6 +111,12 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         mAvailabilityContainer = (ListView) view.findViewById(R.id.listview_availablecontainer3);
         mTextReservation = (TextView) view.findViewById(R.id.text_place_makereservation);
         mButtonReserve = (Button) view.findViewById(R.id.button_place_makereservation);
+        mButtonReserve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makeReservation();
+            }
+        });
         mButtonRate = (Button) view.findViewById(R.id.button_rating_rate);
         mButtonRate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +136,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 Bundle bundle = new Bundle();
                 bundle.putInt("other_user_id", mOwner.getId());
                 chatFragment.setArguments(bundle);
+                galleryThread.interrupt();
                     Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                             R.id.fragment_container,
                             chatFragment
@@ -149,6 +156,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 bundle.putString("to", mTo);
                 DetailedOwnerFragment fragment = new DetailedOwnerFragment();
                 fragment.setArguments(bundle);
+                galleryThread.interrupt();
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                         R.id.fragment_container,
                         fragment
@@ -402,7 +410,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 if (!response.isSuccessful()) {
                     Toast.makeText(
                             getContext(),
-                            "Not successful response " + String.valueOf(response.code()),
+                            "Not successful response " + response.code(),
                             Toast.LENGTH_SHORT
                     ).show();
                     return;
@@ -432,6 +440,86 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
     }
 
     private void checkIfCanRate(){
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<Boolean> call = jsonPlaceHolderApi.checkIfUserCanRate(placeId, AppConstants.USER.getId());
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                if(response.body()){
+                    mRateView.setVisibility(View.VISIBLE);
+                    Toast.makeText(getContext(), "You can rate the Place", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure on image call!!",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
+
+    }
+
+    private void makeReservation(){
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<Boolean> call = jsonPlaceHolderApi.createReservation(
+                placeId, AppConstants.USER.getId(), mFrom, mTo);
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                if(response.body()){
+                    Toast.makeText(
+                            getContext(),
+                            "Reservation done with success",
+                            Toast.LENGTH_LONG
+                    ).show();
+                    galleryThread.interrupt();
+                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
+                            R.id.fragment_container,
+                            new HomeFragment()
+                    ).addToBackStack(null).commit();
+                }
+                else{
+                    Toast.makeText(
+                            getContext(),
+                            "Reservation rejected!",
+                            Toast.LENGTH_LONG
+                    ).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure on image call!!",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+            }
+        });
 
     }
 

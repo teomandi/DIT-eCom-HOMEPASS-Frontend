@@ -246,4 +246,14 @@ public interface JsonPlaceHolderApi {
             @Path("uid") int uid
     );
 
+    @FormUrlEncoded
+    @POST("/reservations/places/{pid}/users/{uid}")
+    Call<Boolean> createReservation(
+            @Path("pid") int pid,
+            @Path("uid") int uid,
+            @Field("start") String start,
+            @Field("end") String to
+    );
+
+
 }
