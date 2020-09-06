@@ -50,7 +50,7 @@
     <string name="to">To</string>
     <string name="add_new_date_range">Add new date range:</string>
     <string name="add">ADD</string>
-    <string name="empty_date">--/--/----</string>
+    <string name="empty_date">----/--/--</string>
     <string name="max_guests_ask">Max Guests:</string>
     <string name="min_cost">Min Cost:</string>
     <string name="cost_per_person_ask">Cost per Person:</string>
@@ -107,4 +107,9 @@
     <string name="message_to_host">Message</string>
     <string name="click_on_the_image_to_get_details_about_the_user">Click on the image to get details about the user</string>
     <string name="messages">Messages</string>
+    <string name="already_stayed_here_please_rate">Already stayed here? Please rate!</string>
+    <string name="rate">Rate</string>
+    <string name="rate_the_place">Rate and Comment the place:</string>
+    <string name="comment">Comment:</string>
+    <string name="submit">SUBMIT</string>
 </resources>

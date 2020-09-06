@@ -211,6 +211,12 @@ public interface JsonPlaceHolderApi {
     @GET("places/{id}/benefits")
     Call<Set<Rating>> getRatingsByPlace(@Path("id") int id);
 
+    @POST("users/{uid}/places/{pid}/ratings")
+    Call<Rating> postRatingForPlace(
+            @Path("uid") int uid,
+            @Path("pid") int pid
+    );
+
     @GET("messages/host/{uid}")
     Call<List<Message>> getMessagesAsHost(@Path("uid") int id);
 
@@ -229,6 +235,12 @@ public interface JsonPlaceHolderApi {
             @Path("rid") int rid,
             @Path("hid") int hid,
             @Query("text") String text
+    );
+
+    @GET("reservations/places/{pid}/users/{uid}/canrate")
+    Call<Boolean> checkIfUserCanRate(
+            @Path("pid") int pid,
+            @Path("uid") int uid
     );
 
 }

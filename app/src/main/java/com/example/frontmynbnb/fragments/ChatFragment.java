@@ -71,7 +71,6 @@ public class ChatFragment extends MyFragment {
         if(AppConstants.MODE.equals("HOST"))
             mButtonSend.setBackground(getContext().getDrawable(R.drawable.success_button));
         fetchChatMesseges();
-
         return view;
     }
 
@@ -104,8 +103,8 @@ public class ChatFragment extends MyFragment {
                 }
                 mMessagesList.addAll(response.body());
                 mMesAdapter.notifyDataSetChanged();
-                fetchUserImage(AppConstants.USER.getId());
                 fetchUserImage(mOtherUserId);
+                fetchUserImage(AppConstants.USER.getId());
                 mMessegeContainer.smoothScrollToPosition(mMesAdapter.getCount());
 
             }
@@ -152,6 +151,7 @@ public class ChatFragment extends MyFragment {
                         if(targetUserId == AppConstants.USER.getId())
                             mBitmap = imageBitmap;
                         mMesAdapter.notifyDataSetChanged();
+
                     }
                 }
             }
@@ -192,8 +192,8 @@ public class ChatFragment extends MyFragment {
                 Message mymsg = response.body();
                 mymsg.setUserImage(mBitmap);
                 mMessagesList.add(mymsg);
-//                mMesAdapter.notifyDataSetChanged();
-                mMessegeContainer.setAdapter(mMesAdapter);
+                mMesAdapter.notifyDataSetChanged();
+//                mMessegeContainer.setAdapter(mMesAdapter);
                 mMessegeContainer.smoothScrollToPosition(mMesAdapter.getCount());
             }
 

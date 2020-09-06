@@ -16,6 +16,11 @@ public class Rating {
         this.comment = comment;
     }
 
+    public Rating(float degree, String comment) {
+        this.degree = degree;
+        this.comment = comment;
+    }
+
     public int getId() {
         return id;
     }

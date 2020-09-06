@@ -7,10 +7,40 @@
     tools:context=".fragments.DetailedPlaceFragment">
 
     <LinearLayout
+        android:id="@+id/linearLayout_rateview"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/calm_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:text="@string/already_stayed_here_please_rate"
+            />
+        <Button
+            android:id="@+id/button_rating_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/calm_background"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:text="@string/rate"
+            android:layout_marginTop="10dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/progressBarPlace2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginTop="150dp"
         android:background="@drawable/dark_round"
         android:gravity="center_horizontal"
@@ -36,25 +66,24 @@
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_rateview">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/imageview_place_gallery"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:id="@+id/imageview_place_gallery"
-                android:contentDescription="@string/place_gallery"
-                />
+                android:contentDescription="@string/place_gallery" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -62,166 +91,167 @@
                 android:layout_marginStart="10dp"
                 android:text="@string/place_details"
                 android:textColor="#fff"
-                android:textSize="30sp"
-                />
+                android:textSize="30sp" />
+
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/light_round"
-                >
+                android:background="@drawable/light_round">
+
                 <TableRow>
+
                     <TextView
-                        android:text="@string/number_of_beds_ask"
                         android:layout_column="1"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
                         android:drawableStart="@drawable/ic_bed_white_24dp"
                         android:padding="5dp"
-                        />
+                        android:text="@string/number_of_beds_ask"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
                     <TextView
                         android:id="@+id/textview_place_beds"
                         android:layout_column="2"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
                         android:padding="5dp"
-                        />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:text="@string/number_of_baths_ask"
-                        android:layout_column="1"
                         android:textColor="#fff"
-                        android:textSize="25sp"
+                        android:textSize="25sp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
                         android:drawableStart="@drawable/ic_bath_white_24dp"
                         android:padding="5dp"
-                        />
+                        android:text="@string/number_of_baths_ask"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
                     <TextView
                         android:id="@+id/textview_place_baths"
                         android:layout_column="2"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
                         android:padding="5dp"
-                        />
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
                 </TableRow>
+
                 <TableRow>
+
                     <TextView
-                        android:text="@string/number_of_bedrooms_ask"
                         android:layout_column="1"
-                        android:textColor="#fff"
                         android:drawableStart="@drawable/ic_bed_white_24dp"
-                        android:textSize="25sp"
                         android:padding="5dp"
-                        />
+                        android:text="@string/number_of_bedrooms_ask"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
                     <TextView
                         android:id="@+id/textview_place_bedrooms"
                         android:layout_column="2"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
                         android:padding="5dp"
-                        />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:text="@string/has_livingroom_ask"
-                        android:layout_column="1"
                         android:textColor="#fff"
-                        android:textSize="25sp"
+                        android:textSize="25sp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
                         android:drawableStart="@drawable/ic_living_room_24dp"
                         android:padding="5dp"
-                        />
+                        android:text="@string/has_livingroom_ask"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
                     <TextView
                         android:id="@+id/textview_place_livingroom"
                         android:layout_column="2"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
                         android:padding="5dp"
-                        />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:text="@string/area_m2_ask"
-                        android:layout_column="1"
                         android:textColor="#fff"
-                        android:textSize="25sp"
+                        android:textSize="25sp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
                         android:drawableStart="@drawable/ic_area_white_24dp"
                         android:padding="5dp"
-                        />
+                        android:text="@string/area_m2_ask"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
                     <TextView
                         android:id="@+id/textview_place_area"
                         android:layout_column="2"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
                         android:padding="5dp"
-                        />
-                </TableRow>
-                <TableRow>
-                    <TextView
-                        android:text="@string/type_of_place"
-                        android:layout_column="1"
                         android:textColor="#fff"
-                        android:textSize="25sp"
+                        android:textSize="25sp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_column="1"
                         android:drawableStart="@drawable/ic_home_white_24dp"
                         android:padding="5dp"
-                        />
+                        android:text="@string/type_of_place"
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
+
                     <TextView
                         android:id="@+id/textview_place_type"
                         android:layout_column="2"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
                         android:padding="5dp"
-                        />
+                        android:textColor="#fff"
+                        android:textSize="25sp" />
                 </TableRow>
             </TableLayout>
 
             <TextView
-                android:text="@string/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#fff"
-                android:textSize="25sp"
                 android:padding="5dp"
-                />
+                android:text="@string/description"
+                android:textColor="#fff"
+                android:textSize="25sp" />
+
             <TextView
+                android:id="@+id/textview_place_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/light_round"
-                android:id="@+id/textview_place_description"
-                android:layout_marginBottom="25dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginBottom="25dp"
+                android:background="@drawable/light_round"
                 android:textColor="#fff"
-                android:textSize="25sp"
-                />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/textview_place_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#fff"
-                android:textStyle="bold"
                 android:textSize="25sp"
-                />
+                android:textStyle="bold" />
 
             <com.google.android.gms.maps.MapView
                 android:id="@+id/mapview3"
                 android:layout_width="match_parent"
                 android:layout_height="325dp"
                 android:layout_margin="10dp"
-                android:layout_marginBottom="20dp"
-                />
+                android:layout_marginBottom="20dp" />
 
 
             <TextView
-                android:text="@string/benefits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#fff"
-                android:textSize="25sp"
                 android:padding="5dp"
-                />
+                android:text="@string/benefits"
+                android:textColor="#fff"
+                android:textSize="25sp" />
 
             <ListView
                 android:id="@+id/listview_benefitcontainer3"
@@ -230,19 +260,18 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
-                android:divider="@color/colorGreen"
                 android:background="@drawable/light_round"
+                android:divider="@color/colorGreen"
                 android:dividerHeight="1sp"
                 android:nestedScrollingEnabled="true" />
 
             <TextView
-                android:text="@string/rules"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#fff"
-                android:textSize="25sp"
                 android:padding="5dp"
-                />
+                android:text="@string/rules"
+                android:textColor="#fff"
+                android:textSize="25sp" />
 
             <ListView
                 android:id="@+id/listview_rulescontainer3"
@@ -251,19 +280,18 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
-                android:divider="@color/colorGreen"
                 android:background="@drawable/light_round"
+                android:divider="@color/colorGreen"
                 android:dividerHeight="1sp"
                 android:nestedScrollingEnabled="true" />
 
             <TextView
-                android:text="@string/availability"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#fff"
-                android:textSize="25sp"
                 android:padding="5dp"
-                />
+                android:text="@string/availability"
+                android:textColor="#fff"
+                android:textSize="25sp" />
 
             <ListView
                 android:id="@+id/listview_availablecontainer3"
@@ -272,8 +300,8 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
-                android:divider="@color/colorGreen"
                 android:background="@drawable/light_round"
+                android:divider="@color/colorGreen"
                 android:dividerHeight="1sp"
                 android:nestedScrollingEnabled="true" />
 
@@ -281,60 +309,57 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textColor="#fff"
                 android:text="@string/click_on_the_image_to_get_details_about_the_user"
-                />
+                android:textColor="#fff"
+                android:textSize="15sp" />
+
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageview_place_ownerpic"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginBottom="20dp"
-                android:src="@drawable/asianx"
-                android:id="@+id/imageview_place_ownerpic"
-                />
+                android:src="@drawable/asianx" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="40dp"
                 android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                >
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="#fff"
                     android:text="@string/click_on_the_image_to_get_details_about_the_user"
-                    />
+                    android:textColor="#fff"
+                    android:textSize="15sp" />
+
                 <Button
+                    android:id="@+id/button_place_sendmessage"
                     android:layout_width="120dp"
                     android:layout_height="40dp"
-                    android:text="@string/message_to_host"
-                    android:textColor="#fff"
                     android:layout_marginBottom="20dp"
-                    android:id="@+id/button_place_sendmessage"
                     android:background="@drawable/default_button"
-                    />
+                    android:text="@string/message_to_host"
+                    android:textColor="#fff" />
 
 
                 <TextView
                     android:id="@+id/text_place_makereservation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
                     android:textColor="#fff"
-                    />
+                    android:textSize="15sp" />
+
                 <Button
-                    android:enabled="false"
+                    android:id="@+id/button_place_makereservation"
                     android:layout_width="120dp"
                     android:layout_height="40dp"
-                    android:text="Reservation"
-                    android:textColor="#f50"
-                    android:id="@+id/button_place_makereservation"
                     android:background="@drawable/success_button"
-                    />
+                    android:enabled="false"
+                    android:text="Reservation"
+                    android:textColor="#f50" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

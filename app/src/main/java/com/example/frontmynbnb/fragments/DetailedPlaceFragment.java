@@ -18,11 +18,10 @@ import com.example.frontmynbnb.AppConstants;
 import com.example.frontmynbnb.JsonPlaceHolderApi;
 import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.RestClient;
-import com.example.frontmynbnb.activities.HostActivity;
-import com.example.frontmynbnb.activities.MainActivity;
 import com.example.frontmynbnb.adapters.AvailabilitiesAdapter;
 import com.example.frontmynbnb.adapters.BenefitsAdapter;
 import com.example.frontmynbnb.adapters.RulesAdapter;
+import com.example.frontmynbnb.dialogs.RatingDialog;
 import com.example.frontmynbnb.models.Availability;
 import com.example.frontmynbnb.models.Benefit;
 import com.example.frontmynbnb.models.Image;
@@ -35,8 +34,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,7 +56,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
     private User mOwner = null;
     private List<Bitmap> galleryBitmapList;
 
-    private LinearLayout mProgressBarView;
+    private LinearLayout mProgressBarView, mRateView;
     private ImageView mGalleryView;
     private CircleImageView mOwnerImage;
     private TextView mTextBeds, mTextBaths, mTextBedrooms, mTextLivingRoom, mTextArea, mTextType,
@@ -75,7 +72,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
 
     private Thread galleryThread;
     private String mFrom, mTo;
-    private Button mButtonReserve, mButtonMessage;
+    private Button mButtonReserve, mButtonMessage, mButtonRate;
 
     public DetailedPlaceFragment() {
         // Required empty public constructor
@@ -97,6 +94,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detailed_place, container, false);
         mProgressBarView = (LinearLayout) view.findViewById(R.id.progressBarPlace2);
+        mRateView = (LinearLayout) view.findViewById(R.id.linearLayout_rateview);
         mGalleryView = (ImageView) view.findViewById(R.id.imageview_place_gallery);
         mTextBeds = (TextView) view.findViewById(R.id.textview_place_beds);
         mTextBaths = (TextView) view.findViewById(R.id.textview_place_baths);
@@ -112,6 +110,17 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         mAvailabilityContainer = (ListView) view.findViewById(R.id.listview_availablecontainer3);
         mTextReservation = (TextView) view.findViewById(R.id.text_place_makereservation);
         mButtonReserve = (Button) view.findViewById(R.id.button_place_makereservation);
+        mButtonRate = (Button) view.findViewById(R.id.button_rating_rate);
+        mButtonRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RatingDialog ratingDialog = RatingDialog.newInstance(
+                        placeId,
+                        targetPlace.getAddress()
+                );
+                ratingDialog.show(getFragmentManager(), "rate dialog");
+            }
+        });
         mButtonMessage = (Button) view.findViewById(R.id.button_place_sendmessage);
         mButtonMessage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,10 +164,11 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 mTextReservation.setText("No dates have been provided");
                 mTextReservation.setTextColor(getResources().getColor(R.color.colorRed));
             }
-
             fetchPlace();
             fetchOwner();
+            checkIfCanRate();
         }
+
         initGoogleMap(savedInstanceState);
         return view;
     }
@@ -416,6 +426,10 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 System.out.println("Error message:: " + t.getMessage());
             }
         });
+    }
+
+    private void checkIfCanRate(){
+
     }
 
     private void initGoogleMap(Bundle savedInstanceState) {
