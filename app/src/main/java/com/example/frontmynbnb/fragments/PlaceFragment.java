@@ -302,6 +302,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
 
 
     private Thread galleryThread;
+
     private void enableGalleryEffect() {
         galleryThread = new Thread(new Runnable() {
             @Override

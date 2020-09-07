@@ -72,8 +72,9 @@ public class HomeFragment extends Fragment {
         mEditSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mSearchGroup.getVisibility() == View.INVISIBLE) {
-                    System.out.println("appearing view");
+                System.out.println("appearing view");
+
+                if (mSearchGroup.getVisibility() == View.GONE) {
                     TransitionManager.beginDelayedTransition(mSearchGroup, new AutoTransition());
                     mSearchGroup.setVisibility(View.VISIBLE);
                 }
