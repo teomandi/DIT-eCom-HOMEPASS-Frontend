@@ -70,7 +70,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
 
     private List<Bitmap> mBitmapList;
 
-    private void setPlaceOnView(){
+    private void setPlaceOnView() {
         myPlace.printDetails();
         textAddress.setText(myPlace.getAddress());
         textMaxGuest.setText(String.valueOf(myPlace.getMaxGuests()));
@@ -84,15 +84,15 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         textType.setText(myPlace.getType());
         textDescription.setText(myPlace.getDescription());
         //set ListViews
-        mBenAdapter = new BenefitsAdapter(getActivity(), (ArrayList<Benefit>)myPlace.getBenefits());
+        mBenAdapter = new BenefitsAdapter(getActivity(), (ArrayList<Benefit>) myPlace.getBenefits());
         containerBenefits.setAdapter(mBenAdapter);
-        mRulAdapter = new RulesAdapter(getActivity(), (ArrayList<Rule>)myPlace.getRules());
+        mRulAdapter = new RulesAdapter(getActivity(), (ArrayList<Rule>) myPlace.getRules());
         containerRules.setAdapter(mRulAdapter);
-        for (Availability av : myPlace.getAvailabilities()){
+        for (Availability av : myPlace.getAvailabilities()) {
             av.setFrom(av.getFrom().split("T")[0]);
             av.setTo(av.getTo().split("T")[0]);
         }
-        mAvAdapter = new AvailabilitiesAdapter(getActivity(), (ArrayList<Availability>)myPlace.getAvailabilities());
+        mAvAdapter = new AvailabilitiesAdapter(getActivity(), (ArrayList<Availability>) myPlace.getAvailabilities());
         containerAvailability.setAdapter(mAvAdapter);
         //set GoogleMap
         mlatLng = new LatLng(
@@ -135,7 +135,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
                 System.out.println("Error message:: " + t.getMessage());
             }
         });
-        for(Image img: myPlace.getImages()) {
+        for (Image img : myPlace.getImages()) {
             Call<ResponseBody> call2 = jsonPlaceHolderApi.getImageById(img.getId());
             call2.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -178,7 +178,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_place, container, false);
+        View view = inflater.inflate(R.layout.fragment_place, container, false);
         //initialize the view
         noPlaceView = (LinearLayout) view.findViewById(R.id.no_having_home_view);
         havingPlaceView = (ScrollView) view.findViewById(R.id.having_home_view);
@@ -204,7 +204,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         buttonCreatePlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(galleryThread!=null)
+                if (galleryThread != null)
                     galleryThread.interrupt();
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
@@ -216,12 +216,14 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         buttonEditPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(galleryThread!=null)
+                if (galleryThread != null)
                     galleryThread.interrupt();
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("edit", true);
                 CreatePlaceFragment fragment = new CreatePlaceFragment();
                 fragment.setArguments(bundle);
+                if (galleryThread != null)
+                    galleryThread.interrupt();
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
                         fragment
@@ -232,7 +234,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         buttonDeletePlace.setOnClickListener(new View.OnClickListener() {  //DELEEEEEEEEETEEEE
             @Override
             public void onClick(View v) {
-                if(galleryThread!=null)
+                if (galleryThread != null)
                     galleryThread.interrupt();
                 deletePlace();
             }
@@ -243,7 +245,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         return view;
     }
 
-    private void fetchPlace(){
+    private void fetchPlace() {
         mTextOnProgress.setText(R.string.fetching_your_place);
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
@@ -284,11 +286,11 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
 
 
     private Thread galleryThread;
-    private void enableGalleryEffect(){
+    private void enableGalleryEffect() {
         galleryThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true) {
+                while (true) {
                     for (final Bitmap b : mBitmapList) {
                         try {
                             getActivity().runOnUiThread(new Runnable() {
@@ -297,7 +299,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
                                     placeGallery.setImageBitmap(b);
                                 }
                             });
-                        }catch (NullPointerException e){
+                        } catch (NullPointerException e) {
                             break;
                         }
                         try {
@@ -327,7 +329,6 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         Bundle mapViewBundle = outState.getBundle(MAPVIEW_BUNDLE_KEY);
         if (mapViewBundle == null) {
             mapViewBundle = new Bundle();
@@ -350,7 +351,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
 
     @Override
     public void onStop() {
-        if(galleryThread!=null)
+        if (galleryThread != null)
             galleryThread.interrupt();
         super.onStop();
         mMapView.onStop();
@@ -359,7 +360,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         mGoogleMap = map;
-        if(mlatLng!=null) {
+        if (mlatLng != null) {
             mGoogleMap.addMarker(new MarkerOptions().position(mlatLng).title("Your Place"));
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mlatLng, 11));
         }
@@ -367,7 +368,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
 
     @Override
     public void onPause() {
-        if(galleryThread!=null)
+        if (galleryThread != null)
             galleryThread.interrupt();
         mMapView.onPause();
         super.onPause();
@@ -385,14 +386,14 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
         mMapView.onLowMemory();
     }
 
-    private void deletePlace(){
+    private void deletePlace() {
         progressBar.setVisibility(View.VISIBLE);
         mTextOnProgress.setText(R.string.deleting_place_msg);
 
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         //delete availabilities
-        for(Availability av: myPlace.getAvailabilities()){
+        for (Availability av : myPlace.getAvailabilities()) {
             Call<Void> call = jsonPlaceHolderApi.deleteAvailability(av.getId());
             call.enqueue(new Callback<Void>() {
                 @Override
@@ -478,7 +479,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
             });
         }
         //delete images
-        for(Image img: myPlace.getImages()){
+        for (Image img : myPlace.getImages()) {
             System.out.println("deleting image: " + img.getFilename());
             Call<Void> call = jsonPlaceHolderApi.deleteImage(img.getId());
             call.enqueue(new Callback<Void>() {
@@ -520,7 +521,7 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
                     return;
                 }
                 System.out.println("Place deleted!");
-                if(galleryThread!=null)
+                if (galleryThread != null)
                     galleryThread.interrupt();
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,

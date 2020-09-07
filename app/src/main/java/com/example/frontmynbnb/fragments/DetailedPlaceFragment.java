@@ -136,11 +136,12 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 Bundle bundle = new Bundle();
                 bundle.putInt("other_user_id", mOwner.getId());
                 chatFragment.setArguments(bundle);
-                galleryThread.interrupt();
-                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
-                            R.id.fragment_container,
-                            chatFragment
-                    ).addToBackStack(null).commit();
+                if (galleryThread != null)
+                    galleryThread.interrupt();
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
+                        R.id.fragment_container,
+                        chatFragment
+                ).addToBackStack(null).commit();
             }
         });
 
@@ -156,7 +157,8 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 bundle.putString("to", mTo);
                 DetailedOwnerFragment fragment = new DetailedOwnerFragment();
                 fragment.setArguments(bundle);
-                galleryThread.interrupt();
+                if (galleryThread != null)
+                    galleryThread.interrupt();
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                         R.id.fragment_container,
                         fragment
@@ -166,9 +168,9 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         if (getArguments() != null) {
             placeId = getArguments().getInt("place_id");
             mFrom = getArguments().getString("from");
-            mTo= getArguments().getString("to");
+            mTo = getArguments().getString("to");
             String emptyDate = getResources().getString(R.string.empty_date);
-            if(!mFrom.equals(emptyDate)  && !mTo.equals(emptyDate)){
+            if (!mFrom.equals(emptyDate) && !mTo.equals(emptyDate)) {
                 mTextReservation.setText("Reserve the place from: " + mFrom + " to " + mTo);
                 mButtonReserve.setEnabled(true);
             } else {
@@ -187,7 +189,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
     @Override
     public boolean onBackPressed() {
         System.out.println("detailed place fragment");
-        if(galleryThread!=null)
+        if (galleryThread != null)
             galleryThread.interrupt();
         Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container,
@@ -237,7 +239,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         });
     }
 
-    private void setPlaceOnView(){
+    private void setPlaceOnView() {
         mTextBeds.setText(String.valueOf(targetPlace.getBeds()));
         mTextBaths.setText(String.valueOf(targetPlace.getBaths()));
         mTextBedrooms.setText(String.valueOf(targetPlace.getBedrooms()));
@@ -248,19 +250,19 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         mTextAddress.setText(targetPlace.getAddress());
 
         //set ListViews
-        mBenAdapter = new BenefitsAdapter(getActivity(), (ArrayList<Benefit>)targetPlace.getBenefits());
+        mBenAdapter = new BenefitsAdapter(getActivity(), (ArrayList<Benefit>) targetPlace.getBenefits());
         mBenefitContainer.setAdapter(mBenAdapter);
-        mRulAdapter = new RulesAdapter(getActivity(), (ArrayList<Rule>)targetPlace.getRules());
+        mRulAdapter = new RulesAdapter(getActivity(), (ArrayList<Rule>) targetPlace.getRules());
         mRuleContainer.setAdapter(mRulAdapter);
-        for (Availability av : targetPlace.getAvailabilities()){
+        for (Availability av : targetPlace.getAvailabilities()) {
             av.setFrom(av.getFrom().split("T")[0]);
             av.setTo(av.getTo().split("T")[0]);
         }
-        mAvAdapter = new AvailabilitiesAdapter(getActivity(), (ArrayList<Availability>)targetPlace.getAvailabilities());
+        mAvAdapter = new AvailabilitiesAdapter(getActivity(), (ArrayList<Availability>) targetPlace.getAvailabilities());
         mAvailabilityContainer.setAdapter(mAvAdapter);
     }
 
-    private void fetchImages(){
+    private void fetchImages() {
         //fetch images
         galleryBitmapList = new ArrayList<>();
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
@@ -297,7 +299,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 System.out.println("Error message:: " + t.getMessage());
             }
         });
-        for(Image img: targetPlace.getImages()) {
+        for (Image img : targetPlace.getImages()) {
             Call<ResponseBody> call2 = jsonPlaceHolderApi.getImageById(img.getId());
             call2.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -334,7 +336,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         enableGalleryEffect();
     }
 
-    private void enableGalleryEffect(){
+    private void enableGalleryEffect() {
         galleryThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -343,7 +345,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                while(true) {
+                while (true) {
                     for (final Bitmap b : galleryBitmapList) {
                         try {
                             getActivity().runOnUiThread(new Runnable() {
@@ -352,7 +354,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                                     mGalleryView.setImageBitmap(b);
                                 }
                             });
-                        }catch (NullPointerException e){
+                        } catch (NullPointerException e) {
                             break;
                         }
                         try {
@@ -368,7 +370,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
     }
 
 
-    private void fetchOwner(){
+    private void fetchOwner() {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         Call<User> call = jsonPlaceHolderApi.getPlaceOwner(placeId);
@@ -400,7 +402,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         });
     }
 
-    private void fetchOwnerImage(){
+    private void fetchOwnerImage() {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         Call<ResponseBody> call = jsonPlaceHolderApi.getUserImage(mOwner.getId());
@@ -439,7 +441,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
         });
     }
 
-    private void checkIfCanRate(){
+    private void checkIfCanRate() {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         Call<Boolean> call = jsonPlaceHolderApi.checkIfUserCanRate(placeId, AppConstants.USER.getId());
@@ -454,7 +456,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                     ).show();
                     return;
                 }
-                if(response.body()){
+                if (response.body()) {
                     mRateView.setVisibility(View.VISIBLE);
                     Toast.makeText(getContext(), "You can rate the Place", Toast.LENGTH_SHORT).show();
                 }
@@ -473,7 +475,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
 
     }
 
-    private void makeReservation(){
+    private void makeReservation() {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         Call<Boolean> call = jsonPlaceHolderApi.createReservation(
@@ -489,19 +491,19 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                     ).show();
                     return;
                 }
-                if(response.body()){
+                if (response.body()) {
                     Toast.makeText(
                             getContext(),
                             "Reservation done with success",
                             Toast.LENGTH_LONG
                     ).show();
-                    galleryThread.interrupt();
+                    if (galleryThread != null)
+                        galleryThread.interrupt();
                     Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                             R.id.fragment_container,
                             new HomeFragment()
                     ).addToBackStack(null).commit();
-                }
-                else{
+                } else {
                     Toast.makeText(
                             getContext(),
                             "Reservation rejected!",
@@ -562,7 +564,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
 
     @Override
     public void onStop() {
-        if(galleryThread!=null)
+        if (galleryThread != null)
             galleryThread.interrupt();
         super.onStop();
         mMapView.onStop();
@@ -571,7 +573,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap map) {
         mGoogleMap = map;
-        if(targetPlace!=null) {
+        if (targetPlace != null) {
             LatLng latLng = new LatLng(
                     targetPlace.getLatitude(),
                     targetPlace.getLongitude()
@@ -583,7 +585,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
 
     @Override
     public void onPause() {
-        if(galleryThread!=null)
+        if (galleryThread != null)
             galleryThread.interrupt();
         mMapView.onPause();
         super.onPause();

@@ -158,7 +158,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(galleryThread!=null)
+                if (galleryThread != null)
                     galleryThread.interrupt();
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
@@ -266,7 +266,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mMainImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(galleryThread!=null)
+                if (galleryThread != null)
                     galleryThread.interrupt();
                 Intent intent = new Intent();
                 intent.setType("image/*");
@@ -282,7 +282,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         mButtonMultipleImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(galleryThread!=null)
+                if (galleryThread != null)
                     galleryThread.interrupt();
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
@@ -395,7 +395,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
 
     @Override
     public void onStop() {
-        if(galleryThread!=null)
+        if (galleryThread != null)
             galleryThread.interrupt();
         super.onStop();
         mMapView.onStop();
@@ -409,7 +409,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
 
     @Override
     public void onPause() {
-        if(galleryThread!=null)
+        if (galleryThread != null)
             galleryThread.interrupt();
         mMapView.onPause();
         super.onPause();
@@ -417,7 +417,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
 
     @Override
     public void onDestroy() {
-        if(galleryThread!=null)
+        if (galleryThread != null)
             galleryThread.interrupt();
         mMapView.onDestroy();
         super.onDestroy();
@@ -549,7 +549,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
     @Override
     public boolean onBackPressed() {
         System.out.println("Create ~~" + AppConstants.MODE);
-        if(galleryThread!=null)
+        if (galleryThread != null)
             galleryThread.interrupt();
         Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container2,
@@ -841,7 +841,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                         "Your place was set!",
                         Toast.LENGTH_SHORT
                 ).show();
-                if(galleryThread!=null)
+                if (galleryThread != null)
                     galleryThread.interrupt();
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
@@ -884,7 +884,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                         Toast.LENGTH_SHORT
                 ).show();
                 editPlace = response.body();
-                for (Availability av : editPlace.getAvailabilities()){
+                for (Availability av : editPlace.getAvailabilities()) {
                     av.setFrom(av.getFrom().split("T")[0]);
                     av.setTo(av.getTo().split("T")[0]);
                 }
@@ -1109,15 +1109,14 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                     imageFile
             );
             System.out.println("file-part initialized");
-        }
-        else {
+        } else {
             RequestBody attachmentEmpty = RequestBody.create(MediaType.parse("text/plain"), "");
             mainImageFilePart = MultipartBody.Part.createFormData("image", "", attachmentEmpty);
         }
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         Call<Place> call = jsonPlaceHolderApi.putUsersPlace(AppConstants.USER.getId(),
-                editPlace.getId(),addressPart, latPart, longPart, maxGuestPart, minCostPart,
+                editPlace.getId(), addressPart, latPart, longPart, maxGuestPart, minCostPart,
                 costPerPersonPart, typePart, descriptionPart, bedsPart, bathsPart, bedroomsPart,
                 livingRoomPart, areaPart, mainImageFilePart
         );
@@ -1136,20 +1135,19 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 putBenefits(p.getId());
                 putRules(p.getId());
                 putAvailabilities(p.getId());
-                if(mImagesUrisList!=null) {
+                if (mImagesUrisList != null) {
                     if (mImagesUrisList.size() > 0) {
                         putImages(p.getId());
                     } else {
-                        if(galleryThread!=null)
+                        if (galleryThread != null)
                             galleryThread.interrupt();
                         getFragmentManager().beginTransaction().replace(
                                 R.id.fragment_container2,
                                 new PlaceFragment()
                         ).commit();
                     }
-                }
-                else{
-                    if(galleryThread!=null)
+                } else {
+                    if (galleryThread != null)
                         galleryThread.interrupt();
                     getFragmentManager().beginTransaction().replace(
                             R.id.fragment_container2,
@@ -1171,11 +1169,11 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         });
     }
 
-    private void putBenefits(int pid){
+    private void putBenefits(int pid) {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        for(Benefit b: benefitList){
-            if(b.getId()==-1){
+        for (Benefit b : benefitList) {
+            if (b.getId() == -1) {
                 //post this benefit
                 System.out.println("sending b:" + b.getContent());
                 Call<Benefit> call = jsonPlaceHolderApi.postPlaceBenefit(pid, b.getContent());
@@ -1205,8 +1203,8 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 });
             }
         }
-        for(Benefit b: editPlace.getBenefits()){
-            if(!benefitList.contains(b)){
+        for (Benefit b : editPlace.getBenefits()) {
+            if (!benefitList.contains(b)) {
                 //delete this benefit
                 System.out.println("deleting b:" + b.getContent());
                 Call<Void> call = jsonPlaceHolderApi.deleteBenefit(b.getId());
@@ -1238,11 +1236,11 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         }
     }
 
-    private void putRules(int pid){
+    private void putRules(int pid) {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        for(Rule r: ruleList){
-            if(r.getId()==-1){
+        for (Rule r : ruleList) {
+            if (r.getId() == -1) {
                 //post this benefit
                 System.out.println("sending r:" + r.getContent());
                 Call<Rule> call = jsonPlaceHolderApi.postPlaceRule(pid, r.getContent());
@@ -1272,8 +1270,8 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 });
             }
         }
-        for(Rule r: editPlace.getRules()){
-            if(!ruleList.contains(r)){
+        for (Rule r : editPlace.getRules()) {
+            if (!ruleList.contains(r)) {
                 //delete this benefit
                 System.out.println("deleting r:" + r.getContent());
                 Call<Void> call = jsonPlaceHolderApi.deleteRule(r.getId());
@@ -1305,11 +1303,11 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
         }
     }
 
-    private void putAvailabilities(int pid){
+    private void putAvailabilities(int pid) {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        for(Availability av: availabilityList){
-            if(av.getId() == -1){
+        for (Availability av : availabilityList) {
+            if (av.getId() == -1) {
                 //post this av
                 Call<Availability> call = jsonPlaceHolderApi.postPlaceAvailability(
                         pid, av.getFrom(), av.getTo());
@@ -1339,8 +1337,8 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                 });
             }
         }
-        for(Availability av: editPlace.getAvailabilities()){
-            if(!availabilityList.contains(av)){
+        for (Availability av : editPlace.getAvailabilities()) {
+            if (!availabilityList.contains(av)) {
                 //delete this avail
                 Call<Void> call = jsonPlaceHolderApi.deleteAvailability(av.getId());
                 call.enqueue(new Callback<Void>() {
@@ -1413,7 +1411,7 @@ public class CreatePlaceFragment extends MyFragment implements OnMapReadyCallbac
                         Toast.LENGTH_SHORT
                 ).show();
 
-                if(galleryThread!=null)
+                if (galleryThread != null)
                     galleryThread.interrupt();
                 getFragmentManager().beginTransaction().replace(
                         R.id.fragment_container2,
