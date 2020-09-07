@@ -1,5 +1,6 @@
 package com.example.frontmynbnb.fragments;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import com.example.frontmynbnb.AppConstants;
 import com.example.frontmynbnb.JsonPlaceHolderApi;
 import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.RestClient;
+import com.example.frontmynbnb.activities.HostActivity;
+import com.example.frontmynbnb.activities.LoginActivity;
 import com.example.frontmynbnb.adapters.AvailabilitiesAdapter;
 import com.example.frontmynbnb.adapters.BenefitsAdapter;
 import com.example.frontmynbnb.adapters.RulesAdapter;
@@ -40,6 +43,7 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -69,6 +73,18 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
     private LatLng mlatLng;
 
     private List<Bitmap> mBitmapList;
+
+    @Override
+    public boolean onBackPressed() {
+        if (galleryThread != null)
+            galleryThread.interrupt();
+        Intent loginIntent = new Intent(
+                getActivity(),
+                LoginActivity.class
+        );
+        startActivity(loginIntent);
+        return true;
+    }
 
     private void setPlaceOnView() {
         myPlace.printDetails();

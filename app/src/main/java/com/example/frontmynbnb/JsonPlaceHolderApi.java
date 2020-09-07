@@ -196,7 +196,9 @@ public interface JsonPlaceHolderApi {
     Call<Void> deleteImage(@Path("id") int id);
 
     @GET("search")
-    Call<ResponseBody> searchPlaces(
+    Call<List<Place>> searchPlaces(
+            @Query("pageNo") int pageNo,
+            @Query("pageSize") int pageSize,
             @Query("type") String type,
             @Query("from") String from,
             @Query("to") String to,

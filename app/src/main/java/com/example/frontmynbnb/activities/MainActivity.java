@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements RatingDialog.Rati
     }
 
     private void fetchUserDetails() {
+        System.out.println("TOKEN: " + AppConstants.TOKEN);
         String token = AppConstants.TOKEN;
         String username = AppConstants.USERNAME;
         Retrofit retrofit = RestClient.getClient(token);

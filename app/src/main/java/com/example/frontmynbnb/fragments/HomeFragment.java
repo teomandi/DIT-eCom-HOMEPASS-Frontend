@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -55,7 +56,7 @@ public class HomeFragment extends Fragment {
 
     private int pageNo;
     private final int pageSize = 10;
-    private boolean fetchedAll;
+    private boolean fetchedAll, mNewSearch, mSearch;
 
     private ListView mPlacesContainer;
     private ArrayList<Place> mPlaceList;
@@ -68,6 +69,16 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mEditSearch = (EditText) view.findViewById(R.id.edittext_search);
+        mEditSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSearchGroup.getVisibility() == View.INVISIBLE) {
+                    System.out.println("appearing view");
+                    TransitionManager.beginDelayedTransition(mSearchGroup, new AutoTransition());
+                    mSearchGroup.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         mEditNumPeople = (EditText) view.findViewById(R.id.edittext_numofpeople);
         mProgressView = (LinearLayout) view.findViewById(R.id.layout_progresscomponent2);
         mSearchGroup = (LinearLayout) view.findViewById(R.id.layout_searchview);
@@ -79,13 +90,17 @@ public class HomeFragment extends Fragment {
         mButtonSearch = (Button) view.findViewById(R.id.button_searchplaces);
         mPlacesContainer = (ListView) view.findViewById(R.id.listview_result_placescontainer);
         mPlacesContainer.setOnScrollListener(new AbsListView.OnScrollListener() {
-            public void onScrollStateChanged(AbsListView view, int scrollState) { }
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
-                if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0 && !fetchedAll)
-                {
-                    pageNo +=1;
-                    fetchPlaces();
+                if (firstVisibleItem + visibleItemCount == totalItemCount && totalItemCount != 0 && !fetchedAll) {
+                    pageNo += 1;
+                    if (mSearch)
+                        searchPlaces();
+                    else
+                        fetchPlaces();
                     System.out.println("firstVisibleItem: " + firstVisibleItem);
                     System.out.println("visibleItemCount: " + visibleItemCount);
                     System.out.println("totalItemCount: " + totalItemCount);
@@ -99,6 +114,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (mSearchGroup.getVisibility() == View.VISIBLE) {
+                    System.out.println("disappearing view");
                     TransitionManager.beginDelayedTransition(mSearchGroup, new AutoTransition());
                     mSearchGroup.setVisibility(View.GONE);
                 }
@@ -123,82 +139,11 @@ public class HomeFragment extends Fragment {
         mButtonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String location = mEditSearch.getText().toString();
-                String from = mButtonFrom.getText().toString();
-                String to = mButtonTo.getText().toString();
-                String type = mRadioType.getCheckedRadioButtonId() == R.id.radio_house2 ? "House" : "Room";
-                String numOfPeople = mEditNumPeople.getText().toString();
-                if(!validate(location, from, to, numOfPeople)){
-                    Toast.makeText(getContext(), "Fields are missing!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                mProgressView.setVisibility(View.VISIBLE);
-                int numPeople = Integer.parseInt(numOfPeople);
-                List<Address> addressList = null;
-                Geocoder geocoder = new Geocoder(getContext());
-                try {
-                    addressList = geocoder.getFromLocationName(location, 1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (addressList.size() == 0) {
-                    Toast.makeText(
-                            getContext(),
-                            "No location found.",
-                            Toast.LENGTH_SHORT
-                    ).show();
-                    return;
-                }
-                Address address = addressList.get(0);
-                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                System.out.println("~~> Search vars:");
-                System.out.println("lat: " + latLng.latitude);
-                System.out.println("long: " + latLng.longitude);
-                System.out.println("From: " + from);
-                System.out.println("To: " + to);
-                System.out.println("NumberOfPeople: " + numOfPeople);
-                System.out.println("Type: " + type);
-                Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
-                JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-                Call<ResponseBody> call = jsonPlaceHolderApi.searchPlaces(
-                        type, from, to,latLng.latitude, latLng.longitude, numPeople);
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (!response.isSuccessful()) {
-                            Toast.makeText(
-                                    getContext(),
-                                    "Not successful response " + response.code(),
-                                    Toast.LENGTH_LONG
-                            ).show();
-                            return;
-                        }
-                        String show = null;
-                        try {
-                            show = response.code() + " | " + response.body().string();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        System.out.println(show);
-                        Toast.makeText(
-                                getContext(),
-                                show,
-                                Toast.LENGTH_LONG
-                        ).show();
-                        mProgressView.setVisibility(View.INVISIBLE);
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(
-                                getContext(),
-                                "Failure on search!",
-                                Toast.LENGTH_LONG
-                        ).show();
-                        System.out.println("Error message:: " + t.getMessage());
-                        mProgressView.setVisibility(View.INVISIBLE);
-                    }
-                });
+                fetchedAll = false;
+                pageNo = 0;
+                mSearch = true;
+                mNewSearch = true;
+                searchPlaces();
             }
         });
         mPlaceList = new ArrayList<>();
@@ -206,6 +151,7 @@ public class HomeFragment extends Fragment {
         mPlacesContainer.setAdapter(mPlaceAdapter);
         pageNo = 0;
         fetchedAll = false;
+        mSearch = false;
         fetchPlaces();
         return view;
     }
@@ -214,7 +160,7 @@ public class HomeFragment extends Fragment {
     DatePickerDialog.OnDateSetListener onDateFrom = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-             String from = String.valueOf(year) + "/" + String.valueOf(monthOfYear + 1)
+            String from = String.valueOf(year) + "/" + String.valueOf(monthOfYear + 1)
                     + "/" + String.valueOf(dayOfMonth);
             mButtonFrom.setText(from);
         }
@@ -228,21 +174,21 @@ public class HomeFragment extends Fragment {
         }
     };
 
-    private boolean validate(String location, String from, String to, String numOfPeople){
-        if(location == null || location.equals(""))
+    private boolean validate(String location, String from, String to, String numOfPeople) {
+        if (location == null || location.equals(""))
             return false;
-        if(from.equals(getResources().getString(R.string.empty_date)) ||
+        if (from.equals(getResources().getString(R.string.empty_date)) ||
                 to.equals(getResources().getString(R.string.empty_date)))
             return false;
         try {
             Integer.parseInt(numOfPeople);
-        }catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return false;
         }
         return true;
     }
 
-    private void fetchPlaces(){
+    private void fetchPlaces() {
         mProgressView.setVisibility(View.VISIBLE);
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
@@ -250,6 +196,7 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<List<Place>>() {
             @Override
             public void onResponse(Call<List<Place>> call, Response<List<Place>> response) {
+                mProgressView.setVisibility(View.INVISIBLE);
                 if (!response.isSuccessful()) {
                     Toast.makeText(
                             getContext(),
@@ -263,10 +210,9 @@ public class HomeFragment extends Fragment {
                         "Place fetched with success!",
                         Toast.LENGTH_SHORT
                 ).show();
-                mProgressView.setVisibility(View.INVISIBLE);
                 List<Place> fetchedPlaces = response.body();
                 fetchedAll = fetchedPlaces.size() < pageSize;
-                for(Place p: fetchedPlaces){
+                for (Place p : fetchedPlaces) {
                     mPlaceList.add(p);
                     fetchMainImage(p);
                     mPlaceAdapter.notifyDataSetChanged();
@@ -286,7 +232,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void fetchMainImage(final Place place){
+    private void fetchMainImage(final Place place) {
         //fetch main image
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create((JsonPlaceHolderApi.class));
@@ -297,7 +243,7 @@ public class HomeFragment extends Fragment {
                 if (!response.isSuccessful()) {
                     Toast.makeText(
                             getContext(),
-                            "Not successful response on place: " + place.getId() + " || "  + response.code(),
+                            "Not successful response on place: " + place.getId() + " || " + response.code(),
                             Toast.LENGTH_SHORT
                     ).show();
                     return;
@@ -323,6 +269,84 @@ public class HomeFragment extends Fragment {
                         Toast.LENGTH_LONG
                 ).show();
                 System.out.println("Error message:: " + t.getMessage());
+            }
+        });
+    }
+
+    public void searchPlaces() {
+        String location = mEditSearch.getText().toString();
+        String from = mButtonFrom.getText().toString();
+        String to = mButtonTo.getText().toString();
+        String type = mRadioType.getCheckedRadioButtonId() == R.id.radio_house2 ? "House" : "Room";
+        String numOfPeople = mEditNumPeople.getText().toString();
+        if (!validate(location, from, to, numOfPeople)) {
+            Toast.makeText(getContext(), "Fields are missing!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mProgressView.setVisibility(View.VISIBLE);
+        int numPeople = Integer.parseInt(numOfPeople);
+        List<Address> addressList = null;
+        Geocoder geocoder = new Geocoder(getContext());
+        try {
+            addressList = geocoder.getFromLocationName(location, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addressList.size() == 0) {
+            Toast.makeText(
+                    getContext(),
+                    "No location found.",
+                    Toast.LENGTH_SHORT
+            ).show();
+            return;
+        }
+        Address address = addressList.get(0);
+        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+        System.out.println("~~> Search vars:");
+        System.out.println("lat: " + latLng.latitude);
+        System.out.println("long: " + latLng.longitude);
+        System.out.println("From: " + from);
+        System.out.println("To: " + to);
+        System.out.println("NumberOfPeople: " + numOfPeople);
+        System.out.println("Type: " + type);
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<List<Place>> call = jsonPlaceHolderApi.searchPlaces(
+                pageNo, pageSize, type, from, to, latLng.latitude, latLng.longitude, numPeople);
+        call.enqueue(new Callback<List<Place>>() {
+            @Override
+            public void onResponse(Call<List<Place>> call, Response<List<Place>> response) {
+                mProgressView.setVisibility(View.INVISIBLE);
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + response.code(),
+                            Toast.LENGTH_LONG
+                    ).show();
+                    return;
+                }
+                if (mNewSearch) {
+                    mPlaceList = new ArrayList<>();
+                    mNewSearch = false;
+                }
+                List<Place> fetchedPlaces = response.body();
+                fetchedAll = fetchedPlaces.size() < pageSize;
+                for (Place p : fetchedPlaces) {
+                    mPlaceList.add(p);
+                    fetchMainImage(p);
+                    mPlaceAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Place>> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure on search!",
+                        Toast.LENGTH_LONG
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+                mProgressView.setVisibility(View.INVISIBLE);
             }
         });
     }

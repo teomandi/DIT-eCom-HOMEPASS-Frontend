@@ -183,6 +183,8 @@ public class ProfileFragment extends MyFragment {
                         infoLinearLayout.setVisibility(View.VISIBLE);
                         mUser = response.body();
                         AppConstants.USER = mUser;
+                        //update the username
+                        AppConstants.USERNAME = mUser.getUsername();
                         setUserDetails();
                         fetchUserImage();
                         Toast.makeText(
@@ -203,9 +205,6 @@ public class ProfileFragment extends MyFragment {
                         System.out.println("Error message:: " + t.getMessage());
                     }
                 });
-                //update the username
-                AppConstants.USERNAME = mUser.getUsername();
-
             }
         });
         mButtonCancel = (Button) view.findViewById(R.id.button_cancel);

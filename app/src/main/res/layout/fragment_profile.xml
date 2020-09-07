@@ -199,7 +199,9 @@
                 android:id="@+id/tableview_edit_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="25dp">
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginBottom="5dp">
 
                 <TableRow>
 
@@ -281,7 +283,9 @@
                 android:id="@+id/tableview_edit_secondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="25dp">
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginBottom="5dp">
 
                 <TableRow>
 

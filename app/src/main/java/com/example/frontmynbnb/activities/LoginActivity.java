@@ -80,7 +80,10 @@ public class LoginActivity extends AppCompatActivity {
                         AppConstants.TOKEN = userToken;
                         AppConstants.USERNAME = mTextUsername.getText().toString();
                         AppConstants.MODE = "GUEST";
-                        System.out.println("~~~~> " + AppConstants.USERNAME);
+                        System.out.println("Login accepted!");
+                        System.out.println("username ~~~~> " + AppConstants.USERNAME);
+                        System.out.println("token ~~~~> " + AppConstants.TOKEN);
+
                         startActivity(mainIntent);
                     }
 
