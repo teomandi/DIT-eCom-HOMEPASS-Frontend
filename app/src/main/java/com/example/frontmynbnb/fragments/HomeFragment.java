@@ -327,16 +327,27 @@ public class HomeFragment extends Fragment {
                     return;
                 }
                 if (mNewSearch) {
-                    mPlaceList = new ArrayList<>();
+                    System.out.println("new search!!");
+                    mPlaceList.removeAll(mPlaceList);
                     mNewSearch = false;
                 }
                 List<Place> fetchedPlaces = response.body();
                 fetchedAll = fetchedPlaces.size() < pageSize;
+                System.out.println("got results: " + fetchedPlaces.size() + "!!");
                 for (Place p : fetchedPlaces) {
                     mPlaceList.add(p);
                     fetchMainImage(p);
-                    mPlaceAdapter.notifyDataSetChanged();
                 }
+
+                mPlaceAdapter.notifyDataSetChanged();
+                mPlaceAdapter.getDateRange(mButtonFrom.getText().toString(), mButtonTo.getText().toString());
+                //close the view
+                if (mSearchGroup.getVisibility() == View.VISIBLE) {
+                    System.out.println("disappearing view");
+                    TransitionManager.beginDelayedTransition(mSearchGroup, new AutoTransition());
+                    mSearchGroup.setVisibility(View.GONE);
+                }
+
             }
 
             @Override

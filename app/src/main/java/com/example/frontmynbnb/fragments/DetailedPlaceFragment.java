@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -499,10 +500,19 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
                     ).show();
                     if (galleryThread != null)
                         galleryThread.interrupt();
-                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
-                            R.id.fragment_container,
-                            new HomeFragment()
-                    ).addToBackStack(null).commit();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(
+                                    R.id.fragment_container,
+                                    new HomeFragment()
+                            ).addToBackStack(null).commit();
+                        }
+                    }, 2000);
+
+
+
                 } else {
                     Toast.makeText(
                             getContext(),

@@ -81,8 +81,8 @@ public class LoginActivity extends AppCompatActivity {
                         AppConstants.USERNAME = mTextUsername.getText().toString();
                         AppConstants.MODE = "GUEST";
                         System.out.println("Login accepted!");
-                        System.out.println("username ~~~~> " + AppConstants.USERNAME);
-                        System.out.println("token ~~~~> " + AppConstants.TOKEN);
+                        System.out.println("username ~~~~>" + AppConstants.USERNAME + "<~~");
+                        System.out.println("token ~~~~>" + AppConstants.TOKEN + "<~~");
 
                         startActivity(mainIntent);
                     }
@@ -117,6 +117,12 @@ public class LoginActivity extends AppCompatActivity {
             String value = extras.getString("username");
             mTextUsername.setText(value);
         }
+    }
 
+    // handle back
+    @Override
+    public void onBackPressed() {
+        System.out.println("going out!");
+        finish();
     }
 }

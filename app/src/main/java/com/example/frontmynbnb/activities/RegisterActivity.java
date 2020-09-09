@@ -22,6 +22,8 @@ import com.example.frontmynbnb.RestClient;
 import com.example.frontmynbnb.misc.Utils;
 import com.example.frontmynbnb.models.User;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -151,6 +153,13 @@ public class RegisterActivity extends AppCompatActivity {
                                     "Creating user failed",
                                     Toast.LENGTH_SHORT
                             ).show();
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast.makeText(getApplicationContext(), jObjError.getString("message"), Toast.LENGTH_LONG).show();
+                                System.out.println("~~~> " + jObjError);
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
                             return;
                         }
                         User retUser = response.body();

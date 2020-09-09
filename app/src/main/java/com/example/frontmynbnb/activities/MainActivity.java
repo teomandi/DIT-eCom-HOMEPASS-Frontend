@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements RatingDialog.Rati
             }
         });
         AppConstants.MODE = "GUEST";
-        System.out.println("uname: ~~> " + AppConstants.USERNAME);
         // put home
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container,

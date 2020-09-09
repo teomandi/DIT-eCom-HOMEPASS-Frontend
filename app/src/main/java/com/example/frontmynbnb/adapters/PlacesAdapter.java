@@ -37,6 +37,11 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
         mTo = to;
     }
 
+    public void getDateRange(String from, String to){
+        mFrom = from;
+        mTo = to;
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -60,6 +65,7 @@ public class PlacesAdapter extends ArrayAdapter<Place> {
                         place.getAddress(), Toast.LENGTH_LONG).show();
                 //pass the place id
                 Bundle bundle = new Bundle();
+                System.out.println("Sending: " + mFrom + " --- " + mTo);
                 bundle.putString("from", mFrom);
                 bundle.putString("to", mTo);
                 bundle.putInt("place_id", place.getId());
