@@ -32,6 +32,7 @@ import com.example.frontmynbnb.R;
 import com.example.frontmynbnb.RestClient;
 import com.example.frontmynbnb.adapters.PlacesAdapter;
 import com.example.frontmynbnb.models.Place;
+import com.example.frontmynbnb.models.User;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
@@ -56,7 +57,7 @@ public class HomeFragment extends Fragment {
 
     private int pageNo;
     private final int pageSize = 10;
-    private boolean fetchedAll, mNewSearch, mSearch;
+    private boolean fetchedAll, mNewSearch, mSearch, mAll;
 
     private ListView mPlacesContainer;
     private ArrayList<Place> mPlaceList;
@@ -153,7 +154,9 @@ public class HomeFragment extends Fragment {
         pageNo = 0;
         fetchedAll = false;
         mSearch = false;
-        fetchPlaces();
+//        fetchPlaces();
+//        checkForPreviousSearches();
+        fetchUserDetails();
         return view;
     }
 
@@ -190,10 +193,18 @@ public class HomeFragment extends Fragment {
     }
 
     private void fetchPlaces() {
-        mProgressView.setVisibility(View.VISIBLE);
+//        mProgressView.setVisibility(View.VISIBLE);
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        Call<List<Place>> call = jsonPlaceHolderApi.getAllPlaces(pageNo, pageSize);
+        Call<List<Place>> call = null;
+        if(mAll){
+            System.out.println("fetching all places");
+            call = jsonPlaceHolderApi.getAllPlaces(pageNo, pageSize);
+        }
+        else{
+            System.out.println("fetching searched places!");
+            call = jsonPlaceHolderApi.getSearchedPlaces(pageNo, pageSize, AppConstants.USER.getId());
+        }
         call.enqueue(new Callback<List<Place>>() {
             @Override
             public void onResponse(Call<List<Place>> call, Response<List<Place>> response) {
@@ -313,7 +324,7 @@ public class HomeFragment extends Fragment {
         Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         Call<List<Place>> call = jsonPlaceHolderApi.searchPlaces(
-                pageNo, pageSize, type, from, to, latLng.latitude, latLng.longitude, numPeople);
+                AppConstants.USER.getId(), pageNo, pageSize, type, from, to, latLng.latitude, latLng.longitude, numPeople);
         call.enqueue(new Callback<List<Place>>() {
             @Override
             public void onResponse(Call<List<Place>> call, Response<List<Place>> response) {
@@ -340,7 +351,7 @@ public class HomeFragment extends Fragment {
                 }
                 Toast.makeText(
                         getContext(),
-                        "Found: " + fetchedPlaces.size() + " beautifu`l places",
+                        "Found: " + fetchedPlaces.size() + " beautiful places",
                         Toast.LENGTH_LONG
                 ).show();
 
@@ -364,6 +375,90 @@ public class HomeFragment extends Fragment {
                 ).show();
                 System.out.println("Error message:: " + t.getMessage());
                 mProgressView.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
+    public void checkForPreviousSearches(){
+        System.out.println("CHECKINGGGGGGGGGG");
+        mProgressView.setVisibility(View.VISIBLE);
+        Retrofit retrofit = RestClient.getClient(AppConstants.TOKEN);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<Boolean> call = jsonPlaceHolderApi.hasSearched(AppConstants.USER.getId());
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                mProgressView.setVisibility(View.INVISIBLE);
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+                System.out.println("===>response for previous searches got:: " + response.body());
+                if(response.body()){
+                    fetchPlaces();
+                    mAll = false;
+                    System.out.println("===>there are previous searches");
+                }
+                else{
+                    mAll = true;
+                    System.out.println("===>There are no previous searches!");
+                    fetchPlaces();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "No place fetched!",
+                        Toast.LENGTH_SHORT
+                ).show();
+                System.out.println("Error message:: " + t.getMessage());
+                mProgressView.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
+    private void fetchUserDetails() {
+        System.out.println("TOKEN: " + AppConstants.TOKEN);
+        String token = AppConstants.TOKEN;
+        String username = AppConstants.USERNAME;
+        Retrofit retrofit = RestClient.getClient(token);
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<User> call = jsonPlaceHolderApi.getUserByUsername(username);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            "Not successful response " + response.code(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    mAll = true;
+                    fetchPlaces();
+                    return;
+                }
+                System.out.println("GOT USER !!!! Status Code : " + response.code());
+
+                AppConstants.USER = response.body();
+                checkForPreviousSearches();
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(
+                        getContext(),
+                        "Failure fetching the user!!",
+                        Toast.LENGTH_LONG
+                ).show();
+                mAll = true;
+                fetchPlaces();
+                System.out.println("Error message:: " + t.getMessage());
             }
         });
     }

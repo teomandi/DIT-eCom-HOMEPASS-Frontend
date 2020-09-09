@@ -197,6 +197,7 @@ public interface JsonPlaceHolderApi {
 
     @GET("search")
     Call<List<Place>> searchPlaces(
+            @Query("uid") int uid,
             @Query("pageNo") int pageNo,
             @Query("pageSize") int pageSize,
             @Query("type") String type,
@@ -255,6 +256,16 @@ public interface JsonPlaceHolderApi {
             @Path("uid") int uid,
             @Field("start") String start,
             @Field("end") String to
+    );
+
+    @GET("/search/{uid}/has")
+    Call<Boolean> hasSearched(@Path("uid") int uid);
+
+    @GET("/search/places")
+    Call<List<Place>> getSearchedPlaces(
+            @Query("pageNo") int pageNo,
+            @Query("pageSize") int pageSize,
+            @Query("uid") int uid
     );
 
 
