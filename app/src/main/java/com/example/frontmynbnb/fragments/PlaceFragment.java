@@ -42,6 +42,7 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Objects;
 
@@ -308,22 +309,26 @@ public class PlaceFragment extends MyFragment implements OnMapReadyCallback {
             @Override
             public void run() {
                 while (true) {
-                    for (final Bitmap b : mBitmapList) {
-                        try {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    placeGallery.setImageBitmap(b);
-                                }
-                            });
-                        } catch (NullPointerException e) {
-                            break;
+                    try {
+                        for (final Bitmap b : mBitmapList) {
+                            try {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        placeGallery.setImageBitmap(b);
+                                    }
+                                });
+                            } catch (NullPointerException e) {
+                                break;
+                            }
+                            try {
+                                Thread.sleep(3000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    }catch (ConcurrentModificationException e){
+                        break;
                     }
                 }
             }

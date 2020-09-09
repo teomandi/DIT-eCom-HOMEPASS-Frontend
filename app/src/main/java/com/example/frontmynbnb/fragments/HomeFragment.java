@@ -338,6 +338,11 @@ public class HomeFragment extends Fragment {
                     mPlaceList.add(p);
                     fetchMainImage(p);
                 }
+                Toast.makeText(
+                        getContext(),
+                        "Found: " + fetchedPlaces.size() + " beautifu`l places",
+                        Toast.LENGTH_LONG
+                ).show();
 
                 mPlaceAdapter.notifyDataSetChanged();
                 mPlaceAdapter.getDateRange(mButtonFrom.getText().toString(), mButtonTo.getText().toString());
