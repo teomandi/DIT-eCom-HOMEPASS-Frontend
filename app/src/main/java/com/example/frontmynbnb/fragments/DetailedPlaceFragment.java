@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +65,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
     private TextView mTextBeds, mTextBaths, mTextBedrooms, mTextLivingRoom, mTextArea, mTextType,
             mTextDescription, mTextAddress, mTextReservation;
     private ListView mBenefitContainer, mRuleContainer, mAvailabilityContainer;
+    private ScrollView mView;
 
     private BenefitsAdapter mBenAdapter;
     private RulesAdapter mRulAdapter;
@@ -95,6 +97,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detailed_place, container, false);
+        mView = (ScrollView) view.findViewById(R.id.scrollView3);
         mProgressBarView = (LinearLayout) view.findViewById(R.id.progressBarPlace2);
         mRateView = (LinearLayout) view.findViewById(R.id.linearLayout_rateview);
         mGalleryView = (ImageView) view.findViewById(R.id.imageview_place_gallery);
@@ -590,6 +593,7 @@ public class DetailedPlaceFragment extends MyFragment implements OnMapReadyCallb
             );
             mGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Your Place"));
             mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
+            mView.smoothScrollTo(mView.getTop(), 0);
         }
     }
 

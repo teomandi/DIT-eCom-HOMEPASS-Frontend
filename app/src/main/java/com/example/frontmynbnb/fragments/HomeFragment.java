@@ -310,6 +310,7 @@ public class HomeFragment extends Fragment {
                     "No location found.",
                     Toast.LENGTH_SHORT
             ).show();
+            mProgressView.setVisibility(View.INVISIBLE);
             return;
         }
         Address address = addressList.get(0);

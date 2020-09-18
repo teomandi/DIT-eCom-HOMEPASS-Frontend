@@ -187,8 +187,6 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
 
-
-
             }
         });
         mTextViewLogin = (TextView) findViewById(R.id.textview_login);

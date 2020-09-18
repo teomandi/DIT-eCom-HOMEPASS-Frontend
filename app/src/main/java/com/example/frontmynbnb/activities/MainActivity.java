@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements RatingDialog.Rati
             }
         });
         AppConstants.MODE = "GUEST";
+        System.out.println("in main content the token: " + AppConstants.TOKEN);
         // put home
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container,
