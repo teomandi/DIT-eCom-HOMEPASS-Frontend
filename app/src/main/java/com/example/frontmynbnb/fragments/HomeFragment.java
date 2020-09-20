@@ -189,6 +189,8 @@ public class HomeFragment extends Fragment {
         } catch (NumberFormatException e) {
             return false;
         }
+        if(numOfPeople.equals(""))
+            return false
         return true;
     }
 
