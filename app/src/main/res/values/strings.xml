@@ -39,7 +39,7 @@
     <string name="secondary_fields">Secondary fields</string>
     <string name="email_ask">Email:</string>
     <string name="phone_ask">Phone:</string>
-    <string name="google_maps_api_key">AIzaSyAASOp4dNDXWgirwg8gcAwqTzJ7dGHyJC8</string>
+    <string name="google_maps_api_key"></string>
     <string name="address_ask">Address:</string>
     <string name="availability">Availabilities</string>
     <string name="set_the_date_ranges_that_the_house_is_available">Set the date ranges that the house is available.</string>
